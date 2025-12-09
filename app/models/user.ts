@@ -1,0 +1,61 @@
+import { withAuthFinder } from "@adonisjs/auth/mixins/lucid";
+import { compose } from "@adonisjs/core/helpers";
+import hash from "@adonisjs/core/services/hash";
+import { BaseModel, belongsTo, column, hasMany } from "@adonisjs/lucid/orm";
+import type { BelongsTo, HasMany } from "@adonisjs/lucid/types/relations";
+import type { DateTime } from "luxon";
+import Hour from "./hour.js";
+import Role from "./role.js";
+
+const AuthFinder = withAuthFinder(() => hash.use("argon"), {
+	uids: ["username"],
+	passwordColumnName: "password",
+});
+
+export default class User extends compose(BaseModel, AuthFinder) {
+	@column({ isPrimary: true })
+	declare id: number;
+
+	@column()
+	declare username: string;
+
+	@column()
+	declare firstname: string;
+
+	@column()
+	declare lastname: string;
+
+	@column()
+	declare phone: string | null;
+
+	@column()
+	declare email: string | null;
+
+	@column({ serializeAs: null })
+	declare password: string;
+
+	@column()
+	declare roleId: number;
+
+	@column()
+	declare firstLogin: boolean;
+
+	@column()
+	declare activated: boolean;
+
+	@column.dateTime({ autoCreate: true })
+	declare createdAt: DateTime;
+
+	@column.dateTime({ autoCreate: true, autoUpdate: true })
+	declare updatedAt: DateTime | null;
+
+	@belongsTo(() => Role)
+	declare role: BelongsTo<typeof Role>;
+
+	@hasMany(() => Hour)
+	declare hours: HasMany<typeof Hour>;
+
+	public async isAdmin() {
+		return this.role.slug === "admin";
+	}
+}
