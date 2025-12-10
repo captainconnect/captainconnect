@@ -5,7 +5,7 @@ import Logo from "~/components/ui/Logo";
 export default function ServerError(props: { error?: HttpError }) {
 	return (
 		<>
-			<Head title="Page non trouvée" />
+			<Head title="Erreur interne" />
 			<div className="w-full h-screen flex flex-col items-center justify-center gap-4">
 				<Logo className="size-48" />
 				<div className="title text-2xl font-semibold">Erreur interne</div>
