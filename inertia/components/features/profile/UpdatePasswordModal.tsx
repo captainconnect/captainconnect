@@ -2,7 +2,6 @@ import { useForm } from "@inertiajs/react";
 import { Lock, Save, X } from "lucide-react";
 import Button from "~/components/ui/buttons/Button";
 import Input from "~/components/ui/inputs/Input";
-import Loader from "~/components/ui/Loader";
 import type { BaseModalProps } from "~/components/ui/modals/Modal";
 import Modal from "~/components/ui/modals/Modal";
 
@@ -57,8 +56,8 @@ export default function UpdatePasswordModal({
 					error={errors.password_confirmation}
 					label="Confirmer"
 				/>
-				<Button type="submit" icon={<Save />}>
-					{processing ? <Loader /> : "Confirmer"}
+				<Button processing={processing} type="submit" icon={<Save />}>
+					Confirmer
 				</Button>
 				<Button onClick={handleCancel} variant="secondary" icon={<X />}>
 					Annuler

@@ -1,45 +1,30 @@
-import {
-	Circle,
-	MapContainer,
-	Marker,
-	Popup,
-	TileLayer,
-	useMap,
-} from "react-leaflet";
+import { Circle, MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import type { Boat, Coordinate } from "#types/boat";
+import { SailMarkerIcon, ShipMarkerIcon } from "~/app/LeafletMarkerIcon";
 import { placesCoordinates } from "~/app/places";
 
 type BoatMapProps = {
 	boat: Boat;
 };
 
-function SetViewOnLoad({
-	center,
-	zoom,
-}: {
-	center: [number, number];
-	zoom: number;
-}) {
-	const map = useMap();
-	map.setView(center, zoom);
-	return null;
-}
-
 export default function BoatMap({ boat }: BoatMapProps) {
 	const zoom = 17;
-	const placeNumber = Number(boat.place);
-
-	let isPanne = placeNumber >= 1 && placeNumber <= 9;
-
-	let boatPosition: Coordinate | undefined;
-
-	if (placeNumber in placesCoordinates) {
-		boatPosition = placesCoordinates[placeNumber];
+	let boatPosition: Coordinate;
+	let isPanne = false;
+	let placeNumber = null;
+	if (boat.place && !Number.isNaN(Number(boat.place))) {
+		placeNumber = Number(boat.place);
+		isPanne = placeNumber >= 1 && placeNumber <= 9;
+		if (placeNumber in placesCoordinates) {
+			boatPosition = placesCoordinates[placeNumber];
+		} else {
+			const panneNumber = Number(String(placeNumber)[0]);
+			isPanne = true;
+			boatPosition = placesCoordinates[panneNumber];
+		}
 	} else {
-		const panneNumber = Number(String(placeNumber)[0]);
-		isPanne = true;
-		boatPosition = placesCoordinates[panneNumber];
+		boatPosition = boat.position as Coordinate;
 	}
 
 	return (
@@ -47,12 +32,13 @@ export default function BoatMap({ boat }: BoatMapProps) {
 			<MapContainer
 				style={{ height: "100%", width: "100%" }}
 				className="rounded-xl"
+				center={boatPosition}
+				zoom={zoom}
 			>
 				<TileLayer
 					attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
 					url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 				/>
-				<SetViewOnLoad center={boatPosition} zoom={zoom} />
 
 				{isPanne ? (
 					<Circle
@@ -65,11 +51,18 @@ export default function BoatMap({ boat }: BoatMapProps) {
 						}}
 					/>
 				) : (
-					<Marker position={boatPosition}>
+					<Marker
+						icon={
+							boat.type?.label === "Voilier" || boat.type?.label === "Catamaran"
+								? SailMarkerIcon
+								: ShipMarkerIcon
+						}
+						position={boatPosition}
+					>
 						<Popup>
 							<b>{boat.name}</b>
 							<br />
-							Place {placeNumber}
+							{placeNumber && `Place ${placeNumber}`}
 						</Popup>
 					</Marker>
 				)}

@@ -3,7 +3,6 @@ import { Plus } from "lucide-react";
 import Button from "~/components/ui/buttons/Button";
 import Input from "~/components/ui/inputs/Input";
 import Select from "~/components/ui/inputs/Select";
-import Loader from "~/components/ui/Loader";
 
 type AddHourFormProps = {
 	taskId: number;
@@ -52,8 +51,13 @@ export default function AddHourForm({ users, taskId }: AddHourFormProps) {
 						name="count"
 						error={errors.hour}
 					/>
-					<Button disabled={processing} type="submit" icon={<Plus />}>
-						{processing ? <Loader /> : "Ajouter"}
+					<Button
+						processing={processing}
+						disabled={processing}
+						type="submit"
+						icon={<Plus />}
+					>
+						Ajouter
 					</Button>
 				</>
 			)}

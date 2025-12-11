@@ -3,7 +3,6 @@ import { Contact2, Save, X } from "lucide-react";
 import type React from "react";
 import Button from "~/components/ui/buttons/Button";
 import Input from "~/components/ui/inputs/Input";
-import Loader from "~/components/ui/Loader";
 import Modal, { type BaseModalProps } from "~/components/ui/modals/Modal";
 
 export default function CreateContactModal({ open, onClose }: BaseModalProps) {
@@ -79,8 +78,8 @@ export default function CreateContactModal({ open, onClose }: BaseModalProps) {
 					<Button onClick={handleCancel} variant="secondary" icon={<X />}>
 						Annuler
 					</Button>
-					<Button type="submit" icon={<Save />}>
-						{processing ? <Loader /> : "Créer le contact"}
+					<Button processing={processing} type="submit" icon={<Save />}>
+						Créer le contact
 					</Button>
 				</div>
 			</form>

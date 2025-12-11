@@ -10,7 +10,7 @@ export type Boat = {
 	boatConstructor?: BoatConstructor;
 	model?: string;
 	place?: string;
-	position?: GPSPoint;
+	position?: Coordinate;
 	mmsi?: string;
 	callSign?: string;
 	length?: string;
@@ -26,7 +26,7 @@ export interface BoatPayload {
 	constructor_id?: number | null;
 	model?: string | null;
 	place?: string | null;
-	position?: GPSPoint | null;
+	position?: Coordinate | null;
 	mmsi?: string | null;
 	call_sign?: string | null;
 	length?: number | null;
@@ -45,8 +45,3 @@ export type BoatConstructor = {
 };
 
 export type Coordinate = [number, number];
-
-export type GPSPoint = {
-	lat: number;
-	lng: number;
-};

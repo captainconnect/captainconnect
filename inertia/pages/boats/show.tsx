@@ -25,6 +25,9 @@ type BoatPageProps = {
 };
 
 const BoatPage = ({ boat }: BoatPageProps) => {
+	const hasPlace = boat.place !== null && !Number.isNaN(Number(boat.place));
+	const hasPosition = boat.position !== null;
+
 	const inProgressInterventions = boat.interventions.filter(
 		(i) => i.status === "IN_PROGRESS" || i.status === "SUSPENDED",
 	);
@@ -86,7 +89,7 @@ const BoatPage = ({ boat }: BoatPageProps) => {
 							<BoatInterventionList interventions={inProgressInterventions} />
 						</Section>
 					)}
-					{boat.place !== null && !Number.isNaN(Number(boat.place)) && (
+					{(hasPlace || hasPosition) && (
 						<Section
 							title="Position dans le port"
 							subtitle="Basé sur le quai/panne/position"

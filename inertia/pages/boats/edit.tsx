@@ -1,14 +1,15 @@
 import { Head, useForm } from "@inertiajs/react";
 import { Ship, X } from "lucide-react";
-import type { Boat, BoatConstructor, BoatType } from "#types/boat";
+import { useState } from "react";
+import type { Boat, BoatConstructor, BoatType, Coordinate } from "#types/boat";
 import type { Contact } from "#types/contact";
+import ManualSetPositionCard from "~/components/features/boat/ManualSetPositionCard";
 import AppLayout from "~/components/layout/AppLayout";
 import Button from "~/components/ui/buttons/Button";
 import CardHeader from "~/components/ui/CardHeader";
 import Input from "~/components/ui/inputs/Input";
 import Select from "~/components/ui/inputs/Select";
 import Textarea from "~/components/ui/inputs/TextArea";
-import Loader from "~/components/ui/Loader";
 
 type EditPageProps = {
 	boat: Boat;
@@ -23,6 +24,12 @@ const EditBoatPage = ({
 	boatTypes,
 	boatConstructors,
 }: EditPageProps) => {
+	const [manualSet, setManualSet] = useState(!!boat.position);
+
+	const currentPos = boat.position
+		? ([boat.position[0], boat.position[1]] as Coordinate)
+		: undefined;
+
 	const getInitialData = () => ({
 		name: boat.name,
 		contact_id: boat.contact?.id || "",
@@ -35,6 +42,7 @@ const EditBoatPage = ({
 		beam: boat.beam || "",
 		note: boat.note || "",
 		place: boat.place || "",
+		position: currentPos || undefined,
 	});
 
 	const { put, errors, data, setData, processing } = useForm(getInitialData());
@@ -56,7 +64,6 @@ const EditBoatPage = ({
 					title="Informations du bateau"
 					subtitle="Complétez les informations du bateau"
 				/>
-
 				<form onSubmit={submit} className="space-y-4">
 					<div className="flex flex-col md:flex-row gap-4">
 						<Input
@@ -109,15 +116,52 @@ const EditBoatPage = ({
 							onChange={(e) => setData("boat_type_id", e.target.value)}
 						/>
 					</div>
-					<Input
-						error={errors.place}
-						name="place"
-						label="Place"
-						placeholder="Ex: 9 ou 604"
-						value={data.place}
-						type="text"
-						onChange={(e) => setData("place", e.target.value)}
-					/>
+					<div className="space-y-2">
+						<div className="space-x-2">
+							<input
+								onChange={() => setManualSet(!manualSet)}
+								checked={manualSet}
+								id="manualSet"
+								type="checkbox"
+							/>
+							<label htmlFor="manualSet">
+								Modifier la position du bateau manuellement
+							</label>
+						</div>
+						{manualSet ? (
+							<>
+								<input
+									type="hidden"
+									name="position[0]"
+									value={data.position ? data.position[0] : ""}
+								/>
+								<input
+									type="hidden"
+									name="position[1]"
+									value={data.position ? data.position[1] : ""}
+								/>
+								<ManualSetPositionCard
+									currentPos={currentPos}
+									onChange={(pos) => {
+										if (Array.isArray(pos) && pos.length === 2) {
+											setData("position", pos);
+										} else {
+											setData("position", undefined);
+										}
+									}}
+								/>
+							</>
+						) : (
+							<Input
+								error={errors.place}
+								name="place"
+								label="Place"
+								placeholder="Ex: 9 ou 604"
+								value={data.place}
+								onChange={(e) => setData("place", e.target.value)}
+							/>
+						)}
+					</div>
 					<Input
 						error={errors.mmsi}
 						name="mmsi"
@@ -167,8 +211,8 @@ const EditBoatPage = ({
 						placeholder="Rédiger des notes sur le bateau"
 					/>
 					<div className="flex items-center justify-between mt-10">
-						<Button type="submit" disabled={processing}>
-							{processing ? <Loader /> : "Enregistrer"}
+						<Button processing={processing} type="submit" disabled={processing}>
+							Enregistrer
 						</Button>
 						<Button
 							type="button"

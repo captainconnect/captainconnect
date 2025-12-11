@@ -1,4 +1,5 @@
 import vine, { SimpleMessagesProvider } from "@vinejs/vine";
+import type { Coordinate } from "#types/boat";
 
 export const boatSchema = vine.object({
 	name: vine.string().minLength(1).maxLength(100),
@@ -17,9 +18,10 @@ export const boatSchema = vine.object({
 		.nullable()
 		.optional(),
 	model: vine.string().nullable(),
-	place: vine.string().nullable(),
+	place: vine.string().nullable().optional(),
 	position: vine
-		.object({ lat: vine.number(), lng: vine.number() })
+		.array(vine.number())
+		.parse((arr) => arr as Coordinate)
 		.nullable()
 		.optional(),
 	mmsi: vine

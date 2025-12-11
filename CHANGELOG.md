@@ -5,14 +5,17 @@
 #### Majeur
 - Export des heures en CSV
 - Export fiche d'intervention en PDF
-
-## Prévisions pour la 1.1.0
-
-#### Majeur
 - Ajout du système de médias
 
-#### Mineur
-- Possibilité de placer un bateau manuellement sur la carte
+## **1.1.1**
+
+#### 🚀 Nouvelles fonctionnalités
+- Ajout de la position d'un bateau en plaçant un point sur la carte
+- Récupération de la position GPS de l'appareil
+
+#### 🛠️ Corrections
+- Le logo dans la barre de navigation est à présent bleu
+- Image du marker GPS dans la carte
 
 ## **1.0.0**
 ### **Refonte majeure & nouveau pipeline de déploiement**

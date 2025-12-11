@@ -3,7 +3,6 @@ import { version } from "~/app/version";
 import Button from "~/components/ui/buttons/Button";
 import Card from "~/components/ui/Card";
 import Input from "~/components/ui/inputs/Input";
-import Loader from "~/components/ui/Loader";
 import Logo from "~/components/ui/Logo";
 
 export default function LoginPage() {
@@ -49,8 +48,12 @@ export default function LoginPage() {
 									autoComplete="current-password"
 								/>
 
-								<Button type="submit" disabled={processing}>
-									{processing ? <Loader /> : "Connexion"}
+								<Button
+									processing={processing}
+									type="submit"
+									disabled={processing}
+								>
+									Connexion
 								</Button>
 								{errors.E_INVALID_CREDENTIALS && (
 									<span className="text-red-500 text-center">

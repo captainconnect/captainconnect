@@ -2,7 +2,6 @@ import { Form, Head, Link } from "@inertiajs/react";
 import Button from "~/components/ui/buttons/Button";
 import Card from "~/components/ui/Card";
 import Input from "~/components/ui/inputs/Input";
-import Loader from "~/components/ui/Loader";
 import Logo from "~/components/ui/Logo";
 
 export default function FirstLoginPage() {
@@ -45,8 +44,12 @@ export default function FirstLoginPage() {
 									autoComplete="current-password"
 									required
 								/>
-								<Button type="submit" disabled={processing}>
-									{processing ? <Loader /> : "Enregistrer"}
+								<Button
+									processing={processing}
+									type="submit"
+									disabled={processing}
+								>
+									Enregistrer
 								</Button>
 								<Link className="text-center" href="/">
 									Me le rappeler plus tard

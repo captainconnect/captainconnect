@@ -3,7 +3,6 @@ import { Save, User as UserIcon, X } from "lucide-react";
 import type { User } from "#types/user";
 import Button from "~/components/ui/buttons/Button";
 import Input from "~/components/ui/inputs/Input";
-import Loader from "~/components/ui/Loader";
 import type { BaseModalProps } from "~/components/ui/modals/Modal";
 import Modal from "~/components/ui/modals/Modal";
 
@@ -69,8 +68,8 @@ export default function UpdateProfileModal({
 					error={errors.phone}
 					label="Numéro de téléphone"
 				/>
-				<Button type="submit" icon={<Save />}>
-					{processing ? <Loader /> : "Enregistrer"}
+				<Button processing={processing} type="submit" icon={<Save />}>
+					Enregistrer
 				</Button>
 				<Button onClick={handleCancel} variant="secondary" icon={<X />}>
 					Annuler
