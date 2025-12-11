@@ -129,7 +129,7 @@ export default class extends BaseSeeder {
 				callSign: "FAS6221",
 				length: 39,
 				beam: 3.7,
-				position: { lat: 43.2965, lng: 5.3698 }, // Marseille
+				position: [43.2965, 5.3698],
 			},
 			{
 				name: "Liberty",
