@@ -22,7 +22,7 @@ export default function CreateBoatForm({
 }: CreateBoatFormProps) {
 	const [showCreateContactModal, setShowCreateContactModal] = useState(false);
 	const [manualSet, setManualSet] = useState(false);
-	const [manualPos, setManualPos] = useState<Coordinate | null>(null);
+	const [manualPos, setManualPos] = useState<Coordinate | "">();
 
 	return (
 		<>

@@ -77,23 +77,26 @@ export default class BoatsController {
 	async update({ request, params, response }: HttpContext) {
 		const boatSlug = params.boatSlug;
 		const boat = await this.boatService.getBySlug(boatSlug);
+		try {
+			const initialPayload = await request.validateUsing(boatValidator, {
+				meta: { boat },
+			});
 
-		const initialPayload = await request.validateUsing(boatValidator, {
-			meta: { boat },
-		});
+			const finalPayload: BoatPayload = {
+				...initialPayload,
 
-		const finalPayload: BoatPayload = {
-			...initialPayload,
+				position: initialPayload.position
+					? (initialPayload.position as Coordinate)
+					: null,
+			};
 
-			position: initialPayload.position
-				? (initialPayload.position as Coordinate)
-				: null,
-		};
-
-		const slug = await this.boatService.update(finalPayload, boat);
-		return response.redirect().toRoute("boats.show", {
-			boatSlug: slug,
-		});
+			const slug = await this.boatService.update(finalPayload, boat);
+			return response.redirect().toRoute("boats.show", {
+				boatSlug: slug,
+			});
+		} catch (e) {
+			console.log(e);
+		}
 	}
 
 	async destroy({ params, response }: HttpContext) {

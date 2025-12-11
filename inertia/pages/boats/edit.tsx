@@ -10,7 +10,6 @@ import CardHeader from "~/components/ui/CardHeader";
 import Input from "~/components/ui/inputs/Input";
 import Select from "~/components/ui/inputs/Select";
 import Textarea from "~/components/ui/inputs/TextArea";
-import Loader from "~/components/ui/Loader";
 
 type EditPageProps = {
 	boat: Boat;
@@ -144,7 +143,11 @@ const EditBoatPage = ({
 								<ManualSetPositionCard
 									currentPos={currentPos}
 									onChange={(pos) => {
-										setData("position", [pos[0], pos[1]]);
+										if (Array.isArray(pos) && pos.length === 2) {
+											setData("position", pos);
+										} else {
+											setData("position", undefined);
+										}
 									}}
 								/>
 							</>
@@ -208,8 +211,8 @@ const EditBoatPage = ({
 						placeholder="Rédiger des notes sur le bateau"
 					/>
 					<div className="flex items-center justify-between mt-10">
-						<Button type="submit" disabled={processing}>
-							{processing ? <Loader /> : "Enregistrer"}
+						<Button processing={processing} type="submit" disabled={processing}>
+							Enregistrer
 						</Button>
 						<Button
 							type="button"

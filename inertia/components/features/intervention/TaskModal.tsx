@@ -5,7 +5,6 @@ import type { TaskGroup } from "#types/intervention";
 import Button from "~/components/ui/buttons/Button";
 import Input from "~/components/ui/inputs/Input";
 import Select from "~/components/ui/inputs/Select";
-import Loader from "~/components/ui/Loader";
 import type { BaseModalProps } from "~/components/ui/modals/Modal";
 import Modal from "~/components/ui/modals/Modal";
 
@@ -87,8 +86,13 @@ export default function TaskModal({
 					value={data.name}
 					onChange={(e) => setData("name", e.target.value)}
 				/>
-				<Button type="submit" disabled={processing} icon={<Plus />}>
-					{processing ? <Loader /> : "Ajouter"}
+				<Button
+					processing={processing}
+					type="submit"
+					disabled={processing}
+					icon={<Plus />}
+				>
+					Ajouter
 				</Button>
 			</form>
 		</Modal>
