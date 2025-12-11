@@ -1,6 +1,7 @@
 import { Link } from "@inertiajs/react";
 import { clsx } from "clsx";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
+import Loader from "../Loader";
 
 export type ButtonVariant = "primary" | "secondary" | "danger";
 
@@ -9,6 +10,7 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 	size?: "icon" | "sm" | "md";
 	icon?: ReactNode;
 	href?: string;
+	processing?: boolean;
 };
 
 export default function Button({
@@ -19,6 +21,7 @@ export default function Button({
 	href,
 	children,
 	className,
+	processing,
 	...props
 }: ButtonProps) {
 	const base =
@@ -54,7 +57,7 @@ export default function Button({
 
 	return (
 		<button type={type} className={classes} {...props}>
-			{content}
+			{processing ? <Loader /> : content}
 		</button>
 	);
 }

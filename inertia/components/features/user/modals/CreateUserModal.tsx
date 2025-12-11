@@ -7,7 +7,6 @@ import { slugify } from "~/app/utils";
 import Button from "~/components/ui/buttons/Button";
 import Input from "~/components/ui/inputs/Input";
 import Select from "~/components/ui/inputs/Select";
-import Loader from "~/components/ui/Loader";
 import type { BaseModalProps } from "~/components/ui/modals/Modal";
 import Modal from "~/components/ui/modals/Modal";
 
@@ -124,8 +123,8 @@ export default function CreateUserModal({
 					<Button onClick={handleCancel} variant="secondary" icon={<X />}>
 						Annuler
 					</Button>
-					<Button type="submit" icon={<Save />}>
-						{processing ? <Loader /> : "Créer l'utilisateur"}
+					<Button processing={processing} type="submit" icon={<Save />}>
+						Créer l'utilisateur
 					</Button>
 				</div>
 			</form>

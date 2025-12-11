@@ -1,4 +1,4 @@
-import { LocateFixed } from "lucide-react";
+import { LocateFixed, LocateOff } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
 	MapContainer,
@@ -8,18 +8,8 @@ import {
 	useMapEvents,
 } from "react-leaflet";
 import type { Coordinate } from "#types/boat";
+import { MarkerIcon } from "~/app/LeafletMarkerIcon";
 import Button from "~/components/ui/buttons/Button";
-import Loader from "~/components/ui/Loader";
-
-type ClickMarkerProps = {
-	onChange: (coords: Coordinate) => void;
-	currentPos?: Coordinate;
-};
-
-type ManualSetPositionCardProps = {
-	onChange: (pos: Coordinate) => void;
-	currentPos?: Coordinate;
-};
 
 function ChangeView({ center, zoom }: { center: Coordinate; zoom: number }) {
 	const map = useMap();
@@ -31,41 +21,40 @@ function ChangeView({ center, zoom }: { center: Coordinate; zoom: number }) {
 	return null;
 }
 
-function ClickMarker({ onChange, currentPos }: ClickMarkerProps) {
-	const [position, setPosition] = useState<Coordinate | null>(
-		currentPos ? currentPos : null,
-	);
+type ClickMarkerProps = {
+	onChangePosition: (pos: Coordinate) => void;
+	position: Coordinate | "";
+};
 
-	useEffect(() => {
-		if (currentPos) {
-			setPosition(currentPos);
-		}
-	}, [currentPos]);
-
+function ClickMarker({ onChangePosition, position }: ClickMarkerProps) {
 	useMapEvents({
 		click(e) {
 			const { lat, lng } = e.latlng;
 			const coords: Coordinate = [lat, lng];
-			setPosition(coords);
-			onChange(coords);
+			onChangePosition(coords);
 		},
 	});
 
-	return position ? (
+	return typeof position !== "string" ? (
 		<Marker
+			icon={MarkerIcon}
 			position={position}
 			draggable={true}
 			eventHandlers={{
 				dragend: (e) => {
 					const latlng = e.target.getLatLng();
 					const coords: Coordinate = [latlng.lat, latlng.lng];
-					setPosition(coords);
-					onChange(coords);
+					onChangePosition(coords);
 				},
 			}}
 		/>
 	) : null;
 }
+
+type ManualSetPositionCardProps = {
+	onChange: (pos: Coordinate | "") => void;
+	currentPos?: Coordinate | "";
+};
 
 export default function ManualSetPositionCard({
 	onChange,
@@ -74,17 +63,27 @@ export default function ManualSetPositionCard({
 	const zoom = 17;
 	const portCorbieres: Coordinate = [43.3594946102194, 5.298484362003815];
 
+	if (currentPos === undefined) currentPos = "";
+
 	const [processingGps, setProcessingGps] = useState(false);
-	const [pos, setPos] = useState<Coordinate | undefined>(currentPos);
 	const [shouldRecenter, setShouldRecenter] = useState(false);
+	const [markerPosition, setMarkerPosition] = useState<Coordinate | "">(
+		currentPos,
+	);
 
 	const onPositionSelected = (coords: Coordinate) => {
-		setPos(coords);
+		setMarkerPosition(coords);
 		onChange(coords);
-		setShouldRecenter(false); // Ne pas recentrer sur clic manuel
+		setShouldRecenter(false);
 	};
 
-	const mapCenter = pos ?? portCorbieres;
+	const onPositionDelete = () => {
+		setMarkerPosition("");
+		onChange("");
+		setShouldRecenter(true);
+	};
+
+	const mapCenter = markerPosition ? markerPosition : portCorbieres;
 
 	const getLocation = () => {
 		if (!navigator.geolocation) {
@@ -95,10 +94,9 @@ export default function ManualSetPositionCard({
 			(pos) => {
 				const coords: Coordinate = [pos.coords.latitude, pos.coords.longitude];
 				setProcessingGps(false);
-				setPos(coords);
-				onChange(coords);
+				onPositionSelected(coords);
 
-				setShouldRecenter(true); // Recentrer uniquement pour le GPS
+				setShouldRecenter(true);
 			},
 			(err) => {
 				console.error(`Error : ${err.message}`);
@@ -112,9 +110,22 @@ export default function ManualSetPositionCard({
 
 	return (
 		<div className="space-y-2">
-			<Button onClick={getLocation} icon={<LocateFixed />}>
-				{processingGps ? <Loader /> : "Récupérer ma position"}
-			</Button>
+			<div className="flex gap-2">
+				<Button
+					processing={processingGps}
+					onClick={getLocation}
+					icon={<LocateFixed />}
+				>
+					Récupérer ma position
+				</Button>
+				<Button
+					variant="secondary"
+					onClick={onPositionDelete}
+					icon={<LocateOff />}
+				>
+					Supprimer la position
+				</Button>
+			</div>
 
 			<div className="w-full h-96 rounded-3xl border border-gray-200">
 				<MapContainer
@@ -130,7 +141,10 @@ export default function ManualSetPositionCard({
 
 					{shouldRecenter && <ChangeView center={mapCenter} zoom={zoom} />}
 
-					<ClickMarker currentPos={pos} onChange={onPositionSelected} />
+					<ClickMarker
+						position={markerPosition}
+						onChangePosition={onPositionSelected}
+					/>
 				</MapContainer>
 			</div>
 		</div>
