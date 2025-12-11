@@ -1,12 +1,13 @@
 import { Form } from "@inertiajs/react";
 import { UserPen, X } from "lucide-react";
 import { useState } from "react";
-import type { BoatConstructor, BoatType } from "#types/boat";
+import type { BoatConstructor, BoatType, Coordinate } from "#types/boat";
 import type { Contact } from "#types/contact";
 import Button from "~/components/ui/buttons/Button";
 import Input from "~/components/ui/inputs/Input";
 import Select from "~/components/ui/inputs/Select";
 import CreateContactModal from "../contact/modals/CreateContactModal";
+import ManualSetPositionCard from "./ManualSetPositionCard";
 
 type CreateBoatFormProps = {
 	contacts: Contact[];
@@ -20,6 +21,9 @@ export default function CreateBoatForm({
 	boatTypes,
 }: CreateBoatFormProps) {
 	const [showCreateContactModal, setShowCreateContactModal] = useState(false);
+	const [manualSet, setManualSet] = useState(false);
+	const [manualPos, setManualPos] = useState<Coordinate | null>(null);
+
 	return (
 		<>
 			<Form method="POST" action="/bateaux/nouveau" className="space-y-4">
@@ -75,12 +79,42 @@ export default function CreateBoatForm({
 								}))}
 							/>
 						</div>
-						<Input
-							error={errors.place}
-							name="place"
-							label="Place"
-							placeholder="Ex: 9 ou 604"
-						/>
+						<div className="space-y-2">
+							<div className="space-x-2">
+								<input
+									onChange={() => setManualSet(!manualSet)}
+									checked={manualSet}
+									id="manualSet"
+									type="checkbox"
+								/>
+								<label htmlFor="manualSet">Placer le bateau manuellement</label>
+							</div>
+
+							{manualSet ? (
+								<>
+									<input
+										type="hidden"
+										name="position[0]"
+										value={manualPos ? manualPos[0] : ""}
+									/>
+									<input
+										type="hidden"
+										name="position[1]"
+										value={manualPos ? manualPos[1] : ""}
+									/>
+									<ManualSetPositionCard
+										onChange={(pos) => setManualPos(pos)}
+									/>
+								</>
+							) : (
+								<Input
+									error={errors.place}
+									name="place"
+									label="Place"
+									placeholder="Ex: 9 ou 604"
+								/>
+							)}
+						</div>
 						<Input
 							error={errors.mmsi}
 							name="mmsi"

@@ -26,11 +26,42 @@ export class BoatService {
 	}
 
 	async create(payload: BoatPayload) {
-		return await Boat.create(payload);
+		return await Boat.create({
+			...payload,
+			...(payload.position
+				? {
+						place: "Manuelle",
+						position: [payload.position[0], payload.position[1]],
+					}
+				: {}),
+		});
 	}
 
 	async update(payload: BoatPayload, boat: Boat) {
-		boat.merge(payload);
+		const hadPlace = !!boat.place;
+		const hadPosition = !!boat.position;
+
+		const hasPayloadPosition =
+			Array.isArray(payload.position) && payload.position.length === 2;
+		const hasPayloadPlace =
+			typeof payload.place === "string" && payload.place.trim() !== "";
+
+		if (hadPlace && hasPayloadPosition) {
+			boat.position = payload.position ?? null;
+			boat.place = "Manuelle";
+		}
+
+		if (hadPosition && hasPayloadPlace) {
+			boat.place = payload.place ?? "";
+			boat.position = null;
+		}
+
+		boat.merge({
+			...payload,
+			position: boat.position,
+			place: boat.place,
+		});
+
 		const { slug } = await boat.save();
 		return slug;
 	}
