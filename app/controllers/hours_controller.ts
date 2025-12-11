@@ -27,8 +27,6 @@ export default class HoursController {
 		}
 
 		if (Number.isNaN(startAt.getTime()) || Number.isNaN(endAt.getTime())) {
-			// Vérification pour éviter les dates invalides
-			console.log("Invalid Date format");
 			return response.badRequest({
 				error: "Invalid date format",
 			});
@@ -44,9 +42,7 @@ export default class HoursController {
 		return response.json(hours);
 	}
 
-	async getBoatHours({ params, response }: HttpContext) {
-		console.log(params);
-
+	async getBoatHours({ response }: HttpContext) {
 		return response.redirect().back();
 	}
 }

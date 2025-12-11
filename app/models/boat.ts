@@ -8,7 +8,7 @@ import {
 } from "@adonisjs/lucid/orm";
 import type { BelongsTo, HasMany } from "@adonisjs/lucid/types/relations";
 import type { DateTime } from "luxon";
-import type { GPSPoint } from "#types/boat";
+import type { Coordinate } from "#types/boat";
 import BoatConstructor from "./boat_constructor.js";
 import BoatType from "./boat_type.js";
 import Contact from "./contact.js";
@@ -39,8 +39,12 @@ export default class Boat extends BaseModel {
 	@column()
 	declare place: string | null;
 
-	@column()
-	declare position: GPSPoint | null;
+	@column({
+		prepare: (value: Coordinate | null) => {
+			return value ? JSON.stringify(value) : null;
+		},
+	})
+	declare position: Coordinate | null;
 
 	@column()
 	declare mmsi: string | null;

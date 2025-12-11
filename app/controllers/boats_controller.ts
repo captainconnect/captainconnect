@@ -4,6 +4,7 @@ import type { HttpContext } from "@adonisjs/core/http";
 import { BoatService } from "#services/boat_service";
 // biome-ignore lint/style/useImportType: IoC runtime needs this
 import { ContactService } from "#services/contact_service";
+import type { BoatPayload, Coordinate } from "#types/boat";
 import { boatValidator } from "#validators/boat";
 
 @inject()
@@ -43,8 +44,16 @@ export default class BoatsController {
 	}
 
 	async store({ request, response }: HttpContext) {
-		const boatPayload = await request.validateUsing(boatValidator);
-		const { slug } = await this.boatService.create(boatPayload);
+		const initialPayload = await request.validateUsing(boatValidator);
+		const finalPayload: BoatPayload = {
+			...initialPayload,
+
+			position: initialPayload.position
+				? (initialPayload.position as Coordinate)
+				: null,
+		};
+		const { slug } = await this.boatService.create(finalPayload);
+
 		return response.redirect().toRoute("boats.show", {
 			boatSlug: slug,
 		});
@@ -69,11 +78,19 @@ export default class BoatsController {
 		const boatSlug = params.boatSlug;
 		const boat = await this.boatService.getBySlug(boatSlug);
 
-		const payload = await request.validateUsing(boatValidator, {
+		const initialPayload = await request.validateUsing(boatValidator, {
 			meta: { boat },
 		});
 
-		const slug = await this.boatService.update(payload, boat);
+		const finalPayload: BoatPayload = {
+			...initialPayload,
+
+			position: initialPayload.position
+				? (initialPayload.position as Coordinate)
+				: null,
+		};
+
+		const slug = await this.boatService.update(finalPayload, boat);
 		return response.redirect().toRoute("boats.show", {
 			boatSlug: slug,
 		});
