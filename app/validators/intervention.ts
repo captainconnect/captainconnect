@@ -7,7 +7,7 @@ const taskSchema = vine.object({
 
 const taskGroupSchema = vine.object({
 	name: vine.string(),
-	tasks: vine.array(taskSchema),
+	tasks: vine.array(taskSchema).minLength(1),
 });
 
 export const createInterventionSchema = vine.object({
