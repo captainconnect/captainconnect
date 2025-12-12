@@ -20,9 +20,14 @@ type AddTaskBoardProps = {
 		taskGroups: TaskGroup[];
 	};
 	setData: (key: string, value: TaskGroup[]) => void;
+	error?: string;
 };
 
-export default function AddTaskBoard({ data, setData }: AddTaskBoardProps) {
+export default function AddTaskBoard({
+	data,
+	setData,
+	error,
+}: AddTaskBoardProps) {
 	const [newGroup, setNewGroup] = useState("");
 	const [newTaskTexts, setNewTaskTexts] = useState<Record<string, string>>({});
 
@@ -82,6 +87,7 @@ export default function AddTaskBoard({ data, setData }: AddTaskBoardProps) {
 				subtitle="Organisez les tâches"
 				icon={<ListCheck />}
 			/>
+			{error && <span className="text-red-500">{error}</span>}
 			<div className="flex items-center gap-4">
 				<Input
 					placeholder="Nouveau groupe de tâches"
@@ -117,7 +123,6 @@ export default function AddTaskBoard({ data, setData }: AddTaskBoardProps) {
 						</button>
 					</div>
 
-					{/* --- Tâches --- */}
 					<ul className="space-y-2 pl-4">
 						{group.tasks.map((task, taskIndex) => (
 							<li
