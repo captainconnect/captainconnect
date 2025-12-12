@@ -46,6 +46,7 @@ const InterventionPage = ({ intervention, users }: InterventionPageProps) => {
 							icon={c.icon}
 							data={c.data}
 							alert={c.alert}
+							link={c.link}
 						/>
 					))}
 				</div>

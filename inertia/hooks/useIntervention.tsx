@@ -73,6 +73,12 @@ export default function useIntervention(
 
 	const cards: InformationCardProps[] = [
 		{
+			title: "Tâches",
+			icon: <Check color="gray" />,
+			data: totalTasks,
+			link: `/interventions/${intervention.slug}/taches`,
+		},
+		{
 			title: "Progression",
 			icon: <Clock color="gray" />,
 			data: `${progress}%`,
@@ -86,11 +92,6 @@ export default function useIntervention(
 					},
 				]
 			: []),
-		{
-			title: "Tâches",
-			icon: <Check color="gray" />,
-			data: totalTasks,
-		},
 		...(startAt
 			? [
 					{

@@ -1,6 +1,8 @@
 import { inject } from "@adonisjs/core";
 import type { HttpContext } from "@adonisjs/core/http";
 // biome-ignore lint/style/useImportType: IoC runtime needs this
+import { InterventionService } from "#services/intervention_service";
+// biome-ignore lint/style/useImportType: IoC runtime needs this
 import { TaskService } from "#services/task_service";
 // biome-ignore lint/style/useImportType: IoC runtime needs this
 import { UserService } from "#services/user_service";
@@ -12,7 +14,19 @@ export default class TasksController {
 	constructor(
 		protected taskService: TaskService,
 		protected userService: UserService,
+		protected interventionService: InterventionService,
 	) {}
+
+	async index({ params, inertia }: HttpContext) {
+		const interventionSlug = params.interventionSlug;
+
+		const intervention =
+			await this.interventionService.getBySlug(interventionSlug);
+
+		return inertia.render("interventions/tasks/index", {
+			intervention,
+		});
+	}
 
 	async show({ params, inertia }: HttpContext) {
 		const taskId = params.taskId;

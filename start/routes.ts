@@ -184,6 +184,10 @@ router
 				router
 					.post("/:interventionSlug/task", [TasksController, "store"])
 					.as("tasks.store");
+
+				router
+					.get("/:interventionSlug/taches", [TasksController, "index"])
+					.as("interventions.tasks.index");
 			})
 			.prefix("interventions");
 
