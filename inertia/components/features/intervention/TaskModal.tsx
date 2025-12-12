@@ -13,30 +13,76 @@ type TaskModalProps = BaseModalProps & {
 	interventionSlug: string;
 };
 
+type AddTaskForm = {
+	taskGroup?: string;
+	taskGroupId?: number;
+	name: string;
+};
+
 export default function TaskModal({
 	open,
 	onClose,
 	taskGroups,
 	interventionSlug,
 }: TaskModalProps) {
-	const [useExistantTaskGroup, setUseExistantTaskGroup] = useState(false);
-
-	const { data, setData, reset, errors, processing, post } = useForm({
-		taskGroup: "",
-		taskGroupId: "",
-		name: "",
+	const options = taskGroups.map((tg) => {
+		return {
+			id: tg.id,
+			label: tg.name,
+		};
 	});
+	const [useExistantTaskGroup, setUseExistantTaskGroup] = useState(true);
+	const [fakeTaskGroupId, setFakeTaskGroupId] = useState<number | string>(
+		options[0].id,
+	);
+
+	const getInitialData = () => {
+		return {
+			taskGroupId: options[0].id,
+			name: "",
+		};
+	};
+
+	const { data, setData, reset, errors, processing, post } =
+		useForm<AddTaskForm>(getInitialData());
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		post(`/interventions/${interventionSlug}/task`);
-		handleOnClose();
+		post(`/interventions/${interventionSlug}/task`, {
+			onSuccess: () => handleOnClose(),
+			onError: (error) => console.error(error),
+		});
+	};
+
+	const handleSelectOnChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		const value = e.target.value;
+
+		if (value === "new") {
+			setUseExistantTaskGroup(false);
+			setFakeTaskGroupId("new");
+
+			setData("taskGroupId", undefined);
+			setData("taskGroup", "");
+			return;
+		}
+
+		const id = Number(value);
+
+		if (Number.isNaN(id)) return;
+
+		setUseExistantTaskGroup(true);
+		setFakeTaskGroupId(value);
+
+		setData("taskGroupId", id);
+		setData("taskGroup", undefined);
 	};
 
 	const handleOnClose = () => {
 		onClose();
 		setTimeout(() => {
-			setUseExistantTaskGroup(false);
+			setUseExistantTaskGroup(true);
+			setFakeTaskGroupId(options[0].id);
+			setData(getInitialData());
 			reset();
 		}, 150);
 	};
@@ -48,16 +94,14 @@ export default function TaskModal({
 			open={open}
 			onClose={handleOnClose}
 		>
-			<div className="space-x-2 text-primary mb-2">
-				<input
-					id="useExistantGroup"
-					type="checkbox"
-					checked={useExistantTaskGroup}
-					onChange={() => setUseExistantTaskGroup(!useExistantTaskGroup)}
-				/>
-				<label htmlFor="useExistantGroup">Utiliser un groupe existant</label>
-			</div>
 			<form className="space-y-4" onSubmit={handleSubmit}>
+				<Select
+					label="Groupe de tâche"
+					value={fakeTaskGroupId}
+					onChange={(e) => handleSelectOnChange(e)}
+					allowNull={false}
+					options={[...options, { id: "new", label: "Nouveau groupe" }]}
+				/>
 				{!useExistantTaskGroup && (
 					<Input
 						label="Nouveau groupe de tâche"
@@ -67,23 +111,12 @@ export default function TaskModal({
 						error={errors.taskGroup}
 					/>
 				)}
-				{useExistantTaskGroup && (
-					<Select
-						label="Groupe de tâche existant"
-						value={data.taskGroupId}
-						onChange={(e) => setData("taskGroupId", e.target.value)}
-						options={taskGroups.map((tg) => {
-							return {
-								id: tg.id,
-								label: tg.name,
-							};
-						})}
-					/>
-				)}
+
 				<Input
 					label="Tâche"
 					placeholder="Nouvelle tâche"
 					value={data.name}
+					error={errors.name}
 					onChange={(e) => setData("name", e.target.value)}
 				/>
 				<Button

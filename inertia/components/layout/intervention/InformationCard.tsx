@@ -1,3 +1,4 @@
+import { Link } from "@inertiajs/react";
 import type { ReactNode } from "react";
 
 export type InformationCardProps = {
@@ -5,6 +6,7 @@ export type InformationCardProps = {
 	title: string;
 	data: string | number;
 	alert?: boolean;
+	link?: string;
 };
 
 export default function InformationCard({
@@ -12,9 +14,13 @@ export default function InformationCard({
 	title,
 	data,
 	alert = false,
+	link,
 }: InformationCardProps) {
-	return (
-		<div className="flex items-center gap-4 bg-white border border-gray-200 p-6 w-54 rounded-2xl">
+	const className =
+		"flex items-center gap-4 bg-white border border-gray-200 p-6 w-54 rounded-2xl";
+	console.log(link);
+	const content = (
+		<>
 			{icon}
 			<div className="flex flex-col">
 				<span className="font-semibold text-xl text-slate-500">{title}</span>
@@ -22,6 +28,13 @@ export default function InformationCard({
 					{data}
 				</span>
 			</div>
-		</div>
+		</>
+	);
+	return link ? (
+		<Link className={className} href={link}>
+			{content}
+		</Link>
+	) : (
+		<div className={className}>{content}</div>
 	);
 }
