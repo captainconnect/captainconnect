@@ -43,6 +43,9 @@ export default class Boat extends BaseModel {
 		prepare: (value: Coordinate | null) => {
 			return value ? JSON.stringify(value) : null;
 		},
+		consume: (value: string | null) => {
+			return value ? JSON.parse(value) : null;
+		},
 	})
 	declare position: Coordinate | null;
 
