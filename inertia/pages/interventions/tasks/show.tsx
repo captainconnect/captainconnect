@@ -64,7 +64,7 @@ const TaskPage = ({ task, users, hours, interventionSlug }: TaskPageProps) => {
 							}
 				}
 				backButton={{
-					route: `/interventions/${task.taskGroup.intervention.slug}#TASKS`,
+					route: `/interventions/${task.taskGroup.intervention.slug}/taches`,
 				}}
 				buttons={[
 					task.status === "IN_PROGRESS"

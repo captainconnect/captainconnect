@@ -179,7 +179,7 @@ router
 					.as("interventions.destroy");
 
 				router
-					.get("/:interventionSlug/task/:taskId", [TasksController, "show"])
+					.get("/:interventionSlug/taches/:taskId", [TasksController, "show"])
 					.as("tasks.show");
 				router
 					.post("/:interventionSlug/task", [TasksController, "store"])
@@ -188,6 +188,9 @@ router
 				router
 					.get("/:interventionSlug/taches", [TasksController, "index"])
 					.as("interventions.tasks.index");
+				router
+					.put("/:interventionSlug/tasks/ordering", [TasksController, "order"])
+					.as("interventions.tasks.ordering");
 			})
 			.prefix("interventions");
 

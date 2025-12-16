@@ -22,6 +22,7 @@ export type Task = {
 	name: string;
 	status: TaskStatus;
 	details?: string;
+	sort: number;
 	createdAt: Date;
 	updatedAt: Date;
 };
@@ -29,6 +30,7 @@ export type Task = {
 export type TaskGroup = {
 	id: number;
 	name: string;
+	sort: number;
 	intervention: Intervention;
 	tasks: Task[];
 };
@@ -84,4 +86,15 @@ export interface CreateTaskPayload {
 	taskGroupId?: number;
 	taskGroup?: string;
 	name: string;
+}
+
+export interface OrderTaskPayload {
+	groups: {
+		id: number;
+		order: number;
+		tasks: {
+			id: number;
+			order: number;
+		}[];
+	}[];
 }

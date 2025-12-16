@@ -21,7 +21,11 @@ export class InterventionService {
 			.preload("boat", (query) =>
 				query.preload("contact").preload("boatConstructor").preload("type"),
 			)
-			.preload("taskGroups", (query) => query.preload("tasks"))
+			.preload("taskGroups", (query) =>
+				query
+					.orderBy("sort", "asc")
+					.preload("tasks", (query) => query.orderBy("sort", "asc")),
+			)
 			.firstOrFail();
 	}
 

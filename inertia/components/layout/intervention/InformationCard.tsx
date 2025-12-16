@@ -31,7 +31,7 @@ export default function InformationCard({
 		</>
 	);
 	return link ? (
-		<Link className={className} href={link}>
+		<Link className={`${className} transition active:scale-95`} href={link}>
 			{content}
 		</Link>
 	) : (

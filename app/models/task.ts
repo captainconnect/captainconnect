@@ -19,6 +19,9 @@ export default class Task extends BaseModel {
 	declare status: TaskStatus;
 
 	@column()
+	declare sort: number;
+
+	@column()
 	declare details: string | null;
 
 	@column.dateTime({ autoCreate: true })

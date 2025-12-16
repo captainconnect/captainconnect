@@ -1,3 +1,4 @@
+import db from "@adonisjs/lucid/services/db";
 import Hour from "#models/hour";
 import Intervention from "#models/intervention";
 import Task from "#models/task";
@@ -5,6 +6,7 @@ import TaskGroup from "#models/task_group";
 import type {
 	AddHourPayload,
 	CreateTaskPayload,
+	OrderTaskPayload,
 	TaskDetailsPayload,
 } from "#types/intervention";
 
@@ -77,6 +79,34 @@ export class TaskService {
 	async deleteHour(id: number) {
 		const hour = await Hour.findOrFail(id);
 		await hour.delete();
+	}
+
+	async orderTasks(interventionSlug: string, payload: OrderTaskPayload) {
+		const intervention = await Intervention.query()
+			.where("slug", interventionSlug)
+			.firstOrFail();
+
+		await db.transaction(async (trx) => {
+			for (let i = 0; i < payload.groups.length; i++) {
+				const group = payload.groups[i];
+
+				// update ordre du groupe
+				await TaskGroup.query({ client: trx })
+					.where("id", group.id)
+					.where("intervention_id", intervention.id)
+					.update({ sort: i });
+
+				for (let j = 0; j < group.tasks.length; j++) {
+					const task = group.tasks[j];
+
+					// update ordre de la tâche
+					await Task.query({ client: trx }).where("id", task.id).update({
+						sort: j,
+						taskGroupId: group.id,
+					});
+				}
+			}
+		});
 	}
 
 	async delete(id: number) {

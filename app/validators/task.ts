@@ -13,3 +13,20 @@ export const taskDetailsSchema = vine.object({
 });
 
 export const taskDetailsValidator = vine.compile(taskDetailsSchema);
+
+export const orderTasksSchema = vine.object({
+	groups: vine.array(
+		vine.object({
+			id: vine.number(),
+			order: vine.number(),
+			tasks: vine.array(
+				vine.object({
+					id: vine.number(),
+					order: vine.number(),
+				}),
+			),
+		}),
+	),
+});
+
+export const orderTasksValidator = vine.compile(orderTasksSchema);

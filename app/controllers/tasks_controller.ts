@@ -7,7 +7,11 @@ import { TaskService } from "#services/task_service";
 // biome-ignore lint/style/useImportType: IoC runtime needs this
 import { UserService } from "#services/user_service";
 import { hourValidator } from "#validators/hour";
-import { createTaskValidator, taskDetailsValidator } from "#validators/task";
+import {
+	createTaskValidator,
+	orderTasksValidator,
+	taskDetailsValidator,
+} from "#validators/task";
 
 @inject()
 export default class TasksController {
@@ -93,11 +97,18 @@ export default class TasksController {
 		return response.redirect().back();
 	}
 
+	async order({ params, request, response }: HttpContext) {
+		const interventionSlug = params.interventionSlug;
+		const payload = await request.validateUsing(orderTasksValidator);
+		await this.taskService.orderTasks(interventionSlug, payload);
+		return response.redirect().back();
+	}
+
 	async destroy({ params, response }: HttpContext) {
 		const taskId = params.taskId;
 		const interventionSlug = params.interventionSlug;
 		await this.taskService.delete(taskId);
-		return response.redirect().toRoute("interventions.show", {
+		return response.redirect().toRoute("interventions.tasks.index", {
 			interventionSlug,
 		});
 	}

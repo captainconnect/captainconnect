@@ -14,6 +14,9 @@ export default class TaskGroup extends BaseModel {
 	@column()
 	declare name: string;
 
+	@column()
+	declare sort: number;
+
 	@column.dateTime({ autoCreate: true })
 	declare createdAt: DateTime;
 
