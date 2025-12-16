@@ -1,28 +1,18 @@
 import { Head, router } from "@inertiajs/react";
-import {
-	CalendarClock,
-	CircleCheck,
-	Clock,
-	ClockPlus,
-	File,
-	Save,
-	Trash,
-} from "lucide-react";
-import { useState } from "react";
-import type { Hour, Task } from "#types/intervention";
-import AddHourForm from "~/components/features/intervention/task/AddHourForm";
-import HourList from "~/components/features/intervention/task/HourList";
+import { CircleCheck, Clock } from "lucide-react";
+import type { Hour, Task, TaskGroup } from "#types/intervention";
+import UpdateTaskModal from "~/components/features/intervention/task/UpdateTaskModal";
 import AppLayout from "~/components/layout/AppLayout";
 import PageHeader from "~/components/layout/PageHeader";
-import Button from "~/components/ui/buttons/Button";
-import Textarea from "~/components/ui/inputs/TextArea";
 import ConfirmModal from "~/components/ui/modals/Confirm";
-import Section from "~/components/ui/Section";
+import ActionSection from "~/components/ui/sections/ActionSection";
+import useTask from "~/hooks/useTask";
 
 type TaskPageProps = {
 	interventionSlug: string;
 	task: Task;
 	hours: Hour[];
+	taskGroups: TaskGroup[];
 	users: {
 		id: number;
 		firstname: string;
@@ -30,19 +20,18 @@ type TaskPageProps = {
 	}[];
 };
 
-const TaskPage = ({ task, users, hours, interventionSlug }: TaskPageProps) => {
-	const [details, setDetails] = useState(task.details || "");
-	const [openConfirm, setOpenConfirm] = useState(false);
-
-	const handleSave = () => {
-		router.patch(`/tasks/${task.id}/details`, {
-			details,
+const TaskPage = ({
+	taskGroups,
+	task,
+	users,
+	hours,
+	interventionSlug,
+}: TaskPageProps) => {
+	const { actionButtons, tag, currentModal, closeModal, Modals, handleDelete } =
+		useTask({
+			task,
+			interventionSlug,
 		});
-	};
-
-	const handleDelete = () => {
-		router.delete(`/tasks/${interventionSlug}/${task.id}`);
-	};
 
 	return (
 		<>
@@ -50,19 +39,7 @@ const TaskPage = ({ task, users, hours, interventionSlug }: TaskPageProps) => {
 			<PageHeader
 				title={task.name}
 				subtitle={task.taskGroup.name}
-				tag={
-					task.status === "IN_PROGRESS"
-						? {
-								label: "En cours",
-								icon: <Clock size="18" />,
-								className: "bg-primary hidden md:flex",
-							}
-						: {
-								label: "Terminée",
-								icon: <CircleCheck size="18" />,
-								className: "bg-primary hidden md:flex",
-							}
-				}
+				tag={tag}
 				backButton={{
 					route: `/interventions/${task.taskGroup.intervention.slug}/taches`,
 				}}
@@ -79,43 +56,50 @@ const TaskPage = ({ task, users, hours, interventionSlug }: TaskPageProps) => {
 								icon: <Clock size="20" />,
 								variant: "secondary",
 							},
-					{
-						label: "Supprimer",
-						onClick: () => setOpenConfirm(true),
-						icon: <Trash size="20" />,
-						variant: "danger",
-					},
 				]}
 			/>
-			<div className="space-y-2">
-				<Section title="Détails" icon={<File />} className="space-y-4">
-					<Textarea
-						value={details}
-						onChange={(e) => setDetails(e.target.value)}
-						placeholder="Détails"
-					/>
-					<Button icon={<Save />} onClick={handleSave}>
-						Sauvegarder
-					</Button>
-				</Section>
-				<Section title="Ajouter des heures" icon={<ClockPlus />}>
-					<AddHourForm users={users} taskId={task.id} />
-				</Section>
-				<Section title="Historique des heures" icon={<CalendarClock />}>
-					{hours.length === 0 ? (
-						<p>Pas d'heures enregistrées</p>
-					) : (
-						<HourList hours={hours} />
-					)}
-				</Section>
+			<div className="flex flex-col md:flex-row gap-4 w-full">
+				<div className="w-2/3 space-y-4">
+					{/* <Section title="Détails" icon={<File />} className="space-y-4">
+						<Textarea
+							value={details}
+							onChange={(e) => setDetails(e.target.value)}
+							placeholder="Détails"
+						/>
+						<Button icon={<Save />} onClick={handleSave}>
+							Sauvegarder
+						</Button>
+					</Section>
+					<Section title="Ajouter des heures" icon={<ClockPlus />}>
+						<AddHourForm users={users} taskId={task.id} />
+					</Section>
+					<Section title="Historique des heures" icon={<CalendarClock />}>
+						{hours.length === 0 ? (
+							<p>Pas d'heures enregistrées</p>
+						) : (
+							<HourList hours={hours} />
+						)}
+					</Section>
+				 */}
+				</div>
+				<div className="w-1/3">
+					<ActionSection title="Actions" buttons={actionButtons} />
+				</div>
 			</div>
 			<ConfirmModal
 				title="Supprimer la tâche"
-				open={openConfirm}
+				open={currentModal === Modals.ConfirmDeletion}
 				confirmationText="Confirmer la suppression de la tâche ?"
 				label="Confirmer"
-				onClose={() => setOpenConfirm(false)}
+				onClose={closeModal}
 				onConfirm={handleDelete}
+			/>
+			<UpdateTaskModal
+				interventionSlug={interventionSlug}
+				task={task}
+				taskGroups={taskGroups}
+				open={currentModal === Modals.UpdateModal}
+				onClose={closeModal}
 			/>
 		</>
 	);

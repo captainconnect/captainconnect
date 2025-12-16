@@ -8,6 +8,7 @@ import type {
 	CreateTaskPayload,
 	OrderTaskPayload,
 	TaskDetailsPayload,
+	UpdateTaskPayload,
 } from "#types/intervention";
 
 export class TaskService {
@@ -43,6 +44,22 @@ export class TaskService {
 		await taskGroup.related("tasks").create({
 			name: payload.name,
 		});
+	}
+
+	async update(
+		payload: UpdateTaskPayload,
+		interventionId: number,
+		taskId: number,
+	) {
+		const task = await Task.query()
+			.where("id", taskId)
+			.whereHas("taskGroup", (q) => {
+				q.where("intervention_id", interventionId);
+			})
+			.firstOrFail();
+
+		task.merge(payload);
+		await task.save();
 	}
 
 	async getHours(id: number) {

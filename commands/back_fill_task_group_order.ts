@@ -30,8 +30,8 @@ export default class BackFillTaskGroupOrder extends BaseCommand {
 				for (let index = 0; index < groups.length; index++) {
 					const group = groups[index];
 
-					if (group.order !== index) {
-						group.order = index;
+					if (group.sort !== index) {
+						group.sort = index;
 						await group.save();
 					}
 				}

@@ -11,6 +11,7 @@ import {
 	createTaskValidator,
 	orderTasksValidator,
 	taskDetailsValidator,
+	updateTaskValidator,
 } from "#validators/task";
 
 @inject()
@@ -35,7 +36,8 @@ export default class TasksController {
 	async show({ params, inertia }: HttpContext) {
 		const taskId = params.taskId;
 		const interventionSlug = params.interventionSlug;
-
+		const { id } = await this.interventionService.getBySlug(interventionSlug);
+		const taskGroups = await this.interventionService.getTaskGroups(id);
 		const task = await this.taskService.getById(taskId);
 		const users = await this.userService.getAllForTask();
 		const hours = await this.taskService.getHours(taskId);
@@ -45,6 +47,7 @@ export default class TasksController {
 			users,
 			hours,
 			interventionSlug,
+			taskGroups,
 		});
 	}
 
@@ -53,6 +56,14 @@ export default class TasksController {
 		const payload = await request.validateUsing(createTaskValidator);
 
 		await this.taskService.create(payload, interventionSlug);
+		return response.redirect().back();
+	}
+
+	async update({ params, request, response }: HttpContext) {
+		const { taskId, interventionSlug } = params;
+		const { id } = await this.interventionService.getBySlug(interventionSlug);
+		const payload = await request.validateUsing(updateTaskValidator);
+		await this.taskService.update(payload, id, taskId);
 		return response.redirect().back();
 	}
 

@@ -1,7 +1,11 @@
 import vine from "@vinejs/vine";
 
 export const createTaskSchema = vine.object({
-	taskGroupId: vine.number().optional().requiredIfMissing("taskGroup"),
+	taskGroupId: vine
+		.number()
+		.exists({ column: "id", table: "task_groups" })
+		.optional()
+		.requiredIfMissing("taskGroup"),
 	taskGroup: vine.string().optional().requiredIfMissing("taskGroupId"),
 	name: vine.string(),
 });
@@ -30,3 +34,10 @@ export const orderTasksSchema = vine.object({
 });
 
 export const orderTasksValidator = vine.compile(orderTasksSchema);
+
+export const updateTaskSchema = vine.object({
+	name: vine.string(),
+	taskGroupId: vine.number().exists({ table: "task_groups", column: "id" }),
+});
+
+export const updateTaskValidator = vine.compile(updateTaskSchema);

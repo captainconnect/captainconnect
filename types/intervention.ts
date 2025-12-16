@@ -98,3 +98,8 @@ export interface OrderTaskPayload {
 		}[];
 	}[];
 }
+
+export interface UpdateTaskPayload {
+	name: string;
+	taskGroupId: number;
+}

@@ -9,13 +9,14 @@
 
 import app from "@adonisjs/core/services/app";
 import router from "@adonisjs/core/services/router";
-import HoursController from "#controllers/hours_controller";
+
 import { middleware } from "./kernel.js";
 
 const InterventionsController = () =>
 	import("#controllers/interventions_controller");
 const BoatsController = () => import("#controllers/boats_controller");
 const ContactsController = () => import("#controllers/contacts_controller");
+const HoursController = () => import("#controllers/hours_controller");
 const UsersController = () => import("#controllers/users_controller");
 const ProfilesController = () => import("#controllers/profiles_controller");
 const SessionController = () => import("#controllers/session_controller");
@@ -213,6 +214,9 @@ router
 				router
 					.delete("/hour/:hourId", [TasksController, "destroyHour"])
 					.as("tasks.hour.destroy");
+				router
+					.patch("/:interventionSlug/:taskId", [TasksController, "update"])
+					.as("tasks.update");
 				router
 					.delete("/:interventionSlug/:taskId", [TasksController, "destroy"])
 					.as("tasks.destroy");

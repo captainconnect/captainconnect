@@ -1,5 +1,6 @@
 import Boat from "#models/boat";
 import Intervention from "#models/intervention";
+import TaskGroup from "#models/task_group";
 
 import type {
 	CreateInterventionPayload,
@@ -27,6 +28,10 @@ export class InterventionService {
 					.preload("tasks", (query) => query.orderBy("sort", "asc")),
 			)
 			.firstOrFail();
+	}
+
+	async getTaskGroups(id: number) {
+		return await TaskGroup.findManyBy("intervention_id", id);
 	}
 
 	async create(boatSlug: string, payload: CreateInterventionPayload) {
