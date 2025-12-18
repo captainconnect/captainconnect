@@ -25,7 +25,7 @@ export default function Button({
 	...props
 }: ButtonProps) {
 	const base =
-		"flex items-center justify-center gap-2 font-semibold rounded-2xl border-2 transition active:scale-95 cursor-pointer text-sm w-auto max-h-10";
+		"flex items-center justify-center gap-2 font-semibold rounded-2xl border-2 transition active:scale-95 cursor-pointer text-sm w-auto max-h-10 disabled:bg-gray-300";
 
 	const sizes = {
 		icon: "p-1",

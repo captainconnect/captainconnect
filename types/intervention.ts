@@ -1,5 +1,6 @@
 import type { Boat } from "./boat.js";
 import type { User } from "./user.js";
+import type { WorkDone } from "./workdone.js";
 
 export type Intervention = {
 	id: number;
@@ -22,13 +23,16 @@ export type Task = {
 	name: string;
 	status: TaskStatus;
 	details?: string;
+	sort: number;
 	createdAt: Date;
 	updatedAt: Date;
+	workDones?: WorkDone[];
 };
 
 export type TaskGroup = {
 	id: number;
 	name: string;
+	sort: number;
 	intervention: Intervention;
 	tasks: Task[];
 };
@@ -84,4 +88,20 @@ export interface CreateTaskPayload {
 	taskGroupId?: number;
 	taskGroup?: string;
 	name: string;
+}
+
+export interface OrderTaskPayload {
+	groups: {
+		id: number;
+		order: number;
+		tasks: {
+			id: number;
+			order: number;
+		}[];
+	}[];
+}
+
+export interface UpdateTaskPayload {
+	name: string;
+	taskGroupId: number;
 }

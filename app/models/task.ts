@@ -4,6 +4,7 @@ import type { DateTime } from "luxon";
 import type { TaskStatus } from "#types/intervention";
 import Hour from "./hour.js";
 import TaskGroup from "./task_group.js";
+import WorkDone from "./work_done.js";
 
 export default class Task extends BaseModel {
 	@column({ isPrimary: true })
@@ -19,6 +20,9 @@ export default class Task extends BaseModel {
 	declare status: TaskStatus;
 
 	@column()
+	declare sort: number;
+
+	@column()
 	declare details: string | null;
 
 	@column.dateTime({ autoCreate: true })
@@ -32,4 +36,7 @@ export default class Task extends BaseModel {
 
 	@hasMany(() => Hour)
 	declare hours: HasMany<typeof Hour>;
+
+	@hasMany(() => WorkDone)
+	declare workDones: HasMany<typeof WorkDone>;
 }
