@@ -1,5 +1,16 @@
 # 📝 Notes de mise à jour
 
+## **1.2.3**
+
+#### 🚀 Nouvelles fonctionnalités
+- Possibilité de changer l'ordre des tâches/groupes
+- Ajout des fiches de travaux
+
+#### 🛠️ Corrections
+- Quelques correctifs minim
+
+---
+
 ## **1.1.1**
 
 #### 🚀 Nouvelles fonctionnalités
