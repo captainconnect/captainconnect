@@ -23,6 +23,43 @@ type UseTaskProps = {
 export default function useTask({ task, interventionSlug }: UseTaskProps) {
 	const [currentModal, setCurrentModal] = useState<Modals>(Modals.None);
 
+	const formatTechnicians = (names: string[]) => {
+		if (names.length === 0) return "";
+		if (names.length === 1) return names[0];
+		if (names.length === 2) return `${names[0]} et ${names[1]}`;
+		return `${names.slice(0, -1).join(", ")} et ${names.at(-1)}`;
+	};
+
+	const getWorkDones = () => {
+		if (!task.workDones) return [];
+
+		return task.workDones.map((wd) => {
+			const hourCount = wd.hours?.[0]?.count ?? 0;
+
+			const technicians =
+				wd.hours
+					?.map((h) => h.user)
+					.filter(Boolean)
+					.map((t) => `${t.firstname} ${t.lastname[0]}`) ?? [];
+
+			const technicianLabel = formatTechnicians(technicians);
+
+			return {
+				id: wd.id,
+				taskId: wd.taskId,
+				interventionId: wd.interventionId,
+				workDone: wd.workDone,
+				usedMaterials: wd.usedMaterials,
+				date: new Date(wd.date).toLocaleDateString("fr-FR"),
+				createdAt: wd.createdAt,
+				updatedAt: wd.updatedAt,
+
+				hour_count: hourCount,
+				technicians: technicianLabel,
+			};
+		});
+	};
+
 	const actionButtons: ActionButton[] = [
 		{
 			icon: <Edit size="18" />,
@@ -66,5 +103,6 @@ export default function useTask({ task, interventionSlug }: UseTaskProps) {
 		closeModal,
 		Modals,
 		handleDelete,
+		getWorkDones,
 	};
 }

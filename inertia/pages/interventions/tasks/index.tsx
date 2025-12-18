@@ -66,6 +66,7 @@ const IndexTaskPage = ({ intervention }: IndexTaskPageProps) => {
 									label: "Sauvegarder",
 									onClick: saveOrdering,
 									icon: <Save size="20" />,
+									variant: "secondary" as const,
 								},
 							]
 						: [
@@ -73,6 +74,7 @@ const IndexTaskPage = ({ intervention }: IndexTaskPageProps) => {
 									label: "Modifier l'ordre",
 									onClick: () => setOrderingEnabled(true),
 									icon: <Pencil size="18" />,
+									variant: "secondary" as const,
 								},
 							]),
 					{

@@ -18,7 +18,6 @@ export default function InformationCard({
 }: InformationCardProps) {
 	const className =
 		"flex items-center gap-4 bg-white border border-gray-200 p-6 w-54 rounded-2xl";
-	console.log(link);
 	const content = (
 		<>
 			{icon}

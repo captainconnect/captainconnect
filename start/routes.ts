@@ -9,7 +9,6 @@
 
 import app from "@adonisjs/core/services/app";
 import router from "@adonisjs/core/services/router";
-
 import { middleware } from "./kernel.js";
 
 const InterventionsController = () =>
@@ -21,6 +20,7 @@ const UsersController = () => import("#controllers/users_controller");
 const ProfilesController = () => import("#controllers/profiles_controller");
 const SessionController = () => import("#controllers/session_controller");
 const TasksController = () => import("#controllers/tasks_controller");
+const WorkDonesController = () => import("#controllers/work_dones_controller");
 
 if (app.inDev) {
 	router.on("/404").renderInertia("errors/not_found");
@@ -192,6 +192,12 @@ router
 				router
 					.put("/:interventionSlug/tasks/ordering", [TasksController, "order"])
 					.as("interventions.tasks.ordering");
+				router
+					.post("/:interventionSlug/task/:taskId/store", [
+						WorkDonesController,
+						"store",
+					])
+					.as("work_dones.store");
 			})
 			.prefix("interventions");
 
@@ -205,15 +211,15 @@ router
 					.patch("/:taskId/uncheck", [TasksController, "uncheckTask"])
 					.as("tasks.uncheck");
 
-				router
-					.post("/:taskId/hour", [TasksController, "addHour"])
-					.as("tasks.addHour");
-				router
-					.patch("/:taskId/details", [TasksController, "updateDetails"])
-					.as("tasks.updateDetails");
-				router
-					.delete("/hour/:hourId", [TasksController, "destroyHour"])
-					.as("tasks.hour.destroy");
+				// router
+				// 	.post("/:taskId/hour", [TasksController, "addHour"])
+				// 	.as("tasks.addHour");
+				// router
+				// 	.patch("/:taskId/details", [TasksController, "updateDetails"])
+				// 	.as("tasks.updateDetails");
+				// router
+				// 	.delete("/hour/:hourId", [TasksController, "destroyHour"])
+				// 	.as("tasks.hour.destroy");
 				router
 					.patch("/:interventionSlug/:taskId", [TasksController, "update"])
 					.as("tasks.update");

@@ -33,6 +33,15 @@ export default function TaskElement({
 		transition,
 	};
 
+	const status =
+		task.status === "DONE"
+			? "DONE"
+			: task.status === "IN_PROGRESS" &&
+					task.workDones &&
+					task.workDones.length !== 0
+				? "TO_CONTINUE"
+				: "IN_PROGRESS";
+
 	return (
 		<li ref={setNodeRef} style={style}>
 			<div
@@ -49,11 +58,11 @@ export default function TaskElement({
 					aria-disabled={orderingEnabled}
 				>
 					<div className="flex items-center gap-4">
-						<TaskStatusIcon status={task.status} />
+						<TaskStatusIcon status={status} />
 						<div>
 							<p className="font-semibold text-left">{task.name}</p>
 							<p className="text-sm text-subtitle text-left">
-								<TaskStatusText status={task.status} />
+								<TaskStatusText status={status} />
 							</p>
 						</div>
 					</div>

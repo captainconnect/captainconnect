@@ -14,7 +14,11 @@ export default function Textarea({
 	const id = useId();
 	return (
 		<div className="w-full flex flex-col gap-2">
-			{label && <label htmlFor={id}>{label}</label>}
+			{label && (
+				<label className="text-primary" htmlFor={id}>
+					{label}
+				</label>
+			)}
 			<div>
 				<textarea
 					id={id}

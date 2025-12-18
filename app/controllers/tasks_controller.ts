@@ -6,11 +6,9 @@ import { InterventionService } from "#services/intervention_service";
 import { TaskService } from "#services/task_service";
 // biome-ignore lint/style/useImportType: IoC runtime needs this
 import { UserService } from "#services/user_service";
-import { hourValidator } from "#validators/hour";
 import {
 	createTaskValidator,
 	orderTasksValidator,
-	taskDetailsValidator,
 	updateTaskValidator,
 } from "#validators/task";
 
@@ -40,12 +38,10 @@ export default class TasksController {
 		const taskGroups = await this.interventionService.getTaskGroups(id);
 		const task = await this.taskService.getById(taskId);
 		const users = await this.userService.getAllForTask();
-		const hours = await this.taskService.getHours(taskId);
 
 		return inertia.render("interventions/tasks/show", {
 			task,
 			users,
-			hours,
 			interventionSlug,
 			taskGroups,
 		});
@@ -67,15 +63,15 @@ export default class TasksController {
 		return response.redirect().back();
 	}
 
-	async addHour({ params, request, response }: HttpContext) {
-		const taskId = params.taskId;
+	// async addHour({ params, request, response }: HttpContext) {
+	// 	const taskId = params.taskId;
 
-		const payload = await request.validateUsing(hourValidator);
+	// 	const payload = await request.validateUsing(hourValidator);
 
-		await this.taskService.addHour(payload, taskId);
+	// 	await this.taskService.addHour(payload, taskId);
 
-		return response.redirect().back();
-	}
+	// 	return response.redirect().back();
+	// }
 
 	async checkTask({ params, response }: HttpContext) {
 		const taskId = params.taskId;
@@ -93,20 +89,20 @@ export default class TasksController {
 		return response.redirect().back();
 	}
 
-	async updateDetails({ params, request, response }: HttpContext) {
-		const taskId = params.taskId;
+	// async updateDetails({ params, request, response }: HttpContext) {
+	// 	const taskId = params.taskId;
 
-		const payload = await request.validateUsing(taskDetailsValidator);
+	// 	const payload = await request.validateUsing(taskDetailsValidator);
 
-		this.taskService.updateDetails(payload, taskId);
-		return response.redirect().back();
-	}
+	// 	this.taskService.updateDetails(payload, taskId);
+	// 	return response.redirect().back();
+	// }
 
-	async destroyHour({ params, response }: HttpContext) {
-		const hourId = params.hourId;
-		await this.taskService.deleteHour(hourId);
-		return response.redirect().back();
-	}
+	// async destroyHour({ params, response }: HttpContext) {
+	// 	const hourId = params.hourId;
+	// 	await this.taskService.deleteHour(hourId);
+	// 	return response.redirect().back();
+	// }
 
 	async order({ params, request, response }: HttpContext) {
 		const interventionSlug = params.interventionSlug;

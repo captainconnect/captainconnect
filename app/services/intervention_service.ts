@@ -25,7 +25,9 @@ export class InterventionService {
 			.preload("taskGroups", (query) =>
 				query
 					.orderBy("sort", "asc")
-					.preload("tasks", (query) => query.orderBy("sort", "asc")),
+					.preload("tasks", (query) =>
+						query.orderBy("sort", "asc").preload("workDones"),
+					),
 			)
 			.firstOrFail();
 	}

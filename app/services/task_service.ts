@@ -4,10 +4,8 @@ import Intervention from "#models/intervention";
 import Task from "#models/task";
 import TaskGroup from "#models/task_group";
 import type {
-	AddHourPayload,
 	CreateTaskPayload,
 	OrderTaskPayload,
-	TaskDetailsPayload,
 	UpdateTaskPayload,
 } from "#types/intervention";
 
@@ -16,7 +14,18 @@ export class TaskService {
 		return await Task.query()
 			.where("id", id)
 			.preload("taskGroup", (q) => q.preload("intervention"))
-			.preload("hours")
+			.preload("workDones", (q) => {
+				// 👇 une seule valeur métier
+				q.orderBy("date", "desc");
+				q.withAggregate("hours", (sub) => {
+					sub.max("count").as("count");
+				});
+
+				// 👇 tous les participants
+				q.preload("hours", (hq) => {
+					hq.preload("user");
+				});
+			})
 			.firstOrFail();
 	}
 
@@ -56,24 +65,38 @@ export class TaskService {
 			.whereHas("taskGroup", (q) => {
 				q.where("intervention_id", interventionId);
 			})
+			.preload("taskGroup")
 			.firstOrFail();
+
+		const oldTaskGroupId = task.taskGroupId;
 
 		task.merge(payload);
 		await task.save();
+
+		// Si le task_group a changé, on vérifie l'ancien
+		if (payload.taskGroupId && payload.taskGroupId !== oldTaskGroupId) {
+			const remainingTasksCount = await Task.query()
+				.where("task_group_id", oldTaskGroupId)
+				.count("* as total");
+
+			if (Number(remainingTasksCount[0].$extras.total) === 0) {
+				await TaskGroup.query().where("id", oldTaskGroupId).delete();
+			}
+		}
 	}
 
-	async getHours(id: number) {
-		return await Hour.query().where("task_id", id).preload("user");
-	}
+	// async getHours(id: number) {
+	// 	return await Hour.query().where("task_id", id).preload("user");
+	// }
 
-	async addHour({ userId, date, count }: AddHourPayload, taskId: number) {
-		await Hour.create({
-			userId,
-			taskId,
-			date,
-			count,
-		});
-	}
+	// async addHour({ userId, date, count }: AddHourPayload, taskId: number) {
+	// 	await Hour.create({
+	// 		userId,
+	// 		taskId,
+	// 		date,
+	// 		count,
+	// 	});
+	// }
 
 	async check(id: number) {
 		const task = await Task.findOrFail(id);
@@ -87,11 +110,11 @@ export class TaskService {
 		await task.save();
 	}
 
-	async updateDetails(payload: TaskDetailsPayload, id: number) {
-		const task = await Task.findOrFail(id);
-		task.details = payload.details;
-		await task.save();
-	}
+	// async updateDetails(payload: TaskDetailsPayload, id: number) {
+	// 	const task = await Task.findOrFail(id);
+	// 	task.details = payload.details;
+	// 	await task.save();
+	// }
 
 	async deleteHour(id: number) {
 		const hour = await Hour.findOrFail(id);

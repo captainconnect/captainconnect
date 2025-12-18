@@ -3,6 +3,7 @@ import type { BelongsTo } from "@adonisjs/lucid/types/relations";
 import type { DateTime } from "luxon";
 import Task from "./task.js";
 import User from "./user.js";
+import WorkDone from "./work_done.js";
 
 export default class Hour extends BaseModel {
 	@column({ isPrimary: true })
@@ -13,6 +14,9 @@ export default class Hour extends BaseModel {
 
 	@column({ columnName: "task_id" })
 	declare taskId: number;
+
+	@column({ columnName: "work_done_id" })
+	declare workDoneId: number;
 
 	@column()
 	declare date: Date;
@@ -25,6 +29,9 @@ export default class Hour extends BaseModel {
 
 	@column.dateTime({ autoCreate: true, autoUpdate: true })
 	declare updatedAt: DateTime;
+
+	@belongsTo(() => WorkDone)
+	declare workDone: BelongsTo<typeof WorkDone>;
 
 	@belongsTo(() => User)
 	declare user: BelongsTo<typeof User>;

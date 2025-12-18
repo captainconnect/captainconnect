@@ -1,5 +1,6 @@
 import type { Boat } from "./boat.js";
 import type { User } from "./user.js";
+import type { WorkDone } from "./workdone.js";
 
 export type Intervention = {
 	id: number;
@@ -25,6 +26,7 @@ export type Task = {
 	sort: number;
 	createdAt: Date;
 	updatedAt: Date;
+	workDones?: WorkDone[];
 };
 
 export type TaskGroup = {

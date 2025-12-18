@@ -15,7 +15,7 @@ const dbConfig = defineConfig({
 			},
 			migrations: {
 				naturalSort: true,
-				paths: ["database/migrations/v1", "database/migrations/v2"],
+				paths: ["database/migrations", "database/migrations/v2"],
 			},
 		},
 	},

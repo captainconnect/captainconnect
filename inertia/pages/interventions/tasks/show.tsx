@@ -1,37 +1,50 @@
 import { Head, router } from "@inertiajs/react";
-import { CircleCheck, Clock } from "lucide-react";
-import type { Hour, Task, TaskGroup } from "#types/intervention";
+import { CircleCheck, Clock, FilePlus } from "lucide-react";
+import { useState } from "react";
+import type WorkDone from "#models/work_done";
+import type { Task, TaskGroup } from "#types/intervention";
+import type { User } from "#types/user";
+import AddWorkDoneForm from "~/components/features/intervention/task/AddWorkDoneForm";
 import UpdateTaskModal from "~/components/features/intervention/task/UpdateTaskModal";
+import WorkDoneCard from "~/components/features/intervention/task/WorkDoneCard";
 import AppLayout from "~/components/layout/AppLayout";
 import PageHeader from "~/components/layout/PageHeader";
 import ConfirmModal from "~/components/ui/modals/Confirm";
+import Section from "~/components/ui/Section";
 import ActionSection from "~/components/ui/sections/ActionSection";
 import useTask from "~/hooks/useTask";
 
 type TaskPageProps = {
 	interventionSlug: string;
 	task: Task;
-	hours: Hour[];
+	workDones: WorkDone[];
 	taskGroups: TaskGroup[];
-	users: {
-		id: number;
-		firstname: string;
-		lastname: string;
-	}[];
+	users: User[];
 };
 
 const TaskPage = ({
 	taskGroups,
 	task,
 	users,
-	hours,
+
 	interventionSlug,
 }: TaskPageProps) => {
-	const { actionButtons, tag, currentModal, closeModal, Modals, handleDelete } =
-		useTask({
-			task,
-			interventionSlug,
-		});
+	const [addWorkDoneFormVisible, setAddWorkDoneFormVisible] = useState(false);
+
+	const {
+		actionButtons,
+		tag,
+		currentModal,
+		closeModal,
+		Modals,
+		handleDelete,
+		getWorkDones,
+	} = useTask({
+		task,
+		interventionSlug,
+	});
+
+	const workDones = getWorkDones();
 
 	return (
 		<>
@@ -44,9 +57,16 @@ const TaskPage = ({
 					route: `/interventions/${task.taskGroup.intervention.slug}/taches`,
 				}}
 				buttons={[
+					{
+						label: "Ajouter des travaux effectués",
+						icon: <FilePlus size="20" />,
+						variant: "secondary",
+						onClick: () => setAddWorkDoneFormVisible(true),
+					},
 					task.status === "IN_PROGRESS"
 						? {
 								label: "Marquer comme terminée",
+								disabled: task.workDones && task.workDones.length === 0,
 								onClick: () => router.patch(`/tasks/${task.id}/check`),
 								icon: <CircleCheck size="20" />,
 							}
@@ -59,30 +79,27 @@ const TaskPage = ({
 				]}
 			/>
 			<div className="flex flex-col md:flex-row gap-4 w-full">
-				<div className="w-2/3 space-y-4">
-					{/* <Section title="Détails" icon={<File />} className="space-y-4">
-						<Textarea
-							value={details}
-							onChange={(e) => setDetails(e.target.value)}
-							placeholder="Détails"
-						/>
-						<Button icon={<Save />} onClick={handleSave}>
-							Sauvegarder
-						</Button>
-					</Section>
-					<Section title="Ajouter des heures" icon={<ClockPlus />}>
-						<AddHourForm users={users} taskId={task.id} />
-					</Section>
-					<Section title="Historique des heures" icon={<CalendarClock />}>
-						{hours.length === 0 ? (
-							<p>Pas d'heures enregistrées</p>
-						) : (
-							<HourList hours={hours} />
-						)}
-					</Section>
-				 */}
+				<div className="md:w-2/3 space-y-4">
+					{addWorkDoneFormVisible ? (
+						<Section
+							className="transition"
+							title="Ajouter des travaux effectués"
+							icon={<FilePlus />}
+						>
+							<AddWorkDoneForm
+								interventionSlug={interventionSlug}
+								taskId={task.id}
+								users={users}
+								onClose={() => setAddWorkDoneFormVisible(false)}
+							/>
+						</Section>
+					) : workDones.length < 1 ? (
+						<p>Pas de travail effectué</p>
+					) : (
+						workDones.map((wd) => <WorkDoneCard key={wd.id} workDone={wd} />)
+					)}
 				</div>
-				<div className="w-1/3">
+				<div className=" md:w-1/3">
 					<ActionSection title="Actions" buttons={actionButtons} />
 				</div>
 			</div>
