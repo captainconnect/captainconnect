@@ -3,7 +3,6 @@ import { useState } from "react";
 import type { Intervention } from "#types/intervention";
 import type { User } from "#types/user";
 import OverviewTab from "~/components/features/intervention/overview_tab/OverviewTab";
-import TaskTab from "~/components/features/intervention/TaskTab";
 import AppLayout from "~/components/layout/AppLayout";
 import InformationCard from "~/components/layout/intervention/InformationCard";
 import InterventionCardSection from "~/components/layout/intervention/InformationCardSection";
@@ -19,7 +18,7 @@ type InterventionPageProps = {
 
 const title = "Intervention";
 
-const InterventionPage = ({ intervention, users }: InterventionPageProps) => {
+const InterventionPage = ({ intervention }: InterventionPageProps) => {
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
 	const { cards } = useIntervention(intervention, setDeleteModalOpen);
@@ -46,6 +45,7 @@ const InterventionPage = ({ intervention, users }: InterventionPageProps) => {
 							icon={c.icon}
 							data={c.data}
 							alert={c.alert}
+							link={c.link}
 						/>
 					))}
 				</div>
@@ -59,12 +59,6 @@ const InterventionPage = ({ intervention, users }: InterventionPageProps) => {
 					label="Vue d'ensemble"
 				/>
 				<TabSelector
-					isSelected={selectedTab === "TASKS"}
-					scope="TASKS"
-					setSelectedTab={setSelectedTab}
-					label="Tâches"
-				/>
-				<TabSelector
 					disabled={true}
 					isSelected={selectedTab === "MEDIAS"}
 					scope="MEDIAS"
@@ -76,11 +70,6 @@ const InterventionPage = ({ intervention, users }: InterventionPageProps) => {
 				intervention={intervention}
 				selected={selectedTab === "OVERVIEW"}
 				openModal={setDeleteModalOpen}
-			/>
-			<TaskTab
-				users={users}
-				selected={selectedTab === "TASKS"}
-				intervention={intervention}
 			/>
 			<ConfirmModal
 				open={deleteModalOpen}

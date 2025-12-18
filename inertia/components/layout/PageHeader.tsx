@@ -19,6 +19,7 @@ type PageHeaderProps = {
 		label: string;
 		onClick?: () => void;
 		href?: string;
+		disabled?: boolean;
 		icon: ReactNode;
 		variant?: ButtonVariant;
 	}[];
@@ -75,6 +76,7 @@ export default function PageHeader({
 							onClick={b.onClick}
 							icon={b.icon}
 							variant={b.variant}
+							disabled={b.disabled}
 							className="flex items-center w-full md:w-auto"
 						>
 							{b.label}

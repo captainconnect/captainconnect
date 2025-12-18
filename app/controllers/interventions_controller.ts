@@ -57,7 +57,6 @@ export default class InterventionsController {
 		const boatSlug = params.boatSlug;
 
 		const payload = await request.validateUsing(createInterventionValidator);
-
 		const slug = await this.interventionService.create(boatSlug, payload);
 
 		return response.redirect().toRoute("interventions.show", {

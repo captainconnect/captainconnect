@@ -21,6 +21,10 @@ export default function CreateInterventionForm({
 		taskGroups: [],
 	});
 
+	const hasTaskGroupsError = Object.keys(errors).some((key) =>
+		key.startsWith("taskGroups"),
+	);
+
 	const submit = (e: React.FormEvent) => {
 		e.preventDefault();
 		if (data.taskGroups.length === 0) return;
@@ -67,7 +71,13 @@ export default function CreateInterventionForm({
 				</div>
 			</div>
 			<hr className="text-gray-200 my-6" />
-			<AddTaskBoard data={data} setData={setData} />
+			<AddTaskBoard
+				error={
+					hasTaskGroupsError ? "Au moins une tâche est requise" : undefined
+				}
+				data={data}
+				setData={setData}
+			/>
 			<Button type="submit" disabled={processing} icon={<Wrench />}>
 				Enregistrer l'intervention
 			</Button>

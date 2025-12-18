@@ -13,6 +13,7 @@ import type {
 } from "#types/intervention";
 import Boat from "./boat.js";
 import TaskGroup from "./task_group.js";
+import WorkDone from "./work_done.js";
 
 export default class Intervention extends BaseModel {
 	@column({ isPrimary: true })
@@ -44,6 +45,9 @@ export default class Intervention extends BaseModel {
 
 	@hasMany(() => TaskGroup)
 	declare taskGroups: HasMany<typeof TaskGroup>;
+
+	@hasMany(() => WorkDone)
+	declare workDones: HasMany<typeof WorkDone>;
 
 	@belongsTo(() => Boat)
 	declare boat: BelongsTo<typeof Boat>;

@@ -1,11 +1,15 @@
 # 📝 Notes de mise à jour
 
-## Prévisions pour la 1.2.0
+## **1.2.3**
 
-#### Majeur
-- Export des heures en CSV
-- Export fiche d'intervention en PDF
-- Ajout du système de médias
+#### 🚀 Nouvelles fonctionnalités
+- Possibilité de changer l'ordre des tâches/groupes
+- Ajout des fiches de travaux
+
+#### 🛠️ Corrections
+- Quelques correctifs minim
+
+---
 
 ## **1.1.1**
 
@@ -16,6 +20,8 @@
 #### 🛠️ Corrections
 - Le logo dans la barre de navigation est à présent bleu
 - Image du marker GPS dans la carte
+
+---
 
 ## **1.0.0**
 ### **Refonte majeure & nouveau pipeline de déploiement**
