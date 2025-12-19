@@ -13,6 +13,7 @@ export type Intervention = {
 	priority: InterventionPriority;
 	boat: Boat;
 	taskGroups: TaskGroup[];
+	totalHours?: number;
 	createdAt: Date;
 	updatedAt: Date;
 };

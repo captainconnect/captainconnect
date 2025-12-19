@@ -3,6 +3,7 @@ import {
 	BaseModel,
 	belongsTo,
 	column,
+	computed,
 	hasMany,
 } from "@adonisjs/lucid/orm";
 import type { BelongsTo, HasMany } from "@adonisjs/lucid/types/relations";
@@ -42,6 +43,20 @@ export default class Intervention extends BaseModel {
 
 	@column()
 	declare priority: InterventionPriority;
+
+	@computed()
+	get totalHours(): number {
+		return (
+			this.workDones?.reduce((sum, wd) => {
+				if (!wd.hours || wd.hours.length === 0) return sum;
+
+				// durée réelle = une seule heure, pas une par technicien
+				const realDuration = Math.max(...wd.hours.map((h) => h.count ?? 0));
+
+				return sum + realDuration;
+			}, 0) ?? 0
+		);
+	}
 
 	@hasMany(() => TaskGroup)
 	declare taskGroups: HasMany<typeof TaskGroup>;

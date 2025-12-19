@@ -1,5 +1,19 @@
 # 📝 Notes de mise à jour
 
+## **1.2.4**
+
+#### 🚀 Ajout mineur
+- Affichage total des heures par intervention
+
+#### 🛠️ Corrections
+- Remplacer le status d'intervention "Terminée" par "Facturée"
+- Affichage du nom complet d'un technicien sur une fiche de travaux
+- Afficher uniquement Travaux effectués, materiel utilisé et heures sur fiche de travaux
+- Disable les boutons lorsque l'on rentre une nouvelle fiche de travaux
+- Suppression des placeholders lors du remplissage d'une nouvelle fiche d'intervention
+
+---
+
 ## **1.2.3**
 
 #### 🚀 Nouvelles fonctionnalités

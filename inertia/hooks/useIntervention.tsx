@@ -4,6 +4,7 @@ import {
 	Calendar,
 	Check,
 	Clock,
+	LoaderCircle,
 	Mail,
 	MapPin,
 	Pause,
@@ -67,7 +68,7 @@ export default function useIntervention(
 		status.label = "En\u00A0cours";
 		status.color = "bg-blue-950";
 	} else if (intervention.status === "DONE") {
-		status.label = "Terminée";
+		status.label = "Facturée";
 		status.color = "bg-green-500";
 	}
 
@@ -80,8 +81,13 @@ export default function useIntervention(
 		},
 		{
 			title: "Progression",
-			icon: <Clock color="gray" />,
+			icon: <LoaderCircle color="gray" />,
 			data: `${progress}%`,
+		},
+		{
+			title: "Heures",
+			icon: <Clock color="gray" />,
+			data: `${intervention.totalHours}h`,
 		},
 		...(boat.place
 			? [
@@ -145,7 +151,7 @@ export default function useIntervention(
 			: [
 					{
 						icon: <Check size="18" />,
-						text: "Clôturer l'intervention",
+						text: "Marquer comme facturée",
 						onClick: () =>
 							router.patch(`/interventions/${intervention.slug}/close`),
 						variant: "accent" as const,
