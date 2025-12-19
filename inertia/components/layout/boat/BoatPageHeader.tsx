@@ -32,7 +32,7 @@ export default function BoatPageHeader({
 						href={`/interventions/${inProgressInterventions[0].slug}`}
 						className="justify-center flex font-semibold px-2 gap-2 items-center text-white p-1 text-sm rounded-full bg-primary hover:bg-primary-hover transition"
 					>
-						<Wrench size="18" /> En intervention
+						<Wrench size="18" /> Intervention en cours
 					</Link>
 				)}
 			</div>

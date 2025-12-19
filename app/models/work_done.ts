@@ -1,4 +1,10 @@
-import { BaseModel, belongsTo, column, hasMany } from "@adonisjs/lucid/orm";
+import {
+	BaseModel,
+	belongsTo,
+	column,
+	computed,
+	hasMany,
+} from "@adonisjs/lucid/orm";
 import type { BelongsTo, HasMany } from "@adonisjs/lucid/types/relations";
 import type { DateTime } from "luxon";
 import Hour from "./hour.js";
@@ -23,6 +29,11 @@ export default class WorkDone extends BaseModel {
 
 	@column()
 	declare date: Date;
+
+	@computed()
+	get totalHours(): number {
+		return this.hours?.reduce((sum, h) => sum + Number(h.count ?? 0), 0) ?? 0;
+	}
 
 	@column.dateTime({ autoCreate: true })
 	declare createdAt: DateTime;

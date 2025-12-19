@@ -44,7 +44,7 @@ export default function BoatCard({ boat }: BoatCardProps) {
 					{boat.interventions.length !== 0 && (
 						<span className="flex font-semibold px-2 gap-2 items-center text-white p-1 text-sm rounded-full bg-primary">
 							<Wrench size="18" />{" "}
-							<span className="hidden md:block">En intervention</span>
+							<span className="hidden md:block">Intervention en cours</span>
 						</span>
 					)}
 				</div>

@@ -61,12 +61,15 @@ const TaskPage = ({
 						label: "Ajouter des travaux effectués",
 						icon: <FilePlus size="20" />,
 						variant: "secondary",
+						disabled: addWorkDoneFormVisible === true || task.status === "DONE",
 						onClick: () => setAddWorkDoneFormVisible(true),
 					},
 					task.status === "IN_PROGRESS"
 						? {
 								label: "Marquer comme terminée",
-								disabled: task.workDones && task.workDones.length === 0,
+								disabled:
+									(task.workDones && task.workDones.length === 0) ||
+									addWorkDoneFormVisible === true,
 								onClick: () => router.patch(`/tasks/${task.id}/check`),
 								icon: <CircleCheck size="20" />,
 							}
