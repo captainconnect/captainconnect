@@ -36,7 +36,7 @@ export default function BoatInterventionListItem({
 				</div>
 				<p className="p-1 mt-4 md:mt-0 px-3 bg-blue-950 rounded-full text-white font-semibold text-sm text-center">
 					{(intervention.status === "IN_PROGRESS" && "En cours") ||
-						(intervention.status === "DONE" && "Terminé") ||
+						(intervention.status === "DONE" && "Facturée") ||
 						(intervention.status === "SUSPENDED" && "Suspendue")}
 				</p>
 			</Link>

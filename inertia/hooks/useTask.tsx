@@ -40,7 +40,7 @@ export default function useTask({ task, interventionSlug }: UseTaskProps) {
 				wd.hours
 					?.map((h) => h.user)
 					.filter(Boolean)
-					.map((t) => `${t.firstname} ${t.lastname[0]}`) ?? [];
+					.map((t) => `${t.firstname} ${t.lastname}`) ?? [];
 
 			const technicianLabel = formatTechnicians(technicians);
 

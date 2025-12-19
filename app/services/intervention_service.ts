@@ -22,11 +22,14 @@ export class InterventionService {
 			.preload("boat", (query) =>
 				query.preload("contact").preload("boatConstructor").preload("type"),
 			)
+			.preload("workDones", (query) => query.preload("hours")) // 👈 ICI
 			.preload("taskGroups", (query) =>
 				query
 					.orderBy("sort", "asc")
 					.preload("tasks", (query) =>
-						query.orderBy("sort", "asc").preload("workDones"),
+						query
+							.orderBy("sort", "asc")
+							.preload("workDones", (query) => query.preload("hours")),
 					),
 			)
 			.firstOrFail();
