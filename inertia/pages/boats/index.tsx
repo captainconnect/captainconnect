@@ -47,6 +47,7 @@ const BoatIndexPage = ({ boats }: BoatIndexPageProps) => {
 				}}
 				buttons={[
 					{
+						mustBeAdmin: true,
 						href: "/bateaux/nouveau",
 						icon: <Plus size="18" />,
 						label: "Nouveau bateau",

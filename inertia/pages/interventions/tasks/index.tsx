@@ -67,6 +67,7 @@ const IndexTaskPage = ({ intervention }: IndexTaskPageProps) => {
 									onClick: saveOrdering,
 									icon: <Save size="20" />,
 									variant: "secondary" as const,
+									mustBeAdmin: true,
 								},
 							]
 						: [
@@ -75,11 +76,13 @@ const IndexTaskPage = ({ intervention }: IndexTaskPageProps) => {
 									onClick: () => setOrderingEnabled(true),
 									icon: <Pencil size="18" />,
 									variant: "secondary" as const,
+									mustBeAdmin: true,
 								},
 							]),
 					{
 						label: "Ajouter une nouvelle tâche",
 						onClick: () => setOpenTaskModal(true),
+						mustBeAdmin: true,
 						icon: <Plus />,
 					},
 				]}

@@ -16,6 +16,7 @@ import EditableField from "~/components/ui/EditableField";
 import Input from "~/components/ui/inputs/Input";
 import type { BaseModalProps } from "~/components/ui/modals/Modal";
 import Modal from "~/components/ui/modals/Modal";
+import AdminChecker from "../../AdminChecker";
 
 type ShowContactModalProps = BaseModalProps & {
 	contact?: Contact | null;
@@ -142,38 +143,40 @@ export default function ShowContactModal({
 					/>
 				</div>
 			</div>
-			<div className="mt-5 flex items-center gap-2 justify-end">
-				<Button
-					disabled={processing}
-					onClick={() => (editing ? handleSave() : setEditing(true))}
-					variant="primary"
-					type="button"
-					icon={editing ? <Save size="18" /> : <Edit size="18" />}
-					size="sm"
-				>
-					{editing ? "Enregistrer" : "Modifier"}
-				</Button>
-				{editing && (
+			<AdminChecker mustBeAdmin={true}>
+				<div className="mt-5 flex items-center gap-2 justify-end">
 					<Button
-						onClick={handleCancel}
-						variant="secondary"
+						disabled={processing}
+						onClick={() => (editing ? handleSave() : setEditing(true))}
+						variant="primary"
 						type="button"
-						icon={<X size="18" />}
+						icon={editing ? <Save size="18" /> : <Edit size="18" />}
 						size="sm"
 					>
-						Annuler
+						{editing ? "Enregistrer" : "Modifier"}
 					</Button>
-				)}
-				{!editing && (
-					<Button
-						variant="danger"
-						type="button"
-						icon={<Trash size="18" />}
-						onClick={handleDelete}
-						size="sm"
-					/>
-				)}
-			</div>
+					{editing && (
+						<Button
+							onClick={handleCancel}
+							variant="secondary"
+							type="button"
+							icon={<X size="18" />}
+							size="sm"
+						>
+							Annuler
+						</Button>
+					)}
+					{!editing && (
+						<Button
+							variant="danger"
+							type="button"
+							icon={<Trash size="18" />}
+							onClick={handleDelete}
+							size="sm"
+						/>
+					)}
+				</div>
+			</AdminChecker>
 		</Modal>
 	);
 }

@@ -103,7 +103,11 @@ const TaskPage = ({
 					)}
 				</div>
 				<div className=" md:w-1/3">
-					<ActionSection title="Actions" buttons={actionButtons} />
+					<ActionSection
+						mustBeAdmin={true}
+						title="Actions"
+						buttons={actionButtons}
+					/>
 				</div>
 			</div>
 			<ConfirmModal

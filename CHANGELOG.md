@@ -4,6 +4,7 @@
 
 #### 🚀 Nouvelles fonctionnalités
 - Feuille de route sur le tableau de bord avec historique
+- Ajout des droits et des restrictions sur les actions et les routes, filtrage administrateur
 
 #### 🛠️ Corrections
 - Le bouton d'ajout d'un technicien lors du remplissage d'une fiche de travaux et désormais à droite

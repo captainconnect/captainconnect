@@ -146,6 +146,7 @@ export default function useIntervention(
 						onClick: () =>
 							router.patch(`/interventions/${intervention.slug}/resume`),
 						variant: "accent" as const,
+						mustBeAdmin: true,
 					},
 				]
 			: [
@@ -155,6 +156,7 @@ export default function useIntervention(
 						onClick: () =>
 							router.patch(`/interventions/${intervention.slug}/close`),
 						variant: "accent" as const,
+						mustBeAdmin: true,
 					},
 				]),
 		...(intervention.status === "SUSPENDED"
@@ -162,6 +164,7 @@ export default function useIntervention(
 					{
 						icon: <Play size="18" />,
 						text: "Reprendre l'intervention",
+						mustBeAdmin: true,
 						onClick: () =>
 							router.patch(`/interventions/${intervention.slug}/resume`),
 					},
@@ -170,6 +173,7 @@ export default function useIntervention(
 					{
 						icon: <Pause size="18" />,
 						text: "Suspendre l'intervention",
+						mustBeAdmin: true,
 						onClick: () =>
 							router.patch(`/interventions/${intervention.slug}/suspend`),
 					},
@@ -177,6 +181,7 @@ export default function useIntervention(
 		{
 			icon: <Trash size="18" />,
 			text: "Supprimer l'intervention",
+			mustBeAdmin: true,
 			onClick: openModal ? () => openModal(true) : () => {},
 			variant: "danger",
 		},

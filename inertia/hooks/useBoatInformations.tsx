@@ -85,6 +85,7 @@ export default function useBoatInformations(
 				type: "NAVIGATE" as const,
 				href: `/interventions/nouvelle/${boat.slug}`,
 			},
+			mustBeAdmin: true,
 		},
 		...(boat.contact?.phone
 			? [

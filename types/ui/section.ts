@@ -10,4 +10,5 @@ export type ActionButton = ButtonHTMLAttributes<HTMLButtonElement> & {
 	variant?: "normal" | "accent" | "warning" | "danger";
 	icon?: ReactNode;
 	link?: LinkType;
+	mustBeAdmin?: boolean;
 };
