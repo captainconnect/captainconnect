@@ -11,7 +11,7 @@ export type User = {
 	activated: boolean;
 	createdAt: Date;
 	updatedAt: Date;
-	isAdmin: () => boolean;
+	isAdmin: boolean;
 };
 
 export interface UserPayload {
