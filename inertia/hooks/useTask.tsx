@@ -65,12 +65,14 @@ export default function useTask({ task, interventionSlug }: UseTaskProps) {
 			icon: <Edit size="18" />,
 			text: "Modifier la tâche",
 			onClick: () => setCurrentModal(Modals.UpdateModal),
+			mustBeAdmin: true,
 		},
 		{
 			icon: <Trash size="18" />,
 			variant: "danger",
 			text: "Supprimer la tâche",
 			onClick: () => setCurrentModal(Modals.ConfirmDeletion),
+			mustBeAdmin: true,
 		},
 	];
 

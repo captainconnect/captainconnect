@@ -74,6 +74,7 @@ const UserPage = ({ user }: UserPageProps) => {
 				</Section>
 
 				<ActionSection
+					mustBeAdmin={true}
 					title="Danger zone"
 					className="md:w-1/3"
 					buttons={dangerZoneButtons}

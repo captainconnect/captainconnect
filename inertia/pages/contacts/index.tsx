@@ -73,6 +73,7 @@ const ContactIndexPage = ({ contacts }: ContactIndexPageProps) => {
 				}}
 				buttons={[
 					{
+						mustBeAdmin: true,
 						label: "Nouveau contact",
 						icon: <Plus />,
 						onClick: () => setShowModal(Modals.Create),

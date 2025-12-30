@@ -1,4 +1,4 @@
-import { Head, router } from "@inertiajs/react";
+import { Head, router, usePage } from "@inertiajs/react";
 import {
 	CircleAlert,
 	Contact,
@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import type { Boat } from "#types/boat";
+import type { User } from "#types/user";
 import BoatMap from "~/components/features/boat/BoatMap";
 import BoatInterventionList from "~/components/features/intervention/BoatInterventionList";
 import AppLayout from "~/components/layout/AppLayout";
@@ -25,6 +26,9 @@ type BoatPageProps = {
 };
 
 const BoatPage = ({ boat }: BoatPageProps) => {
+	const { props } = usePage<{ authenticatedUser: User }>();
+	const currentUser = props.authenticatedUser;
+
 	const hasPlace = boat.place !== null && !Number.isNaN(Number(boat.place));
 	const hasPosition = boat.position !== null;
 
@@ -128,8 +132,15 @@ const BoatPage = ({ boat }: BoatPageProps) => {
 							/>
 						</Section>
 					)}
-					<ActionSection title="Actions" buttons={actionButtons} />
-					<ActionSection title="Danger zone" buttons={dangerActionsButtons} />
+					{(boat.contact || currentUser.isAdmin) && (
+						<ActionSection title="Actions" buttons={actionButtons} />
+					)}
+
+					<ActionSection
+						mustBeAdmin={true}
+						title="Danger zone"
+						buttons={dangerActionsButtons}
+					/>
 				</div>
 			</div>
 			<ConfirmModal

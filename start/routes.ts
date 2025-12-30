@@ -77,13 +77,16 @@ router
 				router.get("/", [ContactsController, "index"]).as("contacts.index");
 				router
 					.post("/store", [ContactsController, "store"])
-					.as("contacts.store");
+					.as("contacts.store")
+					.use(middleware.admin());
 				router
 					.put("/update/:contactId", [ContactsController, "update"])
-					.as("contacts.update");
+					.as("contacts.update")
+					.use(middleware.admin());
 				router
 					.delete("/destroy/:contactId", [ContactsController, "destroy"])
-					.as("contacts.destroy");
+					.as("contacts.destroy")
+					.use(middleware.admin());
 			})
 			.prefix("contacts");
 
@@ -91,27 +94,36 @@ router
 		router
 			.group(() => {
 				router.get("/", [UsersController, "index"]).as("users.index");
-				router.post("/store", [UsersController, "store"]).as("users.store");
+				router
+					.post("/store", [UsersController, "store"])
+					.as("users.store")
+					.use(middleware.admin());
 				router.get("/:userId", [UsersController, "show"]).as("users.show");
 				router
 					.delete("/:userId", [UsersController, "destroy"])
-					.as("users.destroy");
+					.as("users.destroy")
+					.use(middleware.admin());
 				router
 					.patch("/:userId/reset-password", [UsersController, "resetPassword"])
-					.as("users.reset-password");
+					.as("users.reset-password")
+					.use(middleware.admin());
 				router
 					.patch("/:userId/deactivate", [UsersController, "deactivate"])
-					.as("users.deactivate");
+					.as("users.deactivate")
+					.use(middleware.admin());
 				router
 					.patch("/:userId/activate", [UsersController, "activate"])
-					.as("users.activate");
+					.as("users.activate")
+					.use(middleware.admin());
 
 				router
 					.patch("/:userId/promote", [UsersController, "promote"])
-					.as("users.promote");
+					.as("users.promote")
+					.use(middleware.admin());
 				router
 					.patch("/:userId/demote", [UsersController, "demote"])
-					.as("users.demote");
+					.as("users.demote")
+					.use(middleware.admin());
 			})
 			.prefix("utilisateurs");
 
@@ -124,13 +136,16 @@ router
 				router.get("/:boatSlug", [BoatsController, "show"]).as("boats.show");
 				router
 					.get("/:boatSlug/modifier", [BoatsController, "edit"])
-					.as("boats.edit");
+					.as("boats.edit")
+					.use(middleware.admin());
 				router
 					.put("/:boatSlug", [BoatsController, "update"])
-					.as("boats.update");
+					.as("boats.update")
+					.use(middleware.admin());
 				router
 					.delete("/:boatSlug", [BoatsController, "destroy"])
-					.as("boats.destroy");
+					.as("boats.destroy")
+					.use(middleware.admin());
 			})
 			.prefix("bateaux");
 
@@ -145,53 +160,63 @@ router
 					.as("interventions.show");
 				router
 					.get("/nouvelle/:boatSlug", [InterventionsController, "create"])
-					.as("interventions.create");
+					.as("interventions.create")
+					.use(middleware.admin());
 				router
 					.post("nouvelle/:boatSlug", [InterventionsController, "store"])
-					.as("interventions.store");
+					.as("interventions.store")
+					.use(middleware.admin());
 
 				router
 					.get("/:interventionSlug/modifier", [InterventionsController, "edit"])
-					.as("interventions.edit");
+					.as("interventions.edit")
+					.use(middleware.admin());
 				router
 					.put("/:interventionSlug/modifier", [
 						InterventionsController,
 						"update",
 					])
-					.as("interventions.update");
+					.as("interventions.update")
+					.use(middleware.admin());
 
 				router
 					.patch("/:interventionSlug/close", [InterventionsController, "close"])
-					.as("interventions.close");
+					.as("interventions.close")
+					.use(middleware.admin());
 				router
 					.patch("/:interventionSlug/suspend", [
 						InterventionsController,
 						"suspend",
 					])
-					.as("interventions.suspend");
+					.as("interventions.suspend")
+					.use(middleware.admin());
 				router
 					.patch("/:interventionSlug/resume", [
 						InterventionsController,
 						"resume",
 					])
-					.as("interventions.resume");
+					.as("interventions.resume")
+					.use(middleware.admin());
 				router
 					.delete("/:interventionSlug", [InterventionsController, "destroy"])
-					.as("interventions.destroy");
+					.as("interventions.destroy")
+					.use(middleware.admin());
 
 				router
 					.get("/:interventionSlug/taches/:taskId", [TasksController, "show"])
 					.as("tasks.show");
 				router
 					.post("/:interventionSlug/task", [TasksController, "store"])
-					.as("tasks.store");
+					.as("tasks.store")
+					.use(middleware.admin());
 
 				router
 					.get("/:interventionSlug/taches", [TasksController, "index"])
 					.as("interventions.tasks.index");
 				router
 					.put("/:interventionSlug/tasks/ordering", [TasksController, "order"])
-					.as("interventions.tasks.ordering");
+					.as("interventions.tasks.ordering")
+					.use(middleware.admin());
 				router
 					.post("/:interventionSlug/task/:taskId/store", [
 						WorkDonesController,
@@ -222,10 +247,12 @@ router
 				// 	.as("tasks.hour.destroy");
 				router
 					.patch("/:interventionSlug/:taskId", [TasksController, "update"])
-					.as("tasks.update");
+					.as("tasks.update")
+					.use(middleware.admin());
 				router
 					.delete("/:interventionSlug/:taskId", [TasksController, "destroy"])
-					.as("tasks.destroy");
+					.as("tasks.destroy")
+					.use(middleware.admin());
 			})
 			.prefix("tasks");
 

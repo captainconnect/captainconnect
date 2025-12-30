@@ -1,6 +1,7 @@
 import { Link } from "@inertiajs/react";
 import { clsx } from "clsx";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
+import AdminChecker from "~/components/features/AdminChecker";
 import Loader from "../Loader";
 
 export type ButtonVariant = "primary" | "secondary" | "danger";
@@ -11,6 +12,7 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 	icon?: ReactNode;
 	href?: string;
 	processing?: boolean;
+	mustBeAdmin?: boolean;
 };
 
 export default function Button({
@@ -22,6 +24,7 @@ export default function Button({
 	children,
 	className,
 	processing,
+	mustBeAdmin,
 	...props
 }: ButtonProps) {
 	const base =
@@ -50,14 +53,18 @@ export default function Button({
 
 	if (href)
 		return (
-			<Link href={href} className={classes}>
-				{content}
-			</Link>
+			<AdminChecker mustBeAdmin={mustBeAdmin}>
+				<Link href={href} className={classes}>
+					{content}
+				</Link>
+			</AdminChecker>
 		);
 
 	return (
-		<button type={type} className={classes} {...props}>
-			{processing ? <Loader /> : content}
-		</button>
+		<AdminChecker mustBeAdmin={mustBeAdmin}>
+			<button type={type} className={classes} {...props}>
+				{processing ? <Loader /> : content}
+			</button>
+		</AdminChecker>
 	);
 }

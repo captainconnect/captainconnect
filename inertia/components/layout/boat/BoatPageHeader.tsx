@@ -36,7 +36,11 @@ export default function BoatPageHeader({
 					</Link>
 				)}
 			</div>
-			<Button icon={<Edit size="18" />} href={`/bateaux/${boat.slug}/modifier`}>
+			<Button
+				mustBeAdmin={true}
+				icon={<Edit size="18" />}
+				href={`/bateaux/${boat.slug}/modifier`}
+			>
 				Modifier
 			</Button>
 		</div>
