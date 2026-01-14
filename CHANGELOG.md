@@ -3,7 +3,9 @@
 ## **1.3.0**
 
 #### 🚀 Nouvelles fonctionnalités
-- Feuille de route sur le tableau de bord avec historique
+- Système de fichiers
+  - Image de profil pour les utilisateurs
+  - Médias liés aux bateaux
 - Ajout des droits et des restrictions sur les actions et les routes, filtrage administrateur
 
 #### 🛠️ Corrections

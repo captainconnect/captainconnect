@@ -4,6 +4,8 @@ import {
 	Calendar,
 	Check,
 	Clock,
+	Files,
+	FileUp,
 	LoaderCircle,
 	Mail,
 	MapPin,
@@ -15,7 +17,7 @@ import {
 	Stamp,
 	Trash,
 } from "lucide-react";
-
+import { useState } from "react";
 import type { Intervention } from "#types/intervention";
 import type { ActionButton } from "#types/ui/section";
 import type { InformationCardProps } from "~/components/layout/intervention/InformationCard";
@@ -24,7 +26,10 @@ import type { InformationBlockItemProps } from "~/components/ui/InformationBlock
 export default function useIntervention(
 	intervention: Intervention,
 	openModal?: (open: boolean) => void,
+	mediasCount?: number,
 ) {
+	const [addProjectMediaModalOpen, setAddProjectMediaModalOpen] =
+		useState(false);
 	const { boat } = intervention;
 
 	const now = new Date();
@@ -125,6 +130,20 @@ export default function useIntervention(
 	];
 
 	const actionsButtons: ActionButton[] = [
+		{
+			icon: <FileUp size="18" />,
+			text: "Ajouter un fichier",
+			variant: "accent",
+			onClick: () => setAddProjectMediaModalOpen(true),
+		},
+		{
+			icon: <Files size="18" />,
+			text: `Accéder aux fichiers (${mediasCount})`,
+			link: {
+				type: "NAVIGATE",
+				href: `/fichiers/${boat.slug}?intervention_id=${intervention.id}`,
+			},
+		},
 		{
 			icon:
 				boat.type?.label === "Voilier" || boat.type?.label === "Catamaran" ? (
@@ -259,5 +278,7 @@ export default function useIntervention(
 		boatData,
 		contactData,
 		interventionData,
+		setAddProjectMediaModalOpen,
+		addProjectMediaModalOpen,
 	};
 }

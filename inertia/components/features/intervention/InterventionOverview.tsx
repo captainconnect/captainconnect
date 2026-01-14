@@ -3,25 +3,31 @@ import type { Intervention } from "#types/intervention";
 import InformationsBlock from "~/components/ui/InformationsBlock";
 import Section from "~/components/ui/Section";
 import ActionSection from "~/components/ui/sections/ActionSection";
-import type { TabProps } from "~/components/ui/Tab";
-import Tab from "~/components/ui/Tab";
 import useIntervention from "~/hooks/useIntervention";
+import AddProjectMediaModal from "../media/AddProjectMediaModal";
 
-type OverviewTabProps = TabProps & {
+type OverviewTabProps = {
 	intervention: Intervention;
 	openModal: (open: boolean) => void;
+	mediasCount: number;
 };
 
-export default function OverviewTab({
-	selected,
+export default function InterventionOverview({
 	intervention,
 	openModal,
+	mediasCount,
 }: OverviewTabProps) {
-	const { actionsButtons, boatData, contactData, interventionData } =
-		useIntervention(intervention, openModal);
+	const {
+		actionsButtons,
+		boatData,
+		contactData,
+		interventionData,
+		addProjectMediaModalOpen,
+		setAddProjectMediaModalOpen,
+	} = useIntervention(intervention, openModal, mediasCount);
 
 	return (
-		<Tab selected={selected}>
+		<>
 			<div className="flex flex-col md:flex-row gap-4 mb-4 w-full">
 				<Section
 					className="md:w-2/3"
@@ -73,6 +79,12 @@ export default function OverviewTab({
 					</Section>
 				)}
 			</div>
-		</Tab>
+			<AddProjectMediaModal
+				open={addProjectMediaModalOpen}
+				onClose={() => setAddProjectMediaModalOpen(false)}
+				boatId={intervention.boat.id}
+				interventionId={intervention.id}
+			/>
+		</>
 	);
 }

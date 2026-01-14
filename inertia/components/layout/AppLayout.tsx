@@ -1,5 +1,6 @@
 import { usePage } from "@inertiajs/react";
 import {
+	Folder,
 	LayoutDashboard,
 	Ship,
 	SquareUserRound,
@@ -29,6 +30,7 @@ export default function AppLayout({ children, title }: AppLayoutProps) {
 		{ label: "Interventions", route: "/interventions", icon: <Wrench /> },
 		{ label: "Bateaux", route: "/bateaux", icon: <Ship /> },
 		{ label: "Contacts", route: "/contacts", icon: <SquareUserRound /> },
+		{ label: "Fichiers", route: "/fichiers", icon: <Folder /> },
 		{ label: "Utilisateurs", route: "/utilisateurs", icon: <UserRoundCog /> },
 	];
 	if (currentUser.isAdmin) {

@@ -10,6 +10,7 @@ export default class ContactsController {
 
 	async index({ inertia }: HttpContext) {
 		const contacts = await this.contactService.getAll();
+
 		return inertia.render("contacts/index", {
 			contacts,
 		});

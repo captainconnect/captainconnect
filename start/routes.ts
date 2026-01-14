@@ -17,6 +17,7 @@ const BoatsController = () => import("#controllers/boats_controller");
 const ContactsController = () => import("#controllers/contacts_controller");
 const HoursController = () => import("#controllers/hours_controller");
 const UsersController = () => import("#controllers/users_controller");
+const MediaController = () => import("#controllers/media_controller");
 const ProfilesController = () => import("#controllers/profiles_controller");
 const SessionController = () => import("#controllers/session_controller");
 const TasksController = () => import("#controllers/tasks_controller");
@@ -68,6 +69,13 @@ router
 				router
 					.patch("/password", [ProfilesController, "updatePassword"])
 					.as("profile.updatePassword");
+
+				router
+					.patch("/avatar", [ProfilesController, "uploadAvatar"])
+					.as("profile.uploadAvatar");
+				router
+					.delete("/avatar", [ProfilesController, "deleteAvatar"])
+					.as("profile.deleteAvatar");
 			})
 			.prefix("/profile");
 
@@ -131,8 +139,14 @@ router
 		router
 			.group(() => {
 				router.get("/", [BoatsController, "index"]).as("boats.index");
-				router.get("nouveau", [BoatsController, "create"]).as("boats.create");
-				router.post("nouveau", [BoatsController, "store"]).as("boats.store");
+				router
+					.get("nouveau", [BoatsController, "create"])
+					.as("boats.create")
+					.use(middleware.admin());
+				router
+					.post("nouveau", [BoatsController, "store"])
+					.as("boats.store")
+					.use(middleware.admin());
 				router.get("/:boatSlug", [BoatsController, "show"]).as("boats.show");
 				router
 					.get("/:boatSlug/modifier", [BoatsController, "edit"])
@@ -263,5 +277,37 @@ router
 					.as("hours.user");
 			})
 			.prefix("hours");
+
+		router
+			.group(() => {
+				router
+					.post("/projectMedia", [MediaController, "storeProjectMedia"])
+					.as("projectMedia.store");
+				router
+					.post("/projectMedia/mass", [
+						MediaController,
+						"storeMassProjectMedia",
+					])
+					.as("projectMedia.massStore");
+				router
+					.delete("/:projectMediaId", [MediaController, "deleteProjectMedia"])
+					.as("projectMedia.delete")
+					.use(middleware.admin());
+				router
+					.delete("/projectMedia/mass", [
+						MediaController,
+						"deleteManyProjectMedia",
+					])
+					.as("projectMedia.massDelete")
+					.use(middleware.admin());
+			})
+			.prefix("media");
+
+		router
+			.group(() => {
+				router.get("/", [MediaController, "index"]).as("medias.index");
+				router.get("/:boatSlug", [MediaController, "show"]).as("medias.show");
+			})
+			.prefix("fichiers");
 	})
 	.use(middleware.auth());

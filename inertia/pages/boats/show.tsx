@@ -1,4 +1,4 @@
-import { Head, router, usePage } from "@inertiajs/react";
+import { Head, router } from "@inertiajs/react";
 import {
 	CircleAlert,
 	Contact,
@@ -9,9 +9,9 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import type { Boat } from "#types/boat";
-import type { User } from "#types/user";
 import BoatMap from "~/components/features/boat/BoatMap";
 import BoatInterventionList from "~/components/features/intervention/BoatInterventionList";
+import AddProjectMediaModal from "~/components/features/media/AddProjectMediaModal";
 import AppLayout from "~/components/layout/AppLayout";
 import BoatPageHeader from "~/components/layout/boat/BoatPageHeader";
 import EmptyList from "~/components/ui/EmptyList";
@@ -26,9 +26,6 @@ type BoatPageProps = {
 };
 
 const BoatPage = ({ boat }: BoatPageProps) => {
-	const { props } = usePage<{ authenticatedUser: User }>();
-	const currentUser = props.authenticatedUser;
-
 	const hasPlace = boat.place !== null && !Number.isNaN(Number(boat.place));
 	const hasPosition = boat.position !== null;
 
@@ -43,8 +40,14 @@ const BoatPage = ({ boat }: BoatPageProps) => {
 	const [deleteBoatConfirmationModalOpen, setDeleteBoatConfirmationModalOpen] =
 		useState(false);
 
-	const { boatData, contactData, actionButtons, dangerActionsButtons } =
-		useBoatInformations(boat, setDeleteBoatConfirmationModalOpen);
+	const {
+		boatData,
+		contactData,
+		actionButtons,
+		dangerActionsButtons,
+		addProjectMediaModalOpen,
+		setAddProjectMediaModalOpen,
+	} = useBoatInformations(boat, setDeleteBoatConfirmationModalOpen);
 
 	const handleDelete = () => {
 		router.delete(`/bateaux/${boat.slug}`);
@@ -132,9 +135,8 @@ const BoatPage = ({ boat }: BoatPageProps) => {
 							/>
 						</Section>
 					)}
-					{(boat.contact || currentUser.isAdmin) && (
-						<ActionSection title="Actions" buttons={actionButtons} />
-					)}
+
+					<ActionSection title="Actions" buttons={actionButtons} />
 
 					<ActionSection
 						mustBeAdmin={true}
@@ -158,6 +160,11 @@ const BoatPage = ({ boat }: BoatPageProps) => {
 					value: boat.name,
 				}}
 				onConfirm={handleDelete}
+			/>
+			<AddProjectMediaModal
+				onClose={() => setAddProjectMediaModalOpen(false)}
+				open={addProjectMediaModalOpen}
+				boatId={boat.id}
 			/>
 		</>
 	);

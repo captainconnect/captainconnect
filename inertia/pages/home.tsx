@@ -1,18 +1,17 @@
-import { Head, usePage } from "@inertiajs/react";
-import type { User } from "#types/user";
+import { Head } from "@inertiajs/react";
 import AppLayout from "~/components/layout/AppLayout";
 
 const title = "Tableau de bord";
 
 const HomePage = () => {
-	const { props } = usePage<{ authenticatedUser: User }>();
-	const currentUser = props.authenticatedUser;
+	// const { props } = usePage<{ authenticatedUser: User }>();
+	// const currentUser = props.authenticatedUser;
 
 	return (
 		<>
 			<Head title={title} />
 			<h1>Ici retrouvez les dernières actualités</h1>
-			<p>{currentUser.isAdmin ? "Admin" : "Utilisateur"}</p>
+			{/* <p>{currentUser.isAdmin ? "Admin" : "Utilisateur"}</p> */}
 		</>
 	);
 };

@@ -1,5 +1,5 @@
 import { router } from "@inertiajs/react";
-import { CircleCheck, Clock, Edit, Trash } from "lucide-react";
+import { CircleCheck, Clock, Edit, FileUp, Trash } from "lucide-react";
 import { type ReactNode, useState } from "react";
 import type { Task } from "#types/intervention";
 import type { ActionButton } from "#types/ui/section";
@@ -8,6 +8,7 @@ enum Modals {
 	None,
 	ConfirmDeletion,
 	UpdateModal,
+	AddMediaModal,
 }
 type Tag = {
 	label: string;
@@ -61,6 +62,12 @@ export default function useTask({ task, interventionSlug }: UseTaskProps) {
 	};
 
 	const actionButtons: ActionButton[] = [
+		{
+			icon: <FileUp size="18" />,
+			text: "Ajouter un fichier",
+			onClick: () => setCurrentModal(Modals.AddMediaModal),
+			variant: "accent",
+		},
 		{
 			icon: <Edit size="18" />,
 			text: "Modifier la tâche",

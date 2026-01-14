@@ -1,4 +1,5 @@
 import type { Boat } from "./boat.js";
+import type { Media } from "./media.js";
 import type { User } from "./user.js";
 import type { WorkDone } from "./workdone.js";
 
@@ -28,6 +29,7 @@ export type Task = {
 	createdAt: Date;
 	updatedAt: Date;
 	workDones?: WorkDone[];
+	medias?: Media[];
 };
 
 export type TaskGroup = {

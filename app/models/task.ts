@@ -3,6 +3,7 @@ import type { BelongsTo, HasMany } from "@adonisjs/lucid/types/relations";
 import type { DateTime } from "luxon";
 import type { TaskStatus } from "#types/intervention";
 import Hour from "./hour.js";
+import ProjectMedia from "./project_media.js";
 import TaskGroup from "./task_group.js";
 import WorkDone from "./work_done.js";
 
@@ -39,4 +40,7 @@ export default class Task extends BaseModel {
 
 	@hasMany(() => WorkDone)
 	declare workDones: HasMany<typeof WorkDone>;
+
+	@hasMany(() => ProjectMedia)
+	declare medias: HasMany<typeof ProjectMedia>;
 }

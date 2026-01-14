@@ -67,9 +67,13 @@ export default function useUserActions(
 			title: "Supprimer l'utilisateur",
 			label: "Confirmer",
 			icon: <Trash />,
+			confirmationType: {
+				placeholder: "Tapez SUPPRIMER pour confirmer",
+				value: "SUPPRIMER",
+			},
 			action: () => router.delete(`/utilisateurs/${user.id}`),
 			confirmationText:
-				"Supprimer définitivement l'utilisateur ? Cette action est irréversible.",
+				"Supprimer définitivement l'utilisateur, ses heures et ses interventions ? Cette action est irréversible.",
 		},
 	};
 

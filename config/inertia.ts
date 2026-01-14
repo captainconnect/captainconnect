@@ -1,6 +1,8 @@
 import { defineConfig } from "@adonisjs/inertia";
 import type { InferSharedProps } from "@adonisjs/inertia/types";
+import { DriveService } from "#services/drive_service";
 
+const driveService = new DriveService();
 const inertiaConfig = defineConfig({
 	/**
 	 * Path to the Edge view that will be used as the root view for Inertia responses
@@ -18,7 +20,11 @@ const inertiaConfig = defineConfig({
 				if (!authUser) return null;
 
 				await authUser.load("role");
-
+				await authUser.load("avatar");
+				let url: string | undefined;
+				if (authUser.avatar) {
+					url = driveService.getUrl(authUser.avatar.objectKey);
+				}
 				return {
 					id: authUser.id,
 					firstname: authUser.firstname,
@@ -31,6 +37,7 @@ const inertiaConfig = defineConfig({
 					initials:
 						authUser.firstname[0].toUpperCase() +
 						authUser.lastname[0].toUpperCase(),
+					avatar: url || undefined,
 				};
 			}),
 	},
