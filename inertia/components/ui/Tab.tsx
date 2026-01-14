@@ -6,5 +6,5 @@ export type TabProps = {
 };
 
 export default function Tab({ selected, children }: TabProps) {
-	if (selected) return <div>{children}</div>;
+	if (selected) return <div className="w-full">{children}</div>;
 }

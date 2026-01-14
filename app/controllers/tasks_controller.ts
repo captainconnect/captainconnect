@@ -3,6 +3,8 @@ import type { HttpContext } from "@adonisjs/core/http";
 // biome-ignore lint/style/useImportType: IoC runtime needs this
 import { InterventionService } from "#services/intervention_service";
 // biome-ignore lint/style/useImportType: IoC runtime needs this
+import { MediaService } from "#services/media_service";
+// biome-ignore lint/style/useImportType: IoC runtime needs this
 import { TaskService } from "#services/task_service";
 // biome-ignore lint/style/useImportType: IoC runtime needs this
 import { UserService } from "#services/user_service";
@@ -18,6 +20,7 @@ export default class TasksController {
 		protected taskService: TaskService,
 		protected userService: UserService,
 		protected interventionService: InterventionService,
+		protected mediaService: MediaService,
 	) {}
 
 	async index({ params, inertia }: HttpContext) {
@@ -34,15 +37,18 @@ export default class TasksController {
 	async show({ params, inertia }: HttpContext) {
 		const taskId = params.taskId;
 		const interventionSlug = params.interventionSlug;
-		const { id } = await this.interventionService.getBySlug(interventionSlug);
-		const taskGroups = await this.interventionService.getTaskGroups(id);
+		const intervention =
+			await this.interventionService.getBySlug(interventionSlug);
+		const taskGroups = await this.interventionService.getTaskGroups(
+			intervention.id,
+		);
 		const task = await this.taskService.getById(taskId);
 		const users = await this.userService.getAllForTask();
-
 		return inertia.render("interventions/tasks/show", {
 			task,
 			users,
 			interventionSlug,
+			intervention,
 			taskGroups,
 		});
 	}

@@ -5,14 +5,21 @@ import {
 	belongsTo,
 	column,
 	hasMany,
+	hasOne,
 } from "@adonisjs/lucid/orm";
-import type { BelongsTo, HasMany } from "@adonisjs/lucid/types/relations";
+import type {
+	BelongsTo,
+	HasMany,
+	HasOne,
+} from "@adonisjs/lucid/types/relations";
 import type { DateTime } from "luxon";
 import type { Coordinate } from "#types/boat";
 import BoatConstructor from "./boat_constructor.js";
 import BoatType from "./boat_type.js";
 import Contact from "./contact.js";
 import Intervention from "./intervention.js";
+import Media from "./media.js";
+import ProjectMedia from "./project_media.js";
 
 export default class Boat extends BaseModel {
 	@column({ isPrimary: true })
@@ -64,6 +71,12 @@ export default class Boat extends BaseModel {
 	@column()
 	declare note: string | null;
 
+	@column({ columnName: "thumbnail_id" })
+	declare thumbnailId: number | null;
+
+	@hasOne(() => Media)
+	declare thumbnail: HasOne<typeof Media>;
+
 	@column.dateTime({ autoCreate: true })
 	declare createdAt: DateTime;
 
@@ -81,6 +94,9 @@ export default class Boat extends BaseModel {
 
 	@belongsTo(() => BoatConstructor, { foreignKey: "boatConstructorId" })
 	declare boatConstructor: BelongsTo<typeof BoatConstructor>;
+
+	@hasMany(() => ProjectMedia)
+	declare medias: HasMany<typeof ProjectMedia>;
 
 	@afterSave()
 	static async setSlug(boat: Boat) {

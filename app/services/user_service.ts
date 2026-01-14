@@ -1,13 +1,22 @@
+import { inject } from "@adonisjs/core";
+import emitter from "@adonisjs/core/services/emitter";
+import Media from "#models/media";
 import User from "#models/user";
 import type { UserPayload } from "#types/user";
+// biome-ignore lint/style/useImportType: IoC runtime needs this
+import { DriveService } from "./drive_service.js";
 
+@inject()
 export class UserService {
+	constructor(protected driveService: DriveService) {}
+
 	async getAll(authenticatedUserId: number) {
 		return await User.query()
 			.whereNot("id", 1)
 			.andWhereNot("id", authenticatedUserId)
 			.orderBy("firstname", "asc")
-			.preload("role");
+			.preload("role")
+			.preload("avatar");
 	}
 
 	async getAllForTask() {
@@ -17,7 +26,11 @@ export class UserService {
 	}
 
 	async getById(id: number) {
-		return await User.query().where("id", id).preload("role").firstOrFail();
+		return await User.query()
+			.where("id", id)
+			.preload("role")
+			.preload("avatar")
+			.firstOrFail();
 	}
 
 	async create(payload: UserPayload) {
@@ -32,6 +45,12 @@ export class UserService {
 
 	async delete(id: number) {
 		const user = await User.findOrFail(id);
+		const { avatarId } = user;
+		const media = await Media.find(avatarId);
+		if (media) {
+			emitter.emit("user:deleted", media);
+		}
+		await media?.delete();
 		await user.delete();
 	}
 

@@ -1,31 +1,28 @@
 import { Head, router } from "@inertiajs/react";
 import { useState } from "react";
 import type { Intervention } from "#types/intervention";
-import type { User } from "#types/user";
-import OverviewTab from "~/components/features/intervention/overview_tab/OverviewTab";
+import InterventionOverview from "~/components/features/intervention/InterventionOverview";
 import AppLayout from "~/components/layout/AppLayout";
 import InformationCard from "~/components/layout/intervention/InformationCard";
 import InterventionCardSection from "~/components/layout/intervention/InformationCardSection";
 import InterventionHeader from "~/components/layout/intervention/InterventionHeader";
 import ConfirmModal from "~/components/ui/modals/Confirm";
-import TabSelector from "~/components/ui/TabSelector";
 import useIntervention from "~/hooks/useIntervention";
 
 type InterventionPageProps = {
 	intervention: Intervention;
-	users: User[];
+	mediasCount: number;
 };
 
 const title = "Intervention";
 
-const InterventionPage = ({ intervention }: InterventionPageProps) => {
+const InterventionPage = ({
+	intervention,
+	mediasCount,
+}: InterventionPageProps) => {
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
 	const { cards } = useIntervention(intervention, setDeleteModalOpen);
-	const hash = window.location.hash.replace("#", "");
-	const [selectedTab, setSelectedTab] = useState(
-		hash !== "" ? hash : "OVERVIEW",
-	);
 
 	const handleDelete = () => {
 		router.delete(`/interventions/${intervention.slug}`);
@@ -51,25 +48,10 @@ const InterventionPage = ({ intervention }: InterventionPageProps) => {
 				</div>
 			</InterventionCardSection>
 			<hr className="text-gray-200 m-5" />
-			<div className="flex bg-gray-100 rounded-xl mb-5 w-full p-1">
-				<TabSelector
-					isSelected={selectedTab === "OVERVIEW"}
-					scope="OVERVIEW"
-					setSelectedTab={setSelectedTab}
-					label="Vue d'ensemble"
-				/>
-				<TabSelector
-					disabled={true}
-					isSelected={selectedTab === "MEDIAS"}
-					scope="MEDIAS"
-					setSelectedTab={setSelectedTab}
-					label="Médias"
-				/>
-			</div>
-			<OverviewTab
+			<InterventionOverview
 				intervention={intervention}
-				selected={selectedTab === "OVERVIEW"}
 				openModal={setDeleteModalOpen}
+				mediasCount={mediasCount}
 			/>
 			<ConfirmModal
 				open={deleteModalOpen}

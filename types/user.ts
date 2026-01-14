@@ -1,3 +1,4 @@
+import type { MultipartFile } from "@adonisjs/core/bodyparser";
 import type { Role } from "./role.js";
 
 export type User = {
@@ -12,6 +13,8 @@ export type User = {
 	createdAt: Date;
 	updatedAt: Date;
 	isAdmin: boolean;
+	avatar: string | undefined;
+	avatarUrl: string | undefined;
 };
 
 export interface UserPayload {
@@ -24,4 +27,8 @@ export interface UserPayload {
 export interface UpdateProfilePayload {
 	email?: string;
 	phone?: string;
+}
+
+export interface UploadAvatarPayload {
+	avatar: MultipartFile;
 }

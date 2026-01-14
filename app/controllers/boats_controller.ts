@@ -1,5 +1,6 @@
 import { inject } from "@adonisjs/core";
 import type { HttpContext } from "@adonisjs/core/http";
+import emitter from "@adonisjs/core/services/emitter";
 // biome-ignore lint/style/useImportType: IoC runtime needs this
 import { BoatService } from "#services/boat_service";
 // biome-ignore lint/style/useImportType: IoC runtime needs this
@@ -99,6 +100,7 @@ export default class BoatsController {
 	async destroy({ params, response }: HttpContext) {
 		const boatSlug = params.boatSlug;
 		await this.boatService.delete(boatSlug);
+		emitter.emit("boat:deleted", boatSlug);
 		return response.redirect().toRoute("boats.index");
 	}
 }

@@ -9,6 +9,7 @@ import { UserService } from "#services/user_service";
 import {
 	updatePasswordValidator,
 	updateProfileValidator,
+	uploadAvatarValidator,
 } from "#validators/user";
 
 @inject()
@@ -37,6 +38,21 @@ export default class ProfilesController {
 		const { id: userId } = await auth.authenticate();
 		const payload = await request.validateUsing(updatePasswordValidator);
 		await this.userService.updatePassword(userId, payload.password);
+		return response.redirect().back();
+	}
+
+	async uploadAvatar({ request, auth, response }: HttpContext) {
+		const { id: userId } = await auth.authenticate();
+
+		const payload = await request.validateUsing(uploadAvatarValidator);
+		await this.profileService.uploadAvatar(payload, userId);
+
+		return response.redirect().back();
+	}
+
+	async deleteAvatar({ auth, response }: HttpContext) {
+		const { id } = await auth.authenticate();
+		await this.profileService.deleteAvatar(id);
 		return response.redirect().back();
 	}
 }

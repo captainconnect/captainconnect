@@ -1,18 +1,31 @@
-import { Head } from "@inertiajs/react";
-import { CalendarClock, Edit, Lock, User2 } from "lucide-react";
+import type { SharedProps } from "@adonisjs/inertia/types";
+import { Head, router, usePage } from "@inertiajs/react";
+import {
+	CalendarClock,
+	Edit,
+	ImageMinus,
+	ImageUp,
+	Lock,
+	User2,
+} from "lucide-react";
 import { useState } from "react";
 import type { User } from "#types/user";
 import UpdatePasswordModal from "~/components/features/profile/UpdatePasswordModal";
 import UpdateProfileModal from "~/components/features/profile/UpdateProfileModal";
+import UploadAvatarModal from "~/components/features/profile/UploadAvatarModal";
 import UserHourTable from "~/components/features/user/UserHourTable";
 import AppLayout from "~/components/layout/AppLayout";
 import PageHeader from "~/components/layout/PageHeader";
+import AvatarSection from "~/components/layout/profile/AvatarSection";
+import ConfirmModal from "~/components/ui/modals/Confirm";
 import Section from "~/components/ui/Section";
 
 enum ProfilePageModals {
 	None,
 	UpdatePassword,
 	UpdateProfile,
+	UploadAvatar,
+	ConfirmAvatarDelete,
 }
 
 type ProfilePageProps = {
@@ -21,6 +34,11 @@ type ProfilePageProps = {
 
 const ProfilePage = ({ user }: ProfilePageProps) => {
 	const [modal, setModal] = useState<ProfilePageModals>(ProfilePageModals.None);
+	const { authenticatedUser } = usePage<SharedProps>().props;
+
+	const handleAvatarDelete = () => {
+		router.delete("/profile/avatar");
+	};
 
 	return (
 		<>
@@ -39,28 +57,52 @@ const ProfilePage = ({ user }: ProfilePageProps) => {
 						variant: "secondary",
 						onClick: () => setModal(ProfilePageModals.UpdatePassword),
 					},
+					{
+						label: "Ajouter/Changer l'avatar",
+						icon: <ImageUp size="18" />,
+						variant: "secondary",
+						onClick: () => setModal(ProfilePageModals.UploadAvatar),
+					},
+					...(authenticatedUser?.avatar
+						? [
+								{
+									label: "Supprimer l'avatar",
+									icon: <ImageMinus size="18" />,
+									variant: "danger" as const,
+									onClick: () =>
+										setModal(ProfilePageModals.ConfirmAvatarDelete),
+								},
+							]
+						: []),
 				]}
 			/>
 			<div className="space-y-4">
 				<Section title="Informations du profile" icon={<User2 />}>
-					<p>
-						Nom d'utilisateur :{" "}
-						<span className="font-semibold">{user.username}</span>
-					</p>
-					<p>
-						Email :{" "}
-						<span className="font-semibold">{user.email ?? "Non défini"}</span>
-					</p>
-					<p>
-						Numéro de téléphone :{" "}
-						<span className="font-semibold">{user.phone ?? "Non défini"}</span>
-					</p>
-					<p>
-						Compte créé le{" "}
-						<span className="font-semibold">
-							{new Date(user.createdAt).toLocaleDateString("fr-FR")}
-						</span>
-					</p>
+					<div className="flex flex-col items-center md:block">
+						<AvatarSection />
+						<p>
+							Nom d'utilisateur :{" "}
+							<span className="font-semibold">{user.username}</span>
+						</p>
+						<p>
+							Email :{" "}
+							<span className="font-semibold">
+								{user.email ?? "Non défini"}
+							</span>
+						</p>
+						<p>
+							Numéro de téléphone :{" "}
+							<span className="font-semibold">
+								{user.phone ?? "Non défini"}
+							</span>
+						</p>
+						<p>
+							Compte créé le{" "}
+							<span className="font-semibold">
+								{new Date(user.createdAt).toLocaleDateString("fr-FR")}
+							</span>
+						</p>
+					</div>
 				</Section>
 				<Section
 					title="Heures"
@@ -77,6 +119,19 @@ const ProfilePage = ({ user }: ProfilePageProps) => {
 			<UpdateProfileModal
 				user={user}
 				open={modal === ProfilePageModals.UpdateProfile}
+				onClose={() => setModal(ProfilePageModals.None)}
+			/>
+			<UploadAvatarModal
+				open={modal === ProfilePageModals.UploadAvatar}
+				onClose={() => setModal(ProfilePageModals.None)}
+			/>
+			<ConfirmModal
+				confirmationText="Confirmer la suppression de l'avatar ?"
+				label="Confirmer"
+				title="Supprimer l'avatar"
+				icon={<ImageMinus />}
+				onConfirm={handleAvatarDelete}
+				open={modal === ProfilePageModals.ConfirmAvatarDelete}
 				onClose={() => setModal(ProfilePageModals.None)}
 			/>
 		</>
