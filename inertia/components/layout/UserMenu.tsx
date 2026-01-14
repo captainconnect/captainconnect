@@ -40,9 +40,17 @@ export default function UserMenu() {
 				aria-expanded={open}
 				className="flex items-center gap-2 px-3 py-1 rounded-xl cursor-pointer hover:bg-blue-100 transition active:scale-95"
 			>
-				<span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-semibold text-sm">
-					{authenticatedUser?.initials}
-				</span>
+				{authenticatedUser?.avatar ? (
+					<img
+						src={authenticatedUser.avatar}
+						alt="Avatar"
+						className="w-8 h-8 rounded-full object-cover"
+					/>
+				) : (
+					<span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-semibold text-sm">
+						{authenticatedUser?.initials}
+					</span>
+				)}
 
 				<div className="hidden md:flex flex-col text-left">
 					<span className="text-sm font-semibold">

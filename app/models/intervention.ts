@@ -13,6 +13,7 @@ import type {
 	InterventionStatus,
 } from "#types/intervention";
 import Boat from "./boat.js";
+import ProjectMedia from "./project_media.js";
 import TaskGroup from "./task_group.js";
 import WorkDone from "./work_done.js";
 
@@ -72,6 +73,9 @@ export default class Intervention extends BaseModel {
 
 	@column.dateTime({ autoCreate: true, autoUpdate: true })
 	declare updatedAt: DateTime;
+
+	@hasMany(() => ProjectMedia)
+	declare medias: HasMany<typeof ProjectMedia>;
 
 	@afterCreate()
 	static async setSlug(intervention: Intervention) {

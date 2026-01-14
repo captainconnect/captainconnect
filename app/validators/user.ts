@@ -40,3 +40,12 @@ export const updateProfileSchema = vine.object({
 });
 
 export const updateProfileValidator = vine.compile(updateProfileSchema);
+
+export const uploadAvatarSchema = vine.object({
+	avatar: vine.file({
+		extnames: ["jpg", "jpeg", "png", "webp"],
+		size: "20mb",
+	}),
+});
+
+export const uploadAvatarValidator = vine.compile(uploadAvatarSchema);

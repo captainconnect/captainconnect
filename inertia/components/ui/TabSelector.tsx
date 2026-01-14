@@ -19,7 +19,7 @@ export default function TabSelector({
 			role="tab"
 			disabled={disabled}
 			onClick={() => setSelectedTab(scope)}
-			className={`p-2 w-1/2 ${isSelected && "bg-white"} rounded-xl cursor-pointer transition text-slate-500`}
+			className={`p-2 w-1/2 ${isSelected && "bg-white"} rounded-xl cursor-pointer transition text-slate-700`}
 		>
 			{label}
 		</button>

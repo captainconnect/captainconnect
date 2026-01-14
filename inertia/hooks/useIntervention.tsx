@@ -4,6 +4,8 @@ import {
 	Calendar,
 	Check,
 	Clock,
+	Files,
+	FileUp,
 	LoaderCircle,
 	Mail,
 	MapPin,
@@ -15,7 +17,7 @@ import {
 	Stamp,
 	Trash,
 } from "lucide-react";
-
+import { useState } from "react";
 import type { Intervention } from "#types/intervention";
 import type { ActionButton } from "#types/ui/section";
 import type { InformationCardProps } from "~/components/layout/intervention/InformationCard";
@@ -24,7 +26,10 @@ import type { InformationBlockItemProps } from "~/components/ui/InformationBlock
 export default function useIntervention(
 	intervention: Intervention,
 	openModal?: (open: boolean) => void,
+	mediasCount?: number,
 ) {
+	const [addProjectMediaModalOpen, setAddProjectMediaModalOpen] =
+		useState(false);
 	const { boat } = intervention;
 
 	const now = new Date();
@@ -126,6 +131,20 @@ export default function useIntervention(
 
 	const actionsButtons: ActionButton[] = [
 		{
+			icon: <FileUp size="18" />,
+			text: "Ajouter un fichier",
+			variant: "accent",
+			onClick: () => setAddProjectMediaModalOpen(true),
+		},
+		{
+			icon: <Files size="18" />,
+			text: `Accéder aux fichiers (${mediasCount})`,
+			link: {
+				type: "NAVIGATE",
+				href: `/fichiers/${boat.slug}?intervention_id=${intervention.id}`,
+			},
+		},
+		{
 			icon:
 				boat.type?.label === "Voilier" || boat.type?.label === "Catamaran" ? (
 					<Sailboat size="18" />
@@ -146,6 +165,7 @@ export default function useIntervention(
 						onClick: () =>
 							router.patch(`/interventions/${intervention.slug}/resume`),
 						variant: "accent" as const,
+						mustBeAdmin: true,
 					},
 				]
 			: [
@@ -155,6 +175,7 @@ export default function useIntervention(
 						onClick: () =>
 							router.patch(`/interventions/${intervention.slug}/close`),
 						variant: "accent" as const,
+						mustBeAdmin: true,
 					},
 				]),
 		...(intervention.status === "SUSPENDED"
@@ -162,6 +183,7 @@ export default function useIntervention(
 					{
 						icon: <Play size="18" />,
 						text: "Reprendre l'intervention",
+						mustBeAdmin: true,
 						onClick: () =>
 							router.patch(`/interventions/${intervention.slug}/resume`),
 					},
@@ -170,6 +192,7 @@ export default function useIntervention(
 					{
 						icon: <Pause size="18" />,
 						text: "Suspendre l'intervention",
+						mustBeAdmin: true,
 						onClick: () =>
 							router.patch(`/interventions/${intervention.slug}/suspend`),
 					},
@@ -177,6 +200,7 @@ export default function useIntervention(
 		{
 			icon: <Trash size="18" />,
 			text: "Supprimer l'intervention",
+			mustBeAdmin: true,
 			onClick: openModal ? () => openModal(true) : () => {},
 			variant: "danger",
 		},
@@ -254,5 +278,7 @@ export default function useIntervention(
 		boatData,
 		contactData,
 		interventionData,
+		setAddProjectMediaModalOpen,
+		addProjectMediaModalOpen,
 	};
 }

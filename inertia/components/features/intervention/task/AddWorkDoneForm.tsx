@@ -164,25 +164,55 @@ export default function AddWorkDoneForm({
 
 	return (
 		<form className="space-y-4" onSubmit={handleSubmit}>
-			<div className="space-y-2">
-				<span className="text-primary">Techniciens</span>
+			<div className="flex justify-between items-center">
+				<div className="space-y-2">
+					<span className="text-primary">Techniciens</span>
 
-				<ul className="pl-2 text-primary font-semibold space-y-1 mt-2">
-					{selectedTechnicians.map((u) => (
-						<li key={u.id} className="flex gap-2 items-center">
-							{u.label}
-							{u.id !== currentUser.id && (
-								<button
+					<ul className="pl-2 text-primary font-semibold space-y-1 mt-2">
+						{selectedTechnicians.map((u) => (
+							<li key={u.id} className="flex gap-2 items-center">
+								{u.label}
+								{u.id !== currentUser.id && (
+									<button
+										type="button"
+										onClick={() => removeTechnician(u.id)}
+										className="text-gray-500 active:scale-95 transition"
+									>
+										<X size={20} />
+									</button>
+								)}
+							</li>
+						))}
+					</ul>
+					{addTechnician && currentSelectTechnician && (
+						<div className="space-y-4">
+							<Select
+								options={addableTechnicians}
+								value={currentSelectTechnician.id}
+								onChange={(e) => handleOnTechnicianSelectChange(e.target.value)}
+								allowNull={false}
+							/>
+
+							<div className="flex gap-2">
+								<Button
 									type="button"
-									onClick={() => removeTechnician(u.id)}
-									className="text-gray-500 active:scale-95 transition"
+									onClick={handleAddTechnician}
+									icon={<Check size={20} />}
 								>
-									<X size={20} />
-								</button>
-							)}
-						</li>
-					))}
-				</ul>
+									Confirmer
+								</Button>
+								<Button
+									type="button"
+									variant="secondary"
+									icon={<X size={20} />}
+									onClick={() => setAddTechnician(false)}
+								>
+									Annuler
+								</Button>
+							</div>
+						</div>
+					)}
+				</div>
 
 				{!addTechnician && addableTechnicians.length > 0 && (
 					<Button
@@ -192,35 +222,6 @@ export default function AddWorkDoneForm({
 					>
 						Ajouter un technicien
 					</Button>
-				)}
-
-				{addTechnician && currentSelectTechnician && (
-					<div className="space-y-4">
-						<Select
-							options={addableTechnicians}
-							value={currentSelectTechnician.id}
-							onChange={(e) => handleOnTechnicianSelectChange(e.target.value)}
-							allowNull={false}
-						/>
-
-						<div className="flex gap-2">
-							<Button
-								type="button"
-								onClick={handleAddTechnician}
-								icon={<Check size={20} />}
-							>
-								Confirmer
-							</Button>
-							<Button
-								type="button"
-								variant="secondary"
-								icon={<X size={20} />}
-								onClick={() => setAddTechnician(false)}
-							>
-								Annuler
-							</Button>
-						</div>
-					</div>
 				)}
 			</div>
 

@@ -56,6 +56,7 @@ const UserIndexPage = ({ users, roles }: UserIndexPageProps) => {
 				}}
 				buttons={[
 					{
+						mustBeAdmin: true,
 						label: "Créer un utilisateur",
 						icon: <Plus />,
 						onClick: () => setCreateUserModalOpen(true),

@@ -17,6 +17,7 @@ export type Boat = {
 	beam?: string;
 	note?: string;
 	interventions: Intervention[];
+	medias_count?: number;
 };
 
 export interface BoatPayload {

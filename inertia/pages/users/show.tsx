@@ -59,6 +59,20 @@ const UserPage = ({ user }: UserPageProps) => {
 					icon={<UserCircle />}
 					className="md:w-2/3"
 				>
+					<div className="flex items-center justify-center md:justify-start">
+						{user.avatarUrl ? (
+							<img
+								className="size-32 rounded-full"
+								src={user.avatarUrl}
+								alt="Avatar"
+							/>
+						) : (
+							<span className="size-20 text-3xl items-center justify-center flex bg-primary text-white rounded-full">
+								{user.firstname.charAt(0)}
+								{user.lastname.charAt(0)}
+							</span>
+						)}
+					</div>
 					<p>
 						{user.firstname} {user.lastname}
 					</p>
@@ -74,6 +88,7 @@ const UserPage = ({ user }: UserPageProps) => {
 				</Section>
 
 				<ActionSection
+					mustBeAdmin={true}
 					title="Danger zone"
 					className="md:w-1/3"
 					buttons={dangerZoneButtons}
@@ -84,6 +99,7 @@ const UserPage = ({ user }: UserPageProps) => {
 					open={modalOpen}
 					label={modals[currentModal].label}
 					confirmationText={modals[currentModal].confirmationText}
+					// confirmationType={modals[currentModal].confirmationType || "danger"}
 					onClose={() => setModalOpen(false)}
 					onConfirm={() => {
 						modals[currentModal].action();

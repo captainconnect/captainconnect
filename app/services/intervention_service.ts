@@ -1,13 +1,30 @@
 import Boat from "#models/boat";
 import Intervention from "#models/intervention";
 import TaskGroup from "#models/task_group";
-
 import type {
 	CreateInterventionPayload,
 	UpdateInterventionPayload,
 } from "#types/intervention";
 
 export class InterventionService {
+	async getBoatInterventions(boatId: number) {
+		const rows = await Intervention.query()
+			.where("boat_id", boatId)
+			.preload("taskGroups", (query) => query.preload("tasks"))
+			.orderBy("created_at", "desc");
+
+		return rows.map((intervention) => ({
+			id: intervention.id,
+			title: intervention.title,
+			tasks: intervention.taskGroups.flatMap((tg) =>
+				tg.tasks.map((t) => ({
+					id: t.id,
+					name: t.name,
+				})),
+			),
+		}));
+	}
+
 	async getOpenInterventions() {
 		return await Intervention.query()
 			.whereNot("status", "DONE")
@@ -32,6 +49,7 @@ export class InterventionService {
 							.preload("workDones", (query) => query.preload("hours")),
 					),
 			)
+			.withCount("medias")
 			.firstOrFail();
 	}
 

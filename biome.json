@@ -3,8 +3,12 @@
 		"rules": {
 			"suspicious": {
 				"noUnknownAtRules": "off"
+			},
+			"correctness": {
+				"useHookAtTopLevel": "off"
 			}
-		}
+		},
+		"includes": ["**/*.js", "**/*.ts", "**/*.jsx", "**/*.tsx"]
 	},
 	"css": {
 		"parser": {

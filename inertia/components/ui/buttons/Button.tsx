@@ -1,6 +1,7 @@
 import { Link } from "@inertiajs/react";
 import { clsx } from "clsx";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
+import AdminChecker from "~/components/features/AdminChecker";
 import Loader from "../Loader";
 
 export type ButtonVariant = "primary" | "secondary" | "danger";
@@ -11,6 +12,7 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 	icon?: ReactNode;
 	href?: string;
 	processing?: boolean;
+	mustBeAdmin?: boolean;
 };
 
 export default function Button({
@@ -22,10 +24,11 @@ export default function Button({
 	children,
 	className,
 	processing,
+	mustBeAdmin,
 	...props
 }: ButtonProps) {
 	const base =
-		"flex items-center justify-center gap-2 font-semibold rounded-2xl border-2 transition active:scale-95 cursor-pointer text-sm w-auto max-h-10 disabled:bg-gray-300";
+		"flex items-center justify-center gap-2 font-semibold rounded-2xl border-2 transition active:scale-95 cursor-pointer text-sm w-auto max-h-10 disabled:bg-gray-300 disabled:border-transparent disabled:text-gray-500 disabled:active:scale-100";
 
 	const sizes = {
 		icon: "p-1",
@@ -50,14 +53,18 @@ export default function Button({
 
 	if (href)
 		return (
-			<Link href={href} className={classes}>
-				{content}
-			</Link>
+			<AdminChecker mustBeAdmin={mustBeAdmin}>
+				<Link href={href} className={classes}>
+					{content}
+				</Link>
+			</AdminChecker>
 		);
 
 	return (
-		<button type={type} className={classes} {...props}>
-			{processing ? <Loader /> : content}
-		</button>
+		<AdminChecker mustBeAdmin={mustBeAdmin}>
+			<button type={type} className={classes} {...props}>
+				{processing ? <Loader /> : content}
+			</button>
+		</AdminChecker>
 	);
 }

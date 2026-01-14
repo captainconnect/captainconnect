@@ -25,6 +25,7 @@ export default function InterventionHeader({
 				</div>
 			</div>
 			<Button
+				mustBeAdmin={true}
 				className="w-full md:w-auto"
 				icon={<Edit size="18" />}
 				href={`/interventions/${intervention.slug}/modifier`}

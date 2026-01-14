@@ -22,6 +22,7 @@ type PageHeaderProps = {
 		disabled?: boolean;
 		icon: ReactNode;
 		variant?: ButtonVariant;
+		mustBeAdmin?: boolean;
 	}[];
 	tag?: {
 		className: string;
@@ -77,6 +78,7 @@ export default function PageHeader({
 							icon={b.icon}
 							variant={b.variant}
 							disabled={b.disabled}
+							mustBeAdmin={b.mustBeAdmin}
 							className="flex items-center w-full md:w-auto"
 						>
 							{b.label}

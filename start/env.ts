@@ -20,20 +20,32 @@ export default await Env.create(new URL("../", import.meta.url), {
 	SECURED: Env.schema.boolean(),
 
 	/*
-  |----------------------------------------------------------
-  | Variables for configuring session package
-  |----------------------------------------------------------
-  */
+|----------------------------------------------------------
+| Variables for configuring session package
+|----------------------------------------------------------
+*/
 	SESSION_DRIVER: Env.schema.enum(["cookie", "memory"] as const),
 
 	/*
-  |----------------------------------------------------------
-  | Variables for configuring database connection
-  |----------------------------------------------------------
-  */
+|----------------------------------------------------------
+| Variables for configuring database connection
+|----------------------------------------------------------
+*/
 	DB_HOST: Env.schema.string({ format: "host" }),
 	DB_PORT: Env.schema.number(),
 	DB_USER: Env.schema.string(),
 	DB_PASSWORD: Env.schema.string.optional(),
 	DB_DATABASE: Env.schema.string(),
+
+	/*
+  |----------------------------------------------------------
+  | Variables for configuring the drive package
+  |----------------------------------------------------------
+  */
+	DRIVE_DISK: Env.schema.enum(["s3"] as const),
+	MINIO_ACCESS_KEY_ID: Env.schema.string(),
+	MINIO_SECRET_ACCESS_KEY: Env.schema.string(),
+	MINIO_REGION: Env.schema.string(),
+	MINIO_ENDPOINT: Env.schema.string(),
+	S3_BUCKET: Env.schema.string(),
 });

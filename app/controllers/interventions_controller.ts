@@ -6,6 +6,8 @@ import { BoatService } from "#services/boat_service";
 // biome-ignore lint/style/useImportType: IoC runtime needs this
 import { InterventionService } from "#services/intervention_service";
 // biome-ignore lint/style/useImportType: IoC runtime needs this
+import { MediaService } from "#services/media_service";
+// biome-ignore lint/style/useImportType: IoC runtime needs this
 import { UserService } from "#services/user_service";
 import {
 	createInterventionValidator,
@@ -18,6 +20,7 @@ export default class InterventionsController {
 		protected interventionService: InterventionService,
 		protected boatService: BoatService,
 		protected userService: UserService,
+		protected mediaService: MediaService,
 	) {}
 
 	async index({ inertia }: HttpContext) {
@@ -37,9 +40,11 @@ export default class InterventionsController {
 
 		const intervention =
 			await this.interventionService.getBySlug(interventionSlug);
+
 		return inertia.render("interventions/show", {
 			intervention,
 			users,
+			mediasCount: intervention.$extras.medias_count,
 		});
 	}
 

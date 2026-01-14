@@ -15,7 +15,15 @@ export default function UserCard({ user }: UserCardProps) {
 				className="flex flex-col gap-6 bg-white rounded-xl border border-gray-300 p-6 cursor-pointer hover:shadow-sm transition active:scale-[99%]"
 			>
 				<div className="flex items-center gap-4">
-					<IconBadge icon={<UserCircle />} />
+					{user.avatarUrl ? (
+						<img
+							src={user.avatarUrl}
+							alt={`${user.firstname} ${user.lastname}`}
+							className="w-12 h-12 rounded-full object-cover"
+						/>
+					) : (
+						<IconBadge icon={<UserCircle />} />
+					)}
 					<div>
 						<p className="font-semibold text-lg">
 							{user.firstname} {user.lastname}

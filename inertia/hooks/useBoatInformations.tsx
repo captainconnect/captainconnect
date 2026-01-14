@@ -1,5 +1,7 @@
 import {
 	Building2,
+	Files,
+	FileUp,
 	Hash,
 	Mail,
 	Phone,
@@ -8,6 +10,7 @@ import {
 	Trash,
 	Wrench,
 } from "lucide-react";
+import { useState } from "react";
 import type { Boat } from "#types/boat";
 import type { ActionButton } from "#types/ui/section";
 import type { InformationBlockItemProps } from "~/components/ui/InformationBlockItem";
@@ -16,6 +19,9 @@ export default function useBoatInformations(
 	boat: Boat,
 	openModal: (open: true) => void,
 ) {
+	const [addProjectMediaModalOpen, setAddProjectMediaModalOpen] =
+		useState(false);
+
 	const boatData: InformationBlockItemProps[] = [
 		{
 			label: "Type",
@@ -79,12 +85,27 @@ export default function useBoatInformations(
 
 	const actionButtons: ActionButton[] = [
 		{
+			icon: <FileUp size="18" />,
+			text: "Ajouter un fichier",
+			variant: "accent",
+			onClick: () => setAddProjectMediaModalOpen(true),
+		},
+		{
+			icon: <Files size="18" />,
+			text: "Accéder aux fichiers",
+			link: {
+				type: "NAVIGATE" as const,
+				href: `/fichiers/${boat.slug}`,
+			},
+		},
+		{
 			icon: <Wrench size="18" />,
 			text: "Nouvelle intervention",
 			link: {
 				type: "NAVIGATE" as const,
 				href: `/interventions/nouvelle/${boat.slug}`,
 			},
+			mustBeAdmin: true,
 		},
 		...(boat.contact?.phone
 			? [
@@ -126,5 +147,7 @@ export default function useBoatInformations(
 		contactData,
 		actionButtons,
 		dangerActionsButtons,
+		addProjectMediaModalOpen,
+		setAddProjectMediaModalOpen,
 	};
 }

@@ -11,6 +11,7 @@ import { useState } from "react";
 import type { Boat } from "#types/boat";
 import BoatMap from "~/components/features/boat/BoatMap";
 import BoatInterventionList from "~/components/features/intervention/BoatInterventionList";
+import AddProjectMediaModal from "~/components/features/media/AddProjectMediaModal";
 import AppLayout from "~/components/layout/AppLayout";
 import BoatPageHeader from "~/components/layout/boat/BoatPageHeader";
 import EmptyList from "~/components/ui/EmptyList";
@@ -39,8 +40,14 @@ const BoatPage = ({ boat }: BoatPageProps) => {
 	const [deleteBoatConfirmationModalOpen, setDeleteBoatConfirmationModalOpen] =
 		useState(false);
 
-	const { boatData, contactData, actionButtons, dangerActionsButtons } =
-		useBoatInformations(boat, setDeleteBoatConfirmationModalOpen);
+	const {
+		boatData,
+		contactData,
+		actionButtons,
+		dangerActionsButtons,
+		addProjectMediaModalOpen,
+		setAddProjectMediaModalOpen,
+	} = useBoatInformations(boat, setDeleteBoatConfirmationModalOpen);
 
 	const handleDelete = () => {
 		router.delete(`/bateaux/${boat.slug}`);
@@ -128,8 +135,14 @@ const BoatPage = ({ boat }: BoatPageProps) => {
 							/>
 						</Section>
 					)}
+
 					<ActionSection title="Actions" buttons={actionButtons} />
-					<ActionSection title="Danger zone" buttons={dangerActionsButtons} />
+
+					<ActionSection
+						mustBeAdmin={true}
+						title="Danger zone"
+						buttons={dangerActionsButtons}
+					/>
 				</div>
 			</div>
 			<ConfirmModal
@@ -147,6 +160,11 @@ const BoatPage = ({ boat }: BoatPageProps) => {
 					value: boat.name,
 				}}
 				onConfirm={handleDelete}
+			/>
+			<AddProjectMediaModal
+				onClose={() => setAddProjectMediaModalOpen(false)}
+				open={addProjectMediaModalOpen}
+				boatId={boat.id}
 			/>
 		</>
 	);
