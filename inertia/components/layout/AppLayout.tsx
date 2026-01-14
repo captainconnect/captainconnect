@@ -1,16 +1,13 @@
-import { usePage } from "@inertiajs/react";
 import {
 	Folder,
 	LayoutDashboard,
 	Ship,
 	SquareUserRound,
-	UserLock,
 	UserRoundCog,
 	Wrench,
 } from "lucide-react";
 import { type PropsWithChildren, useState } from "react";
 import type { NavLinkRoute } from "#types/nav";
-import type { User } from "#types/user";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import SidebarOverlay from "./SidebarOverlay";
@@ -22,8 +19,8 @@ type AppLayoutProps = PropsWithChildren & {
 export default function AppLayout({ children, title }: AppLayoutProps) {
 	const [sideBarOpen, setSidebarOpen] = useState(false);
 
-	const { props } = usePage<{ authenticatedUser: User }>();
-	const currentUser = props.authenticatedUser;
+	// const { props } = usePage<{ authenticatedUser: User }>();
+	// const currentUser = props.authenticatedUser;
 
 	const routes: NavLinkRoute[] = [
 		{ label: "Tableau de bord", route: "/", icon: <LayoutDashboard /> },
@@ -33,13 +30,13 @@ export default function AppLayout({ children, title }: AppLayoutProps) {
 		{ label: "Fichiers", route: "/fichiers", icon: <Folder /> },
 		{ label: "Utilisateurs", route: "/utilisateurs", icon: <UserRoundCog /> },
 	];
-	if (currentUser.isAdmin) {
-		routes.push({
-			label: "Administration",
-			route: "/administration",
-			icon: <UserLock />,
-		});
-	}
+	// if (currentUser.isAdmin) {
+	// 	routes.push({
+	// 		label: "Administration",
+	// 		route: "/administration",
+	// 		icon: <UserLock />,
+	// 	});
+	// }
 
 	return (
 		<div className="flex h-screen overflow-hidden">
