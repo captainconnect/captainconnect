@@ -47,5 +47,6 @@ export default await Env.create(new URL("../", import.meta.url), {
 	MINIO_SECRET_ACCESS_KEY: Env.schema.string(),
 	MINIO_REGION: Env.schema.string(),
 	MINIO_ENDPOINT: Env.schema.string(),
+	MINIO_CDN_URL: Env.schema.string(),
 	S3_BUCKET: Env.schema.string(),
 });
