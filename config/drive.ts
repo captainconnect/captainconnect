@@ -17,7 +17,7 @@ const driveConfig = defineConfig({
 			region: env.get("MINIO_REGION"),
 			endpoint: env.get("MINIO_ENDPOINT"),
 			visibility: "public",
-			cdnUrl: env.get("MINIO_ENDPOINT"),
+			cdnUrl: env.get("MINIO_CDN_URL"),
 			bucket: env.get("S3_BUCKET"),
 			forcePathStyle: true,
 		}),
