@@ -6,6 +6,7 @@ import TaskGroup from "#models/task_group";
 import type {
 	CreateTaskPayload,
 	OrderTaskPayload,
+	SuspendPayload,
 	UpdateTaskPayload,
 } from "#types/intervention";
 
@@ -147,6 +148,18 @@ export class TaskService {
 				}
 			}
 		});
+	}
+
+	async suspend(taskId: number, payload: SuspendPayload) {
+		const task = await Task.findOrFail(taskId);
+		task.suspensionReason = payload.reason;
+		await task.save();
+	}
+
+	async resume(taskId: number) {
+		const task = await Task.findOrFail(taskId);
+		task.suspensionReason = null;
+		await task.save();
 	}
 
 	async delete(id: number) {

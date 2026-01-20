@@ -1,4 +1,5 @@
 import { inject } from "@adonisjs/core";
+import app from "@adonisjs/core/services/app";
 import emitter from "@adonisjs/core/services/emitter";
 import Media from "#models/media";
 import User from "#models/user";
@@ -20,9 +21,14 @@ export class UserService {
 	}
 
 	async getAllForTask() {
-		return await User.query()
+		const query = User.query()
 			.select(["id", "firstname", "lastname"])
-			.orderBy("firstname", "asc");
+			.orderBy("id", "desc");
+
+		if (app.inProduction) {
+			query.whereNot("id", 2);
+		}
+		return await query;
 	}
 
 	async getById(id: number) {

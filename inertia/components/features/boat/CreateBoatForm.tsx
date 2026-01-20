@@ -23,6 +23,8 @@ export default function CreateBoatForm({
 	const [showCreateContactModal, setShowCreateContactModal] = useState(false);
 	const [manualSet, setManualSet] = useState(false);
 	const [manualPos, setManualPos] = useState<Coordinate | "">();
+	const [selectedContactId, setSelectedContactId] = useState<number | "">("");
+	const [contactList, setContactList] = useState<Contact[]>(contacts);
 
 	return (
 		<>
@@ -40,13 +42,20 @@ export default function CreateBoatForm({
 							<Select
 								name="contact_id"
 								label="Attribuer un contact"
-								options={contacts.map((c) => ({
+								value={selectedContactId}
+								onChange={(e) =>
+									setSelectedContactId(
+										e.target.value ? Number(e.target.value) : "",
+									)
+								}
+								options={contactList.map((c) => ({
 									id: c.id,
 									label: c.company
 										? `${c.fullName} - ${c.company}`
 										: c.fullName,
 								}))}
 							/>
+
 							<Button
 								type="button"
 								variant="secondary"
@@ -166,6 +175,10 @@ export default function CreateBoatForm({
 			<CreateContactModal
 				open={showCreateContactModal}
 				onClose={() => setShowCreateContactModal(false)}
+				onCreated={(contact) => {
+					setContactList((prev) => [...prev, contact]);
+					setSelectedContactId(contact.id);
+				}}
 			/>
 		</>
 	);

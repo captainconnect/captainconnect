@@ -1,99 +1,61 @@
-import { useForm, usePage } from "@inertiajs/react";
+import { useForm } from "@inertiajs/react";
 import { Check, Save, UserPlus, X } from "lucide-react";
-import { type FormEvent, useEffect, useState } from "react";
+import { type FormEvent, useState } from "react";
 import type { User } from "#types/user";
-import { getDefaultDate } from "~/app/utils";
+import type { FormattedWorkDone } from "#types/workdone";
+import { frDateToInputDate } from "~/app/utils";
 import Button from "~/components/ui/buttons/Button";
 import Input from "~/components/ui/inputs/Input";
 import Select from "~/components/ui/inputs/Select";
 import Textarea from "~/components/ui/inputs/TextArea";
 
-export type TechnicianOption = {
+type TechnicianOption = {
 	id: number;
 	label: string;
 };
 
-type AddWorkDoneFormProps = {
-	onClose: () => void;
+type EditWorkDoneFormProps = {
 	users: User[];
-	taskId: number;
-	interventionSlug: string;
+	workDone: FormattedWorkDone;
+	onClose: () => void;
 };
 
-export default function AddWorkDoneForm({
-	onClose,
+export default function EditWorkDoneForm({
 	users,
-	taskId,
-	interventionSlug,
-}: AddWorkDoneFormProps) {
-	const { props } = usePage<{ authenticatedUser: User }>();
-	const currentUser = props.authenticatedUser;
-
-	/* --------------------------------------------
-	 * Helpers
-	 * ------------------------------------------ */
-
-	const allTechnicians: TechnicianOption[] = users
-		.filter((u) => u.id !== currentUser.id)
-		.map((u) => ({
-			id: u.id,
-			label: `${u.firstname} ${u.lastname}`,
-		}));
-
-	/* --------------------------------------------
-	 * useForm (SOURCE DE VÉRITÉ)
-	 * ------------------------------------------ */
-
-	const { data, setData, post, processing, errors } = useForm<{
-		date: string;
-		work_done: string;
-		used_materials: string;
-		hour_count: number | "";
-		technician_ids: number[];
-	}>({
-		date: getDefaultDate(),
-		work_done: "",
-		used_materials: "",
-		hour_count: "",
-		technician_ids: [currentUser.id],
-	});
-
-	/* --------------------------------------------
-	 * UI State
-	 * ------------------------------------------ */
-
-	const [addTechnician, setAddTechnician] = useState(false);
+	workDone,
+	onClose,
+}: EditWorkDoneFormProps) {
+	const allTechnicians: TechnicianOption[] = users.map((u) => ({
+		id: u.id,
+		label: `${u.firstname} ${u.lastname}`,
+	}));
 
 	const [selectedTechnicians, setSelectedTechnicians] = useState<
 		TechnicianOption[]
-	>([
-		{
-			id: currentUser.id,
-			label: `${currentUser.firstname} ${currentUser.lastname}`,
-		},
-	]);
+	>(allTechnicians.filter((t) => workDone.technician_ids.includes(t.id)));
+	const { data, setData, put, processing, errors } = useForm<{
+		date: string;
+		work_done: string;
+		used_materials: string | null | undefined;
+		hour_count: number | "";
+		technician_ids: number[];
+	}>({
+		date: frDateToInputDate(workDone.date),
+		work_done: workDone.workDone,
+		used_materials: workDone.usedMaterials,
+		hour_count: workDone.hour_count,
+		technician_ids: workDone.technician_ids,
+	});
 
-	const [addableTechnicians, setAddableTechnicians] =
-		useState<TechnicianOption[]>(allTechnicians);
+	const [addableTechnicians, setAddableTechnicians] = useState<
+		TechnicianOption[]
+	>(allTechnicians.filter((t) => !workDone.technician_ids.includes(t.id)));
 
+	const [addTechnician, setAddTechnician] = useState(false);
 	const [currentSelectTechnician, setCurrentSelectTechnician] =
 		useState<TechnicianOption | null>(
-			allTechnicians.length ? allTechnicians[0] : null,
+			allTechnicians.length ? addableTechnicians[0] : null,
 		);
-
-	/* --------------------------------------------
-	 * Sync select when addable list changes
-	 * ------------------------------------------ */
-
-	useEffect(() => {
-		setCurrentSelectTechnician(
-			addableTechnicians.length ? addableTechnicians[0] : null,
-		);
-	}, [addableTechnicians]);
-
-	/* --------------------------------------------
-	 * Handlers
-	 * ------------------------------------------ */
 
 	const handleOnTechnicianSelectChange = (value: string) => {
 		const technician = addableTechnicians.find((u) => u.id === Number(value));
@@ -104,22 +66,38 @@ export default function AddWorkDoneForm({
 	const handleAddTechnician = () => {
 		if (!currentSelectTechnician) return;
 
-		setSelectedTechnicians((prev) => [...prev, currentSelectTechnician]);
-		setAddableTechnicians((prev) =>
-			prev.filter((u) => u.id !== currentSelectTechnician.id),
-		);
+		const addedId = currentSelectTechnician.id;
 
-		setData("technician_ids", [
-			...data.technician_ids,
-			currentSelectTechnician.id,
-		]);
+		// calcule la nouvelle liste addable (sans celui qu'on ajoute)
+		const nextAddable = addableTechnicians.filter((u) => u.id !== addedId);
+
+		// UI
+		setSelectedTechnicians((prev) => [...prev, currentSelectTechnician]);
+		setAddableTechnicians(nextAddable);
+
+		// FORM DATA (sans doublon)
+		const nextTechnicianIds = Array.from(
+			new Set([...data.technician_ids, addedId]),
+		);
+		setData("technician_ids", nextTechnicianIds);
+
+		// next current
+		setCurrentSelectTechnician(nextAddable.length ? nextAddable[0] : null);
 
 		setAddTechnician(false);
 	};
 
-	const removeTechnician = (id: number) => {
-		if (id === currentUser.id) return;
+	const handleSubmit = (e: FormEvent) => {
+		e.preventDefault();
 
+		put(`/interventions/work-done/${workDone.id}`, {
+			onSuccess: () => {
+				onClose();
+			},
+		});
+	};
+
+	const removeTechnician = (id: number) => {
 		const removed = selectedTechnicians.find((t) => t.id === id);
 		if (!removed) return;
 
@@ -134,27 +112,6 @@ export default function AddWorkDoneForm({
 		);
 	};
 
-	const handleSubmit = (e: FormEvent) => {
-		e.preventDefault();
-
-		post(`/interventions/${interventionSlug}/task/${taskId}/store`, {
-			onSuccess: () => {
-				setData({
-					date: getDefaultDate(),
-					work_done: "",
-					used_materials: "",
-					hour_count: "",
-					technician_ids: [currentUser.id],
-				});
-				onClose();
-			},
-		});
-	};
-
-	/* --------------------------------------------
-	 * Render
-	 * ------------------------------------------ */
-
 	return (
 		<form className="space-y-4" onSubmit={handleSubmit}>
 			<div className="flex justify-between items-center">
@@ -165,11 +122,12 @@ export default function AddWorkDoneForm({
 						{selectedTechnicians.map((u) => (
 							<li key={u.id} className="flex gap-2 items-center">
 								{u.label}
-								{u.id !== currentUser.id && (
+								{selectedTechnicians.length > 1 && (
 									<button
 										type="button"
 										onClick={() => removeTechnician(u.id)}
 										className="text-gray-500 active:scale-95 transition"
+										title="Retirer"
 									>
 										<X size={20} />
 									</button>
@@ -177,6 +135,7 @@ export default function AddWorkDoneForm({
 							</li>
 						))}
 					</ul>
+
 					{addTechnician && currentSelectTechnician && (
 						<div className="space-y-4">
 							<Select
@@ -211,7 +170,10 @@ export default function AddWorkDoneForm({
 					<Button
 						type="button"
 						icon={<UserPlus size={20} />}
-						onClick={() => setAddTechnician(true)}
+						onClick={() => {
+							setAddTechnician(true);
+							setCurrentSelectTechnician(addableTechnicians[0] ?? null);
+						}}
 					>
 						Ajouter un technicien
 					</Button>
@@ -238,7 +200,7 @@ export default function AddWorkDoneForm({
 
 			<Textarea
 				label="Matériel utilisé"
-				value={data.used_materials}
+				value={data.used_materials as string}
 				onChange={(e) => setData("used_materials", e.target.value)}
 				error={errors.used_materials}
 				placeholder="Matériel utilisé"
@@ -263,11 +225,11 @@ export default function AddWorkDoneForm({
 
 			<div className="flex gap-4">
 				<Button type="submit" icon={<Save />} disabled={processing}>
-					Sauvegarder
+					Enregistrer les modifications
 				</Button>
-				<Button type="button" variant="secondary" onClick={onClose}>
+				{/* <Button type="button" variant="secondary" onClick={onClose}>
 					Annuler
-				</Button>
+				</Button> */}
 			</div>
 		</form>
 	);

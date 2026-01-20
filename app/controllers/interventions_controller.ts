@@ -11,6 +11,7 @@ import { MediaService } from "#services/media_service";
 import { UserService } from "#services/user_service";
 import {
 	createInterventionValidator,
+	suspendInterventionValidator,
 	updateInterventionValidator,
 } from "#validators/intervention";
 
@@ -97,9 +98,10 @@ export default class InterventionsController {
 		return response.redirect().back();
 	}
 
-	async suspend({ params, response }: HttpContext) {
+	async suspend({ request, params, response }: HttpContext) {
 		const interventionSlug = params.interventionSlug;
-		await this.interventionService.suspend(interventionSlug);
+		const payload = await request.validateUsing(suspendInterventionValidator);
+		await this.interventionService.suspend(interventionSlug, payload);
 		return response.redirect().back();
 	}
 

@@ -14,6 +14,19 @@ export default function BoatInterventionListItem({
 		"fr-FR",
 	);
 
+	let status: string = "";
+	if (intervention.status === "DONE") {
+		status = "Facturée";
+	} else if (intervention.status === "SUSPENDED") {
+		status = "Suspendue";
+	} else if (intervention.status === "IN_PROGRESS") {
+		if (intervention.isProgressComplete) {
+			status = "Terminée";
+		} else {
+			status = "En cours";
+		}
+	}
+
 	return (
 		<li className="w-full">
 			<Link
@@ -35,9 +48,7 @@ export default function BoatInterventionListItem({
 					</div>
 				</div>
 				<p className="p-1 mt-4 md:mt-0 px-3 bg-blue-950 rounded-full text-white font-semibold text-sm text-center">
-					{(intervention.status === "IN_PROGRESS" && "En cours") ||
-						(intervention.status === "DONE" && "Facturée") ||
-						(intervention.status === "SUSPENDED" && "Suspendue")}
+					{status}
 				</p>
 			</Link>
 		</li>

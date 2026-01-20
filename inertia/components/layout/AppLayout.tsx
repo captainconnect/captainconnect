@@ -1,3 +1,4 @@
+import { usePage } from "@inertiajs/react";
 import {
 	Folder,
 	LayoutDashboard,
@@ -8,6 +9,7 @@ import {
 } from "lucide-react";
 import { type PropsWithChildren, useState } from "react";
 import type { NavLinkRoute } from "#types/nav";
+import type { User } from "#types/user";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import SidebarOverlay from "./SidebarOverlay";
@@ -19,24 +21,26 @@ type AppLayoutProps = PropsWithChildren & {
 export default function AppLayout({ children, title }: AppLayoutProps) {
 	const [sideBarOpen, setSidebarOpen] = useState(false);
 
-	// const { props } = usePage<{ authenticatedUser: User }>();
-	// const currentUser = props.authenticatedUser;
+	const { props } = usePage<{ authenticatedUser: User }>();
+	const currentUser = props.authenticatedUser;
 
 	const routes: NavLinkRoute[] = [
 		{ label: "Tableau de bord", route: "/", icon: <LayoutDashboard /> },
 		{ label: "Interventions", route: "/interventions", icon: <Wrench /> },
 		{ label: "Bateaux", route: "/bateaux", icon: <Ship /> },
-		{ label: "Contacts", route: "/contacts", icon: <SquareUserRound /> },
-		{ label: "Fichiers", route: "/fichiers", icon: <Folder /> },
-		{ label: "Utilisateurs", route: "/utilisateurs", icon: <UserRoundCog /> },
 	];
-	// if (currentUser.isAdmin) {
-	// 	routes.push({
-	// 		label: "Administration",
-	// 		route: "/administration",
-	// 		icon: <UserLock />,
-	// 	});
-	// }
+	if (currentUser.isAdmin) {
+		routes.push(
+			{ label: "Contacts", route: "/contacts", icon: <SquareUserRound /> },
+			{ label: "Fichiers", route: "/fichiers", icon: <Folder /> },
+			{ label: "Utilisateurs", route: "/utilisateurs", icon: <UserRoundCog /> },
+			// {
+			// 	label: "Administration",
+			// 	route: "/administration",
+			// 	icon: <UserLock />,
+			// },
+		);
+	}
 
 	return (
 		<div className="flex h-screen overflow-hidden">
@@ -49,7 +53,10 @@ export default function AppLayout({ children, title }: AppLayoutProps) {
 
 			<div className="flex flex-col flex-1 min-w-0">
 				<Header title={title} setSidebarOpen={setSidebarOpen} />
-				<main className="flex-1 overflow-y-auto bg-gray-50 p-4 md:p-6">
+				<main
+					id="app-main"
+					className="flex-1 overflow-y-auto bg-gray-50 p-4 md:p-6 relative"
+				>
 					{children}
 				</main>
 			</div>

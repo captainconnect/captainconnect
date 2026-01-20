@@ -11,7 +11,6 @@ import {
 	MapPin,
 	Pause,
 	Phone,
-	Play,
 	Sailboat,
 	Ship,
 	Stamp,
@@ -23,13 +22,22 @@ import type { ActionButton } from "#types/ui/section";
 import type { InformationCardProps } from "~/components/layout/intervention/InformationCard";
 import type { InformationBlockItemProps } from "~/components/ui/InformationBlockItem";
 
+enum Modals {
+	None,
+	ConfirmDeletion,
+	AddMediaModal,
+	SuspendIntervention,
+}
+
 export default function useIntervention(
 	intervention: Intervention,
-	openModal?: (open: boolean) => void,
 	mediasCount?: number,
+	onDelete?: () => void,
 ) {
-	const [addProjectMediaModalOpen, setAddProjectMediaModalOpen] =
-		useState(false);
+	const [currentModal, setCurrentModal] = useState<Modals>(Modals.None);
+
+	const closeModal = () => setCurrentModal(Modals.None);
+
 	const { boat } = intervention;
 
 	const now = new Date();
@@ -70,7 +78,11 @@ export default function useIntervention(
 		status.label = "Suspendue";
 		status.color = "bg-yellow-600";
 	} else if (intervention.status === "IN_PROGRESS") {
-		status.label = "En\u00A0cours";
+		if (progress === 100) {
+			status.label = "Terminé";
+		} else {
+			status.label = "En\u00A0cours";
+		}
 		status.color = "bg-blue-950";
 	} else if (intervention.status === "DONE") {
 		status.label = "Facturée";
@@ -134,7 +146,7 @@ export default function useIntervention(
 			icon: <FileUp size="18" />,
 			text: "Ajouter un fichier",
 			variant: "accent",
-			onClick: () => setAddProjectMediaModalOpen(true),
+			onClick: () => setCurrentModal(Modals.AddMediaModal),
 		},
 		{
 			icon: <Files size="18" />,
@@ -178,30 +190,21 @@ export default function useIntervention(
 						mustBeAdmin: true,
 					},
 				]),
-		...(intervention.status === "SUSPENDED"
+		...(intervention.status !== "SUSPENDED"
 			? [
-					{
-						icon: <Play size="18" />,
-						text: "Reprendre l'intervention",
-						mustBeAdmin: true,
-						onClick: () =>
-							router.patch(`/interventions/${intervention.slug}/resume`),
-					},
-				]
-			: [
 					{
 						icon: <Pause size="18" />,
 						text: "Suspendre l'intervention",
 						mustBeAdmin: true,
-						onClick: () =>
-							router.patch(`/interventions/${intervention.slug}/suspend`),
+						onClick: () => setCurrentModal(Modals.SuspendIntervention),
 					},
-				]),
+				]
+			: []),
 		{
 			icon: <Trash size="18" />,
 			text: "Supprimer l'intervention",
 			mustBeAdmin: true,
-			onClick: openModal ? () => openModal(true) : () => {},
+			onClick: onDelete,
 			variant: "danger",
 		},
 	];
@@ -278,7 +281,9 @@ export default function useIntervention(
 		boatData,
 		contactData,
 		interventionData,
-		setAddProjectMediaModalOpen,
-		addProjectMediaModalOpen,
+		currentModal,
+		setCurrentModal,
+		closeModal,
+		Modals,
 	};
 }

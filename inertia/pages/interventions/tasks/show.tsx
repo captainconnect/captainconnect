@@ -1,15 +1,19 @@
 import { Head, router } from "@inertiajs/react";
 import { CircleCheck, Clock, FilePlus, Wrench } from "lucide-react";
 import { useState } from "react";
-import type WorkDone from "#models/work_done";
+
 import type { Intervention, Task, TaskGroup } from "#types/intervention";
 import type { User } from "#types/user";
+import type { FormattedWorkDone, WorkDone } from "#types/workdone";
 import AddWorkDoneForm from "~/components/features/intervention/task/AddWorkDoneForm";
 import UpdateTaskModal from "~/components/features/intervention/task/UpdateTaskModal";
 import WorkDoneCard from "~/components/features/intervention/task/WorkDoneCard";
 import AddProjectMediaModal from "~/components/features/media/AddProjectMediaModal";
 import AppLayout from "~/components/layout/AppLayout";
+import UpdateWorkdoneModal from "~/components/layout/intervention/UpdateWorkdoneModal";
 import PageHeader from "~/components/layout/PageHeader";
+import SuspendModal from "~/components/layout/SuspendModal";
+import SuspensionModal from "~/components/layout/SuspensionModal";
 import EmptyList from "~/components/ui/EmptyList";
 import ConfirmModal from "~/components/ui/modals/Confirm";
 import Section from "~/components/ui/Section";
@@ -33,10 +37,20 @@ const TaskPage = ({
 	interventionSlug,
 }: TaskPageProps) => {
 	const [addWorkDoneFormVisible, setAddWorkDoneFormVisible] = useState(false);
+	const [selectedWorkdone, setSelectedWorkdone] =
+		useState<FormattedWorkDone | null>(null);
+
+	const handleCloseUpdateWorkdoneModal = () => {
+		setCurrentModal(Modals.None);
+		setTimeout(() => {
+			setSelectedWorkdone(null);
+		}, 150);
+	};
 
 	const {
 		actionButtons,
 		tag,
+		setCurrentModal,
 		currentModal,
 		closeModal,
 		Modals,
@@ -105,7 +119,17 @@ const TaskPage = ({
 							text="Aucun travail effectué"
 						/>
 					) : (
-						workDones.map((wd) => <WorkDoneCard key={wd.id} workDone={wd} />)
+						workDones.map((wd) => (
+							<WorkDoneCard
+								taskId={task.id}
+								onUpdate={(workdone: FormattedWorkDone) => {
+									setCurrentModal(Modals.UpdateWorkdone);
+									setSelectedWorkdone(workdone);
+								}}
+								key={wd.id}
+								workDone={wd}
+							/>
+						))
 					)}
 				</div>
 				<div className=" md:w-1/3 space-y-4">
@@ -127,6 +151,12 @@ const TaskPage = ({
 				open={currentModal === Modals.UpdateModal}
 				onClose={closeModal}
 			/>
+			<UpdateWorkdoneModal
+				users={users}
+				workdone={selectedWorkdone}
+				open={currentModal === Modals.UpdateWorkdone}
+				onClose={handleCloseUpdateWorkdoneModal}
+			/>
 			<AddProjectMediaModal
 				open={currentModal === Modals.AddMediaModal}
 				onClose={closeModal}
@@ -134,6 +164,22 @@ const TaskPage = ({
 				interventionId={intervention.id}
 				taskId={task.id}
 			/>
+			<SuspendModal
+				interventionSlug={intervention.slug}
+				taskId={task.id}
+				onClose={closeModal}
+				open={currentModal === Modals.SuspendModal}
+				scope="task"
+			/>
+			{task.suspensionReason !== null && (
+				<SuspensionModal
+					interventionSlug={intervention.slug}
+					taskId={task.id}
+					reason={task.suspensionReason}
+					scope="task"
+					open={task.suspensionReason !== null}
+				/>
+			)}
 		</>
 	);
 };

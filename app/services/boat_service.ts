@@ -46,7 +46,9 @@ export class BoatService {
 			.preload("boatConstructor")
 			.preload("type")
 			.preload("contact")
-			.preload("interventions")
+			.preload("interventions", (query) =>
+				query.preload("taskGroups", (query) => query.preload("tasks")),
+			)
 			.firstOrFail();
 	}
 

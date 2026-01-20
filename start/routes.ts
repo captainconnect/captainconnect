@@ -88,6 +88,9 @@ router
 					.as("contacts.store")
 					.use(middleware.admin());
 				router
+					.post("/store/boat", [ContactsController, "storeFromBoat"])
+					.as("contacts.store.boat");
+				router
 					.put("/update/:contactId", [ContactsController, "update"])
 					.as("contacts.update")
 					.use(middleware.admin());
@@ -96,7 +99,8 @@ router
 					.as("contacts.destroy")
 					.use(middleware.admin());
 			})
-			.prefix("contacts");
+			.prefix("contacts")
+			.use(middleware.admin());
 
 		// --- Users Routes ---
 		router
@@ -133,7 +137,8 @@ router
 					.as("users.demote")
 					.use(middleware.admin());
 			})
-			.prefix("utilisateurs");
+			.prefix("utilisateurs")
+			.use(middleware.admin());
 
 		// --- Boats Routes ---
 		router
@@ -236,7 +241,16 @@ router
 						WorkDonesController,
 						"store",
 					])
-					.as("work_dones.store");
+					.as("work_done.store");
+				router
+					.put("/work-done/:workdoneId", [WorkDonesController, "update"])
+					.as("work-done.update");
+				router
+					.delete("/task/:taskId/workdone/:workdoneId", [
+						WorkDonesController,
+						"destroy",
+					])
+					.as("work_done.delete");
 			})
 			.prefix("interventions");
 
@@ -259,6 +273,14 @@ router
 				// router
 				// 	.delete("/hour/:hourId", [TasksController, "destroyHour"])
 				// 	.as("tasks.hour.destroy");
+
+				router
+					.patch("/:taskId/suspend", [TasksController, "suspend"])
+					.as("task.suspend");
+				router
+					.patch("/:taskId/resume", [TasksController, "resume"])
+					.as("task.resume");
+
 				router
 					.patch("/:interventionSlug/:taskId", [TasksController, "update"])
 					.as("tasks.update")
@@ -308,6 +330,7 @@ router
 				router.get("/", [MediaController, "index"]).as("medias.index");
 				router.get("/:boatSlug", [MediaController, "show"]).as("medias.show");
 			})
-			.prefix("fichiers");
+			.prefix("fichiers")
+			.use(middleware.admin());
 	})
 	.use(middleware.auth());
