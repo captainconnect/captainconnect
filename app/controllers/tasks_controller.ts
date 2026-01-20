@@ -8,6 +8,7 @@ import { MediaService } from "#services/media_service";
 import { TaskService } from "#services/task_service";
 // biome-ignore lint/style/useImportType: IoC runtime needs this
 import { UserService } from "#services/user_service";
+import { suspendInterventionValidator } from "#validators/intervention";
 import {
 	createTaskValidator,
 	orderTasksValidator,
@@ -114,6 +115,18 @@ export default class TasksController {
 		const interventionSlug = params.interventionSlug;
 		const payload = await request.validateUsing(orderTasksValidator);
 		await this.taskService.orderTasks(interventionSlug, payload);
+		return response.redirect().back();
+	}
+
+	async suspend({ params, request, response }: HttpContext) {
+		const taskId = params.taskId;
+		const payload = await request.validateUsing(suspendInterventionValidator);
+		await this.taskService.suspend(taskId, payload);
+		return response.redirect().back();
+	}
+	async resume({ params, response }: HttpContext) {
+		const taskId = params.taskId;
+		await this.taskService.resume(taskId);
 		return response.redirect().back();
 	}
 

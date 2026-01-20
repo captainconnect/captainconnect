@@ -1,5 +1,5 @@
 import { router } from "@inertiajs/react";
-import { CircleCheck, Clock, Edit, FileUp, Trash } from "lucide-react";
+import { CircleCheck, Clock, Edit, FileUp, Pause, Trash } from "lucide-react";
 import { type ReactNode, useState } from "react";
 import type { Task } from "#types/intervention";
 import type { ActionButton } from "#types/ui/section";
@@ -9,6 +9,8 @@ enum Modals {
 	ConfirmDeletion,
 	UpdateModal,
 	AddMediaModal,
+	SuspendModal,
+	UpdateWorkdone,
 }
 type Tag = {
 	label: string;
@@ -45,6 +47,15 @@ export default function useTask({ task, interventionSlug }: UseTaskProps) {
 
 			const technicianLabel = formatTechnicians(technicians);
 
+			// ✅ ids de tous les techniciens sélectionnés (uniques)
+			const technician_ids = Array.from(
+				new Set(
+					wd.hours
+						?.map((h) => h.user?.id)
+						.filter((id): id is number => typeof id === "number"),
+				),
+			);
+
 			return {
 				id: wd.id,
 				taskId: wd.taskId,
@@ -57,6 +68,8 @@ export default function useTask({ task, interventionSlug }: UseTaskProps) {
 
 				hour_count: hourCount,
 				technicians: technicianLabel,
+
+				technician_ids, // 👈 ajouté
 			};
 		});
 	};
@@ -74,6 +87,16 @@ export default function useTask({ task, interventionSlug }: UseTaskProps) {
 			onClick: () => setCurrentModal(Modals.UpdateModal),
 			mustBeAdmin: true,
 		},
+		...(task.suspensionReason === null
+			? [
+					{
+						icon: <Pause size="18" />,
+						text: "Suspendre la tâche",
+						onClick: () => setCurrentModal(Modals.SuspendModal),
+						mustBeAdmin: true,
+					},
+				]
+			: []),
 		{
 			icon: <Trash size="18" />,
 			variant: "danger",

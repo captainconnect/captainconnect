@@ -26,6 +26,9 @@ export default class Task extends BaseModel {
 	@column()
 	declare details: string | null;
 
+	@column()
+	declare suspensionReason: string | null;
+
 	@column.dateTime({ autoCreate: true })
 	declare createdAt: DateTime;
 

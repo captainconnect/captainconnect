@@ -1,7 +1,7 @@
 import type { Hour } from "./intervention.js";
 import type { User } from "./user.js";
 
-export interface CreateWorkDonePayload {
+export interface WorkDonePayload {
 	date: Date;
 	hour_count: number;
 	work_done: string;
@@ -33,4 +33,5 @@ export type FormattedWorkDone = {
 	updatedAt: Date;
 	hour_count: number;
 	technicians: string;
+	technician_ids: number[];
 };

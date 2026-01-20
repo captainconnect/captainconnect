@@ -1,14 +1,8 @@
 import { Head, router } from "@inertiajs/react";
-import {
-	CircleAlert,
-	Contact,
-	MapPin,
-	Sailboat,
-	Ship,
-	Wrench,
-} from "lucide-react";
+import { CircleAlert, Contact, MapPin, Wrench } from "lucide-react";
 import { useState } from "react";
 import type { Boat } from "#types/boat";
+import { getBoatTypeIcon } from "~/app/utils";
 import BoatMap from "~/components/features/boat/BoatMap";
 import BoatInterventionList from "~/components/features/intervention/BoatInterventionList";
 import AddProjectMediaModal from "~/components/features/media/AddProjectMediaModal";
@@ -63,14 +57,7 @@ const BoatPage = ({ boat }: BoatPageProps) => {
 			<div className="flex flex-col md:flex-row gap-4 mt-6">
 				<div className="flex-2 space-y-4">
 					<Section
-						icon={
-							boat.type?.label === "Voilier" ||
-							boat.type?.label === "Catamaran" ? (
-								<Sailboat />
-							) : (
-								<Ship />
-							)
-						}
+						icon={getBoatTypeIcon(boat.type?.label)}
 						title="Informations du bateau"
 						subtitle="Détails techniques et caractéristiques"
 					>
@@ -90,7 +77,7 @@ const BoatPage = ({ boat }: BoatPageProps) => {
 					{inProgressInterventions.length !== 0 && (
 						<Section
 							title="Interventions"
-							subtitle="Interventions en cours"
+							subtitle="Interventions en cours/suspendues/non-facturées"
 							icon={<Wrench />}
 						>
 							<BoatInterventionList interventions={inProgressInterventions} />

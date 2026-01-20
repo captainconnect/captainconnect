@@ -32,3 +32,11 @@ export const updateInterventionSchema = vine.object({
 export const updateInterventionValidator = vine.compile(
 	updateInterventionSchema,
 );
+
+export const suspendInterventionSchema = vine.object({
+	reason: vine.string(),
+});
+
+export const suspendInterventionValidator = vine.compile(
+	suspendInterventionSchema,
+);

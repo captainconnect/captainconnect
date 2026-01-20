@@ -1,12 +1,21 @@
 import { useForm } from "@inertiajs/react";
 import { Contact2, Save, X } from "lucide-react";
 import type React from "react";
+import type { Contact } from "#types/contact";
 import Button from "~/components/ui/buttons/Button";
 import Input from "~/components/ui/inputs/Input";
 import Modal, { type BaseModalProps } from "~/components/ui/modals/Modal";
 
-export default function CreateContactModal({ open, onClose }: BaseModalProps) {
-	const { data, setData, post, processing, errors, reset } = useForm({
+type CreateContactModalProps = BaseModalProps & {
+	onCreated?: (contact: Contact) => void;
+};
+
+export default function CreateContactModal({
+	open,
+	onClose,
+	onCreated,
+}: CreateContactModalProps) {
+	const { data, setData, processing, errors, reset, post } = useForm({
 		company: "",
 		fullName: "",
 		phone: "",
@@ -18,14 +27,32 @@ export default function CreateContactModal({ open, onClose }: BaseModalProps) {
 		reset();
 	};
 
-	const submit = (e: React.FormEvent) => {
+	const submit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		post("/contacts/store", {
-			onSuccess: () => {
-				reset();
-				onClose();
-			},
-		});
+		if (onCreated) {
+			const res = await fetch("/contacts/store/boat", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(data),
+			});
+
+			if (!res.ok) return;
+
+			const contact = await res.json();
+
+			onCreated(contact);
+			reset();
+			onClose();
+		} else {
+			post("/contacts/store", {
+				onSuccess: () => {
+					reset();
+					onClose();
+				},
+			});
+		}
 	};
 
 	return (

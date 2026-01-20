@@ -22,6 +22,13 @@ export default class ContactsController {
 		return response.redirect().back();
 	}
 
+	async storeFromBoat({ request, response }: HttpContext) {
+		const payload = await request.validateUsing(contactValidator);
+		const contact = await this.contactService.create(payload);
+
+		return response.status(201).json(contact);
+	}
+
 	async update({ params, request, response }: HttpContext) {
 		const contactId = params.contactId;
 		const payload = await request.validateUsing(contactValidator);

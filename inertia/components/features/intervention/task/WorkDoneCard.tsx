@@ -1,12 +1,29 @@
-import { Clock, ToolCase, Wrench } from "lucide-react";
+import { router } from "@inertiajs/react";
+import { Clock, ToolCase, Trash, Wrench } from "lucide-react";
 import type { FormattedWorkDone } from "#types/workdone";
+import Button from "~/components/ui/buttons/Button";
 import Section from "~/components/ui/Section";
+import AdminChecker from "../../AdminChecker";
 
 type WorkDoneCardProps = {
 	workDone: FormattedWorkDone;
+	onUpdate: (workdone: FormattedWorkDone) => void;
+	taskId: number;
 };
 
-export default function WorkDoneCard({ workDone }: WorkDoneCardProps) {
+export default function WorkDoneCard({
+	workDone,
+	onUpdate,
+	taskId,
+}: WorkDoneCardProps) {
+	const handleDelete = () => {
+		const confirmation = confirm(
+			"Supprimer le travail effectué ? Les heures seront perdues",
+		);
+		if (!confirmation) return;
+		router.delete(`/interventions/task/${taskId}/workdone/${workDone.id}`);
+	};
+
 	return (
 		<Section
 			title={`Travaux effectués le ${workDone.date}`}
@@ -42,6 +59,12 @@ export default function WorkDoneCard({ workDone }: WorkDoneCardProps) {
 					<p className="font-medium">{workDone.hour_count}h</p>
 				</div>
 			</div>
+			<AdminChecker mustBeAdmin={true}>
+				<div className="flex gap-2">
+					<Button onClick={() => onUpdate(workDone)}>Modifier</Button>
+					<Button variant="danger" icon={<Trash />} onClick={handleDelete} />
+				</div>
+			</AdminChecker>
 		</Section>
 	);
 }

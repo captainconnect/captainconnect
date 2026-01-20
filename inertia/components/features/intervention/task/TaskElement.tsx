@@ -34,13 +34,15 @@ export default function TaskElement({
 	};
 
 	const status =
-		task.status === "DONE"
-			? "DONE"
-			: task.status === "IN_PROGRESS" &&
-					task.workDones &&
-					task.workDones.length !== 0
-				? "TO_CONTINUE"
-				: "IN_PROGRESS";
+		task.suspensionReason !== null
+			? "SUSPENDED"
+			: task.status === "DONE"
+				? "DONE"
+				: task.status === "IN_PROGRESS" &&
+						task.workDones &&
+						task.workDones.length > 0
+					? "TO_CONTINUE"
+					: "IN_PROGRESS";
 
 	return (
 		<li ref={setNodeRef} style={style}>
@@ -63,6 +65,7 @@ export default function TaskElement({
 							<p className="font-semibold text-left">{task.name}</p>
 							<p className="text-sm text-subtitle text-left">
 								<TaskStatusText status={status} />
+								{status === "SUSPENDED" && ` : ${task.suspensionReason}`}
 							</p>
 						</div>
 					</div>
