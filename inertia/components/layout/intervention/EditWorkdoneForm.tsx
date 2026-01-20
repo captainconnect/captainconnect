@@ -175,7 +175,7 @@ export default function EditWorkDoneForm({
 							setCurrentSelectTechnician(addableTechnicians[0] ?? null);
 						}}
 					>
-						Ajouter un technicien
+						<span className="hidden md:block">Ajouter un technicien</span>
 					</Button>
 				)}
 			</div>

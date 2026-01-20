@@ -213,7 +213,7 @@ export default function AddWorkDoneForm({
 						icon={<UserPlus size={20} />}
 						onClick={() => setAddTechnician(true)}
 					>
-						Ajouter un technicien
+						<span className="hidden md:block">Ajouter un technicien</span>
 					</Button>
 				)}
 			</div>
