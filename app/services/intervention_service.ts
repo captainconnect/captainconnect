@@ -3,6 +3,7 @@ import Intervention from "#models/intervention";
 import TaskGroup from "#models/task_group";
 import type {
 	CreateInterventionPayload,
+	SuspendPayload,
 	UpdateInterventionPayload,
 } from "#types/intervention";
 
@@ -29,7 +30,7 @@ export class InterventionService {
 		return await Intervention.query()
 			.whereNot("status", "DONE")
 			.orderBy("endAt", "desc")
-			.preload("boat")
+			.preload("boat", (query) => query.preload("type"))
 			.preload("taskGroups", (query) => query.preload("tasks"));
 	}
 
@@ -102,12 +103,14 @@ export class InterventionService {
 	async resume(slug: string) {
 		const intervention = await Intervention.findByOrFail("slug", slug);
 		intervention.status = "IN_PROGRESS";
+		intervention.suspensionReason = null;
 		await intervention.save();
 	}
 
-	async suspend(slug: string) {
+	async suspend(slug: string, payload: SuspendPayload) {
 		const intervention = await Intervention.findByOrFail("slug", slug);
 		intervention.status = "SUSPENDED";
+		intervention.suspensionReason = payload.reason;
 		await intervention.save();
 	}
 

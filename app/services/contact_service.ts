@@ -7,7 +7,7 @@ export class ContactService {
 	}
 
 	async create(payload: ContactPayload) {
-		await Contact.create(payload);
+		return await Contact.create(payload);
 	}
 
 	async update(id: number, payload: ContactPayload) {

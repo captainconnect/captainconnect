@@ -17,6 +17,9 @@ export type Intervention = {
 	totalHours?: number;
 	createdAt: Date;
 	updatedAt: Date;
+	progress: number;
+	isProgressComplete: boolean;
+	suspensionReason: string | null;
 };
 
 export type Task = {
@@ -30,6 +33,7 @@ export type Task = {
 	updatedAt: Date;
 	workDones?: WorkDone[];
 	medias?: Media[];
+	suspensionReason: string | null;
 };
 
 export type TaskGroup = {
@@ -107,4 +111,8 @@ export interface OrderTaskPayload {
 export interface UpdateTaskPayload {
 	name: string;
 	taskGroupId: number;
+}
+
+export interface SuspendPayload {
+	reason: string;
 }

@@ -1,11 +1,11 @@
 import { Head, router } from "@inertiajs/react";
-import { useState } from "react";
 import type { Intervention } from "#types/intervention";
 import InterventionOverview from "~/components/features/intervention/InterventionOverview";
 import AppLayout from "~/components/layout/AppLayout";
 import InformationCard from "~/components/layout/intervention/InformationCard";
 import InterventionCardSection from "~/components/layout/intervention/InformationCardSection";
 import InterventionHeader from "~/components/layout/intervention/InterventionHeader";
+import SuspensionModal from "~/components/layout/SuspensionModal";
 import ConfirmModal from "~/components/ui/modals/Confirm";
 import useIntervention from "~/hooks/useIntervention";
 
@@ -20,9 +20,8 @@ const InterventionPage = ({
 	intervention,
 	mediasCount,
 }: InterventionPageProps) => {
-	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-
-	const { cards } = useIntervention(intervention, setDeleteModalOpen);
+	const { cards, setCurrentModal, currentModal, closeModal, Modals } =
+		useIntervention(intervention);
 
 	const handleDelete = () => {
 		router.delete(`/interventions/${intervention.slug}`);
@@ -49,18 +48,30 @@ const InterventionPage = ({
 			</InterventionCardSection>
 			<hr className="text-gray-200 m-5" />
 			<InterventionOverview
+				onDelete={() => setCurrentModal(Modals.ConfirmDeletion)}
 				intervention={intervention}
-				openModal={setDeleteModalOpen}
 				mediasCount={mediasCount}
 			/>
 			<ConfirmModal
-				open={deleteModalOpen}
-				onClose={() => setDeleteModalOpen(false)}
+				open={currentModal === Modals.ConfirmDeletion}
+				onClose={closeModal}
 				title="Supprimer l'intervention"
 				label="Confirmer"
 				confirmationText="Confirmer la suppression de l'intervention ?"
 				onConfirm={handleDelete}
 			/>
+			{intervention.status === "SUSPENDED" &&
+				intervention.suspensionReason !== null && (
+					<SuspensionModal
+						interventionSlug={intervention.slug}
+						reason={intervention.suspensionReason}
+						scope="intervention"
+						open={
+							intervention.status === "SUSPENDED" &&
+							intervention.suspensionReason !== null
+						}
+					/>
+				)}
 		</>
 	);
 };

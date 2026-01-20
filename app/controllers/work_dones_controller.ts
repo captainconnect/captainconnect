@@ -4,7 +4,7 @@ import type { HttpContext } from "@adonisjs/core/http";
 import { InterventionService } from "#services/intervention_service";
 // biome-ignore lint/style/useImportType: IoC runtime needs this
 import { WorkDoneService } from "#services/work_done_service";
-import { addWorkDoneValidator } from "#validators/work_done";
+import { workDoneValidator } from "#validators/work_done";
 
 @inject()
 export default class WorkDonesController {
@@ -16,8 +16,21 @@ export default class WorkDonesController {
 	async store({ params, request, response }: HttpContext) {
 		const { interventionSlug, taskId } = params;
 		const { id } = await this.interventionService.getBySlug(interventionSlug);
-		const payload = await request.validateUsing(addWorkDoneValidator);
+		const payload = await request.validateUsing(workDoneValidator);
 		await this.workDoneService.create(id, taskId, payload);
+		return response.redirect().back();
+	}
+
+	async update({ params, request, response }: HttpContext) {
+		const { workdoneId } = params;
+		const payload = await request.validateUsing(workDoneValidator);
+		await this.workDoneService.update(workdoneId, payload);
+		return response.redirect().back();
+	}
+
+	async destroy({ params, response }: HttpContext) {
+		const { taskId, workdoneId } = params;
+		await this.workDoneService.delete(workdoneId, taskId);
 		return response.redirect().back();
 	}
 }

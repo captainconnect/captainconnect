@@ -41,3 +41,9 @@ export const updateTaskSchema = vine.object({
 });
 
 export const updateTaskValidator = vine.compile(updateTaskSchema);
+
+export const suspendTaskSchema = vine.object({
+	reason: vine.string(),
+});
+
+export const suspendTaskValidator = vine.compile(suspendTaskSchema);

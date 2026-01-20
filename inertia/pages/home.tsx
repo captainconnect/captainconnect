@@ -10,7 +10,7 @@ const HomePage = () => {
 	return (
 		<>
 			<Head title={title} />
-			<h1>Ici retrouvez les dernières actualités</h1>
+			<h1>Prochainement tableau d'affichage avec instructions</h1>
 			{/* <p>{currentUser.isAdmin ? "Admin" : "Utilisateur"}</p> */}
 		</>
 	);

@@ -45,6 +45,9 @@ export default class Intervention extends BaseModel {
 	@column()
 	declare priority: InterventionPriority;
 
+	@column()
+	declare suspensionReason: string | null;
+
 	@computed()
 	get totalHours(): number {
 		return (
@@ -76,6 +79,23 @@ export default class Intervention extends BaseModel {
 
 	@hasMany(() => ProjectMedia)
 	declare medias: HasMany<typeof ProjectMedia>;
+
+	@computed()
+	get progress(): number {
+		const taskGroups = this.taskGroups ?? [];
+		const tasks = taskGroups.flatMap((tg) => tg.tasks ?? []);
+
+		if (tasks.length === 0) return 0;
+
+		const doneCount = tasks.filter((t) => t.status === "DONE").length; // adapte si ton enum est différent
+		return Math.round((doneCount / tasks.length) * 100);
+	}
+
+	@computed()
+	get isProgressComplete(): boolean {
+		// si tu préfères : return this.progress >= 100;
+		return this.progress === 100;
+	}
 
 	@afterCreate()
 	static async setSlug(intervention: Intervention) {

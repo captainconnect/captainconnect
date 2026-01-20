@@ -1,6 +1,6 @@
 import vine from "@vinejs/vine";
 
-export const addWorkDoneSchema = vine.object({
+export const workDoneSchema = vine.object({
 	date: vine.date(),
 	hour_count: vine.number().min(0.25),
 	work_done: vine.string(),
@@ -10,4 +10,4 @@ export const addWorkDoneSchema = vine.object({
 		.minLength(1),
 });
 
-export const addWorkDoneValidator = vine.compile(addWorkDoneSchema);
+export const workDoneValidator = vine.compile(workDoneSchema);

@@ -1,5 +1,19 @@
 # 📝 Notes de mise à jour
 
+## **1.3.2**
+
+#### 🚀 Nouvelles fonctionnalités
+- Possibilité de suspendre des interventions/tâches avec raison
+- Affichage de la position du bateau dans la page d'intervention
+- Possibilité de supprimer/modifier un travail effectué
+
+#### 🛠️ Corrections
+- L'utilisateur Clément Mistral n'apparaît plus dans la selection lors de l'ajout d'un travail effectué
+- Lors de la création d'un bateau, le contact nouvellement créé est sélectionné automatiquement
+- Routes Utilisateurs, contacts et fichiers limitées aux administrateurs
+- Si toutes les tâches d'une intervention sont terminées, l'intervention est marquée comme terminée
+- Nouveaux icons + remplacement de l'icon clé par l'icon du bateau
+
 ## **1.3.1**
 
 #### 🚀 Nouvelles fonctionnalités
