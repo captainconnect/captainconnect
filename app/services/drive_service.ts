@@ -7,7 +7,7 @@ import { extractMetaData } from "../helpers/drive.js";
 
 export class DriveService {
 	getUrl(objectKey: string): string {
-		return `${env.get("MINIO_ENDPOINT")}/${env.get("S3_BUCKET")}/${objectKey}`;
+		return `${env.get("MINIO_CDN_URL")}/${env.get("S3_BUCKET")}/${objectKey}`;
 	}
 
 	createObjectKey(folder: string, extname: string) {
