@@ -11,6 +11,7 @@ import {
 	MapPin,
 	Pause,
 	Phone,
+	Play,
 	Sailboat,
 	Ship,
 	Stamp,
@@ -199,7 +200,15 @@ export default function useIntervention(
 						onClick: () => setCurrentModal(Modals.SuspendIntervention),
 					},
 				]
-			: []),
+			: [
+					{
+						icon: <Play size="18" />,
+						text: "Reprendre l'intervention",
+						mustBeAdmin: true,
+						onClick: () =>
+							router.patch(`/interventions/${intervention.slug}/resume`),
+					},
+				]),
 		{
 			icon: <Trash size="18" />,
 			text: "Supprimer l'intervention",

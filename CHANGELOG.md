@@ -1,6 +1,6 @@
 # 📝 Notes de mise à jour
 
-## **1.3.2**
+## **1.3.3**
 
 #### 🚀 Nouvelles fonctionnalités
 - Possibilité de suspendre des interventions/tâches avec raison
