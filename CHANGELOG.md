@@ -1,5 +1,14 @@
 # 📝 Notes de mise à jour
 
+## **1.3.4**
+
+#### 🚀 Nouvelles fonctionnalités
+- Les bateaux peuvent désormais avoir une image de miniature
+
+#### 🛠️ Corrections
+- Affichage du nom du bateau et du titre de l'intervention dans les tâches
+- Bouton retour dans la modal de suspension d'une tâche/intervention
+
 ## **1.3.3**
 
 #### 🚀 Nouvelles fonctionnalités

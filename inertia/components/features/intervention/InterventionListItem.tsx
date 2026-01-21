@@ -21,8 +21,19 @@ export default function InterventionListItem({
 				href={`/interventions/${intervention.slug}`}
 			>
 				<div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
-					<div className="flex flex-col md:w-4/10 md:flex-row gap-4">
-						<IconBadge icon={getBoatTypeIcon(intervention.boat.type?.label)} />
+					<div className="flex flex-col md:w-3/10 md:flex-row gap-4">
+						{intervention.boat.thumbnailUrl ? (
+							<img
+								className="rounded-xl size-18"
+								src={intervention.boat.thumbnailUrl}
+								alt="Miniature du bateau"
+							/>
+						) : (
+							<IconBadge
+								size="18"
+								icon={getBoatTypeIcon(intervention.boat.type?.label)}
+							/>
+						)}
 						<div>
 							<p className="text-lg font-semibold">
 								{intervention.boat.name} • {intervention.title}

@@ -18,6 +18,10 @@ export class DriveService {
 		return `avatars/user_${userId}-${cuid()}.${extname}`;
 	}
 
+	createBoatThumbnailObjectKey(boatId: number, extname: string) {
+		return `thumbnails/boat_${boatId}-${cuid()}.${extname}`;
+	}
+
 	async storeFile(file: MultipartFile, boatSlug: string) {
 		const fileData = await extractMetaData(file);
 		const extName = fileData.extension;
@@ -33,6 +37,17 @@ export class DriveService {
 		const fileData = await extractMetaData(file);
 		const extName = fileData.extension;
 		const objectKey = this.createAvatarObjectKey(userId, extName);
+		await file.moveToDisk(objectKey);
+		return {
+			...fileData,
+			objectKey,
+		};
+	}
+
+	async storeThumbnail(file: MultipartFile, boatId: number) {
+		const fileData = await extractMetaData(file);
+		const extName = fileData.extension;
+		const objectKey = this.createBoatThumbnailObjectKey(boatId, extName);
 		await file.moveToDisk(objectKey);
 		return {
 			...fileData,

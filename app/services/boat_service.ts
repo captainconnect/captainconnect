@@ -1,12 +1,17 @@
 import { inject } from "@adonisjs/core";
 import emitter from "@adonisjs/core/services/emitter";
 import db from "@adonisjs/lucid/services/db";
+import { E_DUPLICATE_MEDIA } from "#exceptions/duplicate_media_exception";
 import Boat from "#models/boat";
 import BoatConstructor from "#models/boat_constructor";
 import BoatType from "#models/boat_type";
 import Media from "#models/media";
 import ProjectMedia from "#models/project_media";
-import type { BoatPayload, Coordinate } from "#types/boat";
+import type {
+	BoatPayload,
+	Coordinate,
+	UploadThumbnailPayload,
+} from "#types/boat";
 // biome-ignore lint/style/useImportType: IoC runtime needs this
 import { DriveService } from "./drive_service.js";
 
@@ -32,6 +37,7 @@ export class BoatService {
 			.preload("type")
 			.preload("contact")
 			.preload("interventions", (query) => query.where("status", "IN_PROGRESS"))
+			.preload("thumbnail")
 			.orderBy("name", "asc");
 	}
 
@@ -49,6 +55,7 @@ export class BoatService {
 			.preload("interventions", (query) =>
 				query.preload("taskGroups", (query) => query.preload("tasks")),
 			)
+			.preload("thumbnail")
 			.firstOrFail();
 	}
 
@@ -108,6 +115,64 @@ export class BoatService {
 
 		const { slug } = await boat.save();
 		return slug;
+	}
+
+	async uploadThumbnail(
+		payload: UploadThumbnailPayload,
+		boatId: number,
+		userId: number,
+	) {
+		const boat = await Boat.findOrFail(boatId);
+
+		if (boat.thumbnailId) {
+			const oldThumbnail = await Media.find(boat.thumbnailId);
+
+			if (oldThumbnail) {
+				await this.driveService.deleteFile(oldThumbnail.objectKey);
+			}
+		}
+
+		const media = await this.driveService.storeThumbnail(
+			payload.thumbnail,
+			boatId,
+		);
+
+		try {
+			const { id } = await Media.create({
+				bucket: media.bucket,
+				objectKey: media.objectKey,
+				mimeType: media.mimeType,
+				extension: media.extension,
+				byteSize: media.byteSize,
+				width: media.width,
+				height: media.height,
+				checksumSha256: media.checksumSha256,
+				originalName: media.originalName,
+				ownerId: userId,
+			});
+			boat.thumbnailId = id;
+			await boat.save();
+		} catch (_) {
+			await this.driveService.deleteFile(media.objectKey);
+
+			throw new E_DUPLICATE_MEDIA(
+				"Cette photo a déjà été ajouté (Duplication)",
+			);
+		}
+	}
+
+	async deleteThumbnail(boatId: number) {
+		const boat = await Boat.findOrFail(boatId);
+
+		if (boat.thumbnailId) {
+			const thumbnail = await Media.find(boat.thumbnailId);
+			if (thumbnail) {
+				await thumbnail?.delete();
+				await this.driveService.deleteFile(thumbnail.objectKey);
+			}
+			boat.thumbnailId = null;
+			await boat.save();
+		}
 	}
 
 	async delete(slug: string) {

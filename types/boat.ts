@@ -1,5 +1,7 @@
+import type { MultipartFile } from "@adonisjs/core/bodyparser";
 import type { Contact } from "./contact.js";
 import type { Intervention } from "./intervention.js";
+import type { Media } from "./media.js";
 
 export type Boat = {
 	id: number;
@@ -18,6 +20,8 @@ export type Boat = {
 	note?: string;
 	interventions: Intervention[];
 	medias_count?: number;
+	thumbnail?: Media;
+	thumbnailUrl: string | null;
 };
 
 export interface BoatPayload {
@@ -46,3 +50,7 @@ export type BoatConstructor = {
 };
 
 export type Coordinate = [number, number];
+
+export interface UploadThumbnailPayload {
+	thumbnail: MultipartFile;
+}

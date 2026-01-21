@@ -29,7 +29,7 @@ export default function SuspendModal({
 				},
 			});
 		} else {
-			patch(`/tasks/${taskId}/suspend`, {
+			patch(`/tasks/${interventionSlug}/${taskId}/suspend`, {
 				onSuccess: () => {
 					handleOnClose();
 				},

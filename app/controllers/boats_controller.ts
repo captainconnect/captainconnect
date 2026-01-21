@@ -6,7 +6,7 @@ import { BoatService } from "#services/boat_service";
 // biome-ignore lint/style/useImportType: IoC runtime needs this
 import { ContactService } from "#services/contact_service";
 import type { BoatPayload, Coordinate } from "#types/boat";
-import { boatValidator } from "#validators/boat";
+import { boatValidator, uploadThumbnailValidator } from "#validators/boat";
 
 @inject()
 export default class BoatsController {
@@ -95,6 +95,22 @@ export default class BoatsController {
 		return response.redirect().toRoute("boats.show", {
 			boatSlug: slug,
 		});
+	}
+
+	async uploadThumbnail({ params, request, auth, response }: HttpContext) {
+		const { id: userId } = await auth.authenticate();
+		const { boatId } = params;
+
+		const payload = await request.validateUsing(uploadThumbnailValidator);
+
+		await this.boatService.uploadThumbnail(payload, boatId, userId);
+		return response.redirect().back();
+	}
+
+	async deleteThumbnail({ params, response }: HttpContext) {
+		const { boatId } = params;
+		await this.boatService.deleteThumbnail(boatId);
+		return response.redirect().back();
 	}
 
 	async destroy({ params, response }: HttpContext) {

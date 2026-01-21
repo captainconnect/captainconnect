@@ -70,16 +70,6 @@ export default class TasksController {
 		return response.redirect().back();
 	}
 
-	// async addHour({ params, request, response }: HttpContext) {
-	// 	const taskId = params.taskId;
-
-	// 	const payload = await request.validateUsing(hourValidator);
-
-	// 	await this.taskService.addHour(payload, taskId);
-
-	// 	return response.redirect().back();
-	// }
-
 	async checkTask({ params, response }: HttpContext) {
 		const taskId = params.taskId;
 
@@ -96,21 +86,6 @@ export default class TasksController {
 		return response.redirect().back();
 	}
 
-	// async updateDetails({ params, request, response }: HttpContext) {
-	// 	const taskId = params.taskId;
-
-	// 	const payload = await request.validateUsing(taskDetailsValidator);
-
-	// 	this.taskService.updateDetails(payload, taskId);
-	// 	return response.redirect().back();
-	// }
-
-	// async destroyHour({ params, response }: HttpContext) {
-	// 	const hourId = params.hourId;
-	// 	await this.taskService.deleteHour(hourId);
-	// 	return response.redirect().back();
-	// }
-
 	async order({ params, request, response }: HttpContext) {
 		const interventionSlug = params.interventionSlug;
 		const payload = await request.validateUsing(orderTasksValidator);
@@ -119,10 +94,12 @@ export default class TasksController {
 	}
 
 	async suspend({ params, request, response }: HttpContext) {
-		const taskId = params.taskId;
+		const { taskId, interventionSlug } = params;
 		const payload = await request.validateUsing(suspendInterventionValidator);
 		await this.taskService.suspend(taskId, payload);
-		return response.redirect().back();
+		return response.redirect().toRoute("interventions.tasks.index", {
+			interventionSlug,
+		});
 	}
 	async resume({ params, response }: HttpContext) {
 		const taskId = params.taskId;

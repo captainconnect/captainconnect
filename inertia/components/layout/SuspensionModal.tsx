@@ -13,6 +13,7 @@ type SuspensionModalProps = {
 	reason: string;
 	interventionSlug: string;
 	taskId?: number;
+	href: string;
 };
 
 export default function SuspensionModal({
@@ -21,6 +22,7 @@ export default function SuspensionModal({
 	scope,
 	interventionSlug,
 	taskId,
+	href,
 }: SuspensionModalProps) {
 	useEffect(() => {
 		if (!open) return;
@@ -60,8 +62,13 @@ export default function SuspensionModal({
 						Raison : <br />
 						<span className="font-semibold">{reason}</span>
 					</p>
+					<Button href={href}>Retour</Button>
 					<AdminChecker mustBeAdmin={true}>
-						<Button onClick={handleResume} icon={<Play size="20" />}>
+						<Button
+							variant="secondary"
+							onClick={handleResume}
+							icon={<Play size="20" />}
+						>
 							{`Reprendre ${scope === "intervention" ? "l'intervention" : "la tâche"}`}
 						</Button>
 					</AdminChecker>{" "}

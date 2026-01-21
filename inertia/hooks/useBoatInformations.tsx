@@ -3,6 +3,7 @@ import {
 	Files,
 	FileUp,
 	Hash,
+	ImageUp,
 	Mail,
 	Phone,
 	Radio,
@@ -15,12 +16,15 @@ import type { Boat } from "#types/boat";
 import type { ActionButton } from "#types/ui/section";
 import type { InformationBlockItemProps } from "~/components/ui/InformationBlockItem";
 
-export default function useBoatInformations(
-	boat: Boat,
-	openModal: (open: true) => void,
-) {
-	const [addProjectMediaModalOpen, setAddProjectMediaModalOpen] =
-		useState(false);
+enum Modals {
+	None,
+	AddMedia,
+	UpdateThumbnail,
+	DeleteBoat,
+}
+
+export default function useBoatInformations(boat: Boat) {
+	const [currentModal, setCurrentModal] = useState<Modals>(Modals.None);
 
 	const boatData: InformationBlockItemProps[] = [
 		{
@@ -85,10 +89,16 @@ export default function useBoatInformations(
 
 	const actionButtons: ActionButton[] = [
 		{
+			icon: <ImageUp size="18" />,
+			text: "Ajouter/remplacer miniature",
+			variant: "accent",
+			onClick: () => setCurrentModal(Modals.UpdateThumbnail),
+		},
+		{
 			icon: <FileUp size="18" />,
 			text: "Ajouter un fichier",
 			variant: "accent",
-			onClick: () => setAddProjectMediaModalOpen(true),
+			onClick: () => setCurrentModal(Modals.AddMedia),
 		},
 		{
 			icon: <Files size="18" />,
@@ -137,7 +147,7 @@ export default function useBoatInformations(
 		{
 			icon: <Trash size="18" />,
 			text: "Supprimer le bateau",
-			onClick: () => openModal(true),
+			onClick: () => setCurrentModal(Modals.DeleteBoat),
 			variant: "danger",
 		},
 	];
@@ -147,7 +157,8 @@ export default function useBoatInformations(
 		contactData,
 		actionButtons,
 		dangerActionsButtons,
-		addProjectMediaModalOpen,
-		setAddProjectMediaModalOpen,
+		currentModal,
+		setCurrentModal,
+		Modals,
 	};
 }

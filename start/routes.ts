@@ -165,6 +165,12 @@ router
 					.delete("/:boatSlug", [BoatsController, "destroy"])
 					.as("boats.destroy")
 					.use(middleware.admin());
+				router
+					.patch("/:boatId/thumbnail", [BoatsController, "uploadThumbnail"])
+					.as("boat.thumbnail.store");
+				router
+					.delete("/:boatId/thumbnail", [BoatsController, "deleteThumbnail"])
+					.as("boat.thumbnail.delete");
 			})
 			.prefix("bateaux");
 
@@ -275,7 +281,10 @@ router
 				// 	.as("tasks.hour.destroy");
 
 				router
-					.patch("/:taskId/suspend", [TasksController, "suspend"])
+					.patch("/:interventionSlug/:taskId/suspend", [
+						TasksController,
+						"suspend",
+					])
 					.as("task.suspend");
 				router
 					.patch("/:taskId/resume", [TasksController, "resume"])
