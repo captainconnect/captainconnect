@@ -1,5 +1,11 @@
 # 📝 Notes de mise à jour
 
+## **1.3.5**
+
+#### 🚀 Nouvelles fonctionnalités
+
+#### 🛠️ Corrections
+
 ## **1.3.4**
 
 #### 🚀 Nouvelles fonctionnalités

@@ -10,18 +10,15 @@ export default class HoursController {
 	async getUserHours({ request, params, response }: HttpContext) {
 		const userId = params.userId;
 
-		// Récupération des params
-		const start_at = request.input("start_at"); // string | undefined
-		const end_at = request.input("end_at"); // string | undefined
+		const start_at = request.input("start_at");
+		const end_at = request.input("end_at");
 
-		// Parsing des dates
 		const startAt = start_at ? new Date(start_at) : new Date();
 
 		let endAt: Date;
 		if (end_at) {
 			endAt = new Date(end_at);
 		} else {
-			// +1 mois à startAt
 			endAt = new Date(startAt);
 			endAt.setMonth(endAt.getMonth() + 1);
 		}
@@ -40,9 +37,5 @@ export default class HoursController {
 		);
 
 		return response.json(hours);
-	}
-
-	async getBoatHours({ response }: HttpContext) {
-		return response.redirect().back();
 	}
 }
