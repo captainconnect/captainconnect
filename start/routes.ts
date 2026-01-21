@@ -275,7 +275,10 @@ router
 				// 	.as("tasks.hour.destroy");
 
 				router
-					.patch("/:taskId/suspend", [TasksController, "suspend"])
+					.patch("/:interventionSlug/:taskId/suspend", [
+						TasksController,
+						"suspend",
+					])
 					.as("task.suspend");
 				router
 					.patch("/:taskId/resume", [TasksController, "resume"])

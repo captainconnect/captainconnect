@@ -173,6 +173,7 @@ const TaskPage = ({
 			/>
 			{task.suspensionReason !== null && (
 				<SuspensionModal
+					href={`/interventions/${intervention.slug}/taches`}
 					interventionSlug={intervention.slug}
 					taskId={task.id}
 					reason={task.suspensionReason}
@@ -184,8 +185,13 @@ const TaskPage = ({
 	);
 };
 
-TaskPage.layout = (page: React.ReactNode & { props: TaskPageProps }) => (
-	<AppLayout title="Gérer la tâche">{page}</AppLayout>
-);
+TaskPage.layout = (page: React.ReactNode & { props: TaskPageProps }) => {
+	const { intervention } = page.props;
+	return (
+		<AppLayout title={`${intervention.boat.name} - ${intervention.title}`}>
+			{page}
+		</AppLayout>
+	);
+};
 
 export default TaskPage;
