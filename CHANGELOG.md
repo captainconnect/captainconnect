@@ -1,5 +1,11 @@
 # 📝 Notes de mise à jour
 
+## **1.3.5**
+
+#### 🚀 Nouvelles fonctionnalités
+- Nouvelle version du tableau des heures
+- Export des heures au format xlsx (Excel/Tableur)
+
 ## **1.3.4**
 
 #### 🚀 Nouvelles fonctionnalités
