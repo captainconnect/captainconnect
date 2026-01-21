@@ -4,15 +4,12 @@ import {
 	BaseModel,
 	belongsTo,
 	column,
+	computed,
 	hasMany,
-	hasOne,
 } from "@adonisjs/lucid/orm";
-import type {
-	BelongsTo,
-	HasMany,
-	HasOne,
-} from "@adonisjs/lucid/types/relations";
+import type { BelongsTo, HasMany } from "@adonisjs/lucid/types/relations";
 import type { DateTime } from "luxon";
+import { DriveService } from "#services/drive_service";
 import type { Coordinate } from "#types/boat";
 import BoatConstructor from "./boat_constructor.js";
 import BoatType from "./boat_type.js";
@@ -20,6 +17,8 @@ import Contact from "./contact.js";
 import Intervention from "./intervention.js";
 import Media from "./media.js";
 import ProjectMedia from "./project_media.js";
+
+const driveService = new DriveService();
 
 export default class Boat extends BaseModel {
 	@column({ isPrimary: true })
@@ -74,8 +73,10 @@ export default class Boat extends BaseModel {
 	@column({ columnName: "thumbnail_id" })
 	declare thumbnailId: number | null;
 
-	@hasOne(() => Media)
-	declare thumbnail: HasOne<typeof Media>;
+	@belongsTo(() => Media, {
+		foreignKey: "thumbnailId",
+	})
+	declare thumbnail: BelongsTo<typeof Media>;
 
 	@column.dateTime({ autoCreate: true })
 	declare createdAt: DateTime;
@@ -102,5 +103,11 @@ export default class Boat extends BaseModel {
 	static async setSlug(boat: Boat) {
 		boat.slug = `${boat.id}-${string.slug(boat.name, { lower: true })}`;
 		await boat.save();
+	}
+
+	@computed()
+	get thumbnailUrl() {
+		if (!this.thumbnail) return null;
+		return driveService.getUrl(this.thumbnail.objectKey);
 	}
 }

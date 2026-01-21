@@ -8,6 +8,7 @@ type SectionProps = {
 	children: ReactNode;
 	className?: string;
 	button?: ReactNode;
+	image?: string | null;
 };
 
 export default function Section({
@@ -17,6 +18,7 @@ export default function Section({
 	children,
 	className = "",
 	button,
+	image,
 }: SectionProps) {
 	const id = useId();
 	return (
@@ -26,7 +28,19 @@ export default function Section({
 		>
 			<div className="flex flex-col md:flex-row md:items-center justify-between">
 				<div className="flex gap-4 mb-4">
-					{icon && <IconBadge icon={icon} />}
+					{!image && icon ? (
+						<IconBadge icon={icon} />
+					) : (
+						image && (
+							<a href={image} target="_blank">
+								<img
+									className="size-24 rounded-xl"
+									src={image}
+									alt="Thumbnail du bateau"
+								/>
+							</a>
+						)
+					)}
 					<div
 						className={
 							subtitle ? "" : "justify-center flex flex-col items-center"

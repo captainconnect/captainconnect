@@ -63,6 +63,7 @@ const InterventionPage = ({
 			{intervention.status === "SUSPENDED" &&
 				intervention.suspensionReason !== null && (
 					<SuspensionModal
+						href="/interventions"
 						interventionSlug={intervention.slug}
 						reason={intervention.suspensionReason}
 						scope="intervention"

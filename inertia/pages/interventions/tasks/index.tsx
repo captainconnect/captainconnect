@@ -7,8 +7,6 @@ import TaskBoard from "~/components/features/intervention/task/TaskBoard";
 import AppLayout from "~/components/layout/AppLayout";
 import PageHeader from "~/components/layout/PageHeader";
 
-const title = "Tâches";
-
 export type IndexTaskPageProps = {
 	intervention: Intervention;
 };
@@ -54,7 +52,7 @@ const IndexTaskPage = ({ intervention }: IndexTaskPageProps) => {
 
 	return (
 		<>
-			<Head title={title} />
+			<Head title={`Tâches - ${intervention.boat.name}`} />
 			<PageHeader
 				backButton={{ route: `/interventions/${intervention.slug}` }}
 				title="Travaux à faire"
@@ -104,8 +102,15 @@ const IndexTaskPage = ({ intervention }: IndexTaskPageProps) => {
 	);
 };
 
-IndexTaskPage.layout = (page: React.ReactNode) => (
-	<AppLayout title={title}>{page}</AppLayout>
-);
+IndexTaskPage.layout = (
+	page: React.ReactNode & { props: IndexTaskPageProps },
+) => {
+	const { intervention } = page.props;
+	return (
+		<AppLayout title={`${intervention.boat.name} - ${intervention.title}`}>
+			{page}
+		</AppLayout>
+	);
+};
 
 export default IndexTaskPage;

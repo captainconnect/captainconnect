@@ -102,7 +102,7 @@ export default class InterventionsController {
 		const interventionSlug = params.interventionSlug;
 		const payload = await request.validateUsing(suspendInterventionValidator);
 		await this.interventionService.suspend(interventionSlug, payload);
-		return response.redirect().back();
+		return response.redirect().toRoute("interventions.index");
 	}
 
 	async resume({ params, response }: HttpContext) {
