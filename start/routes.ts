@@ -165,6 +165,12 @@ router
 					.delete("/:boatSlug", [BoatsController, "destroy"])
 					.as("boats.destroy")
 					.use(middleware.admin());
+				router
+					.patch("/:boatId/thumbnail", [BoatsController, "uploadThumbnail"])
+					.as("boat.thumbnail.store");
+				router
+					.delete("/:boatId/thumbnail", [BoatsController, "deleteThumbnail"])
+					.as("boat.thumbnail.delete");
 			})
 			.prefix("bateaux");
 

@@ -88,3 +88,12 @@ boatValidator.messagesProvider = new SimpleMessagesProvider({
 	"beam.number": "La largeur doit être un nombre.",
 	"beam.min": "La largeur ne peut pas être négative.",
 });
+
+export const uploadThumbnailSchema = vine.object({
+	thumbnail: vine.file({
+		extnames: ["jpg", "jpeg", "png", "webp"],
+		size: "30mb",
+	}),
+});
+
+export const uploadThumbnailValidator = vine.compile(uploadThumbnailSchema);

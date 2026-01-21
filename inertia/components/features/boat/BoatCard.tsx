@@ -16,7 +16,16 @@ export default function BoatCard({ boat }: BoatCardProps) {
 			>
 				<div className="flex justify-between items-center">
 					<div className="flex gap-4">
-						<BoatBadge type={boat.type?.label} />
+						{boat.thumbnailUrl ? (
+							<img
+								className="rounded-xl size-12"
+								src={boat.thumbnailUrl}
+								alt="Miniature du bateau"
+							/>
+						) : (
+							<BoatBadge type={boat.type?.label} />
+						)}
+
 						<div>
 							<p className="text-lg font-semibold">{boat.name}</p>
 							<p className="flex gap-1 text-slate-500">

@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { Boat } from "#types/boat";
 import { getBoatTypeIcon } from "~/app/utils";
 import BoatMap from "~/components/features/boat/BoatMap";
+import UploadBoatThumbnailModal from "~/components/features/boat/UploadBoatThumbnailModal";
 import BoatInterventionList from "~/components/features/intervention/BoatInterventionList";
 import AddProjectMediaModal from "~/components/features/media/AddProjectMediaModal";
 import AppLayout from "~/components/layout/AppLayout";
@@ -39,8 +40,9 @@ const BoatPage = ({ boat }: BoatPageProps) => {
 		contactData,
 		actionButtons,
 		dangerActionsButtons,
-		addProjectMediaModalOpen,
-		setAddProjectMediaModalOpen,
+		currentModal,
+		setCurrentModal,
+		Modals,
 	} = useBoatInformations(boat, setDeleteBoatConfirmationModalOpen);
 
 	const handleDelete = () => {
@@ -57,6 +59,7 @@ const BoatPage = ({ boat }: BoatPageProps) => {
 			<div className="flex flex-col md:flex-row gap-4 mt-6">
 				<div className="flex-2 space-y-4">
 					<Section
+						image={boat.thumbnailUrl}
 						icon={getBoatTypeIcon(boat.type?.label)}
 						title="Informations du bateau"
 						subtitle="Détails techniques et caractéristiques"
@@ -149,9 +152,15 @@ const BoatPage = ({ boat }: BoatPageProps) => {
 				onConfirm={handleDelete}
 			/>
 			<AddProjectMediaModal
-				onClose={() => setAddProjectMediaModalOpen(false)}
-				open={addProjectMediaModalOpen}
+				onClose={() => setCurrentModal(Modals.None)}
+				open={currentModal === Modals.AddMedia}
 				boatId={boat.id}
+			/>
+			<UploadBoatThumbnailModal
+				hasThumbnail={!!boat.thumbnail}
+				boatId={boat.id}
+				open={currentModal === Modals.UpdateThumbnail}
+				onClose={() => setCurrentModal(Modals.None)}
 			/>
 		</>
 	);

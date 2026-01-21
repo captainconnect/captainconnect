@@ -30,7 +30,7 @@ export class InterventionService {
 		return await Intervention.query()
 			.whereNot("status", "DONE")
 			.orderBy("endAt", "desc")
-			.preload("boat", (query) => query.preload("type"))
+			.preload("boat", (query) => query.preload("type").preload("thumbnail"))
 			.preload("taskGroups", (query) => query.preload("tasks"));
 	}
 
