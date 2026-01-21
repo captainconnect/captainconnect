@@ -20,12 +20,10 @@ enum Modals {
 	None,
 	AddMedia,
 	UpdateThumbnail,
+	DeleteBoat,
 }
 
-export default function useBoatInformations(
-	boat: Boat,
-	openModal: (open: true) => void,
-) {
+export default function useBoatInformations(boat: Boat) {
 	const [currentModal, setCurrentModal] = useState<Modals>(Modals.None);
 
 	const boatData: InformationBlockItemProps[] = [
@@ -149,7 +147,7 @@ export default function useBoatInformations(
 		{
 			icon: <Trash size="18" />,
 			text: "Supprimer le bateau",
-			onClick: () => openModal(true),
+			onClick: () => setCurrentModal(Modals.DeleteBoat),
 			variant: "danger",
 		},
 	];

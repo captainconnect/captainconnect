@@ -1,6 +1,5 @@
 import { Head, router } from "@inertiajs/react";
 import { CircleAlert, Contact, MapPin, Wrench } from "lucide-react";
-import { useState } from "react";
 import type { Boat } from "#types/boat";
 import { getBoatTypeIcon } from "~/app/utils";
 import BoatMap from "~/components/features/boat/BoatMap";
@@ -32,9 +31,6 @@ const BoatPage = ({ boat }: BoatPageProps) => {
 		(i) => i.status === "DONE",
 	);
 
-	const [deleteBoatConfirmationModalOpen, setDeleteBoatConfirmationModalOpen] =
-		useState(false);
-
 	const {
 		boatData,
 		contactData,
@@ -43,7 +39,7 @@ const BoatPage = ({ boat }: BoatPageProps) => {
 		currentModal,
 		setCurrentModal,
 		Modals,
-	} = useBoatInformations(boat, setDeleteBoatConfirmationModalOpen);
+	} = useBoatInformations(boat);
 
 	const handleDelete = () => {
 		router.delete(`/bateaux/${boat.slug}`);
@@ -136,8 +132,8 @@ const BoatPage = ({ boat }: BoatPageProps) => {
 				</div>
 			</div>
 			<ConfirmModal
-				open={deleteBoatConfirmationModalOpen}
-				onClose={() => setDeleteBoatConfirmationModalOpen(false)}
+				open={currentModal === Modals.DeleteBoat}
+				onClose={() => setCurrentModal(Modals.None)}
 				title={`Supprimer ${boat.name}`}
 				label="Confirmer"
 				confirmationText={
