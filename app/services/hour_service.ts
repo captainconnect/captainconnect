@@ -5,15 +5,14 @@ export class HourService {
 	async getUserHours(id: number, startAt: Date, endAt: Date) {
 		return await db
 			.from("hours")
-			.join("tasks", "tasks.id", "hours.task_id")
-			.join("task_groups", "task_groups.id", "tasks.task_group_id")
-			.join("interventions", "interventions.id", "task_groups.intervention_id")
+			.join("work_dones", "work_dones.id", "hours.work_done_id")
+			.join("interventions", "interventions.id", "work_dones.intervention_id")
 			.join("boats", "boats.id", "interventions.boat_id")
 			.where("hours.user_id", id)
-			.whereBetween("hours.date", [startAt, endAt])
+			.whereBetween("work_dones.date", [startAt, endAt])
 			.select(
 				"boats.name as boat",
-				db.raw("DATE(hours.date) as day"),
+				db.raw("DATE(work_dones.date) as day"),
 				db.raw("SUM(hours.count) as total_hours"),
 			)
 			.groupBy("boat", "day")
@@ -43,7 +42,7 @@ export class HourService {
 		}));
 	}
 
-	// Formatage de date : "21-01-2025"
+	// Formatage de date : "21/01/2025"
 	private formatDate(date: string) {
 		const d = new Date(date);
 		return d.toLocaleDateString("fr-FR"); // DD/MM/YYYY

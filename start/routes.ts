@@ -270,16 +270,6 @@ router
 					.patch("/:taskId/uncheck", [TasksController, "uncheckTask"])
 					.as("tasks.uncheck");
 
-				// router
-				// 	.post("/:taskId/hour", [TasksController, "addHour"])
-				// 	.as("tasks.addHour");
-				// router
-				// 	.patch("/:taskId/details", [TasksController, "updateDetails"])
-				// 	.as("tasks.updateDetails");
-				// router
-				// 	.delete("/hour/:hourId", [TasksController, "destroyHour"])
-				// 	.as("tasks.hour.destroy");
-
 				router
 					.patch("/:interventionSlug/:taskId/suspend", [
 						TasksController,
