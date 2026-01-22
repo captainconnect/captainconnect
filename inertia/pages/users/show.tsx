@@ -99,7 +99,7 @@ const UserPage = ({ user }: UserPageProps) => {
 					open={modalOpen}
 					label={modals[currentModal].label}
 					confirmationText={modals[currentModal].confirmationText}
-					// confirmationType={modals[currentModal].confirmationType || "danger"}
+					confirmationType={modals[currentModal].confirmationType}
 					onClose={() => setModalOpen(false)}
 					onConfirm={() => {
 						modals[currentModal].action();

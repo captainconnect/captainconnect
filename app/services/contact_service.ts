@@ -17,6 +17,7 @@ export class ContactService {
 			company: payload.company ?? null,
 			email: payload.email ?? null,
 			phone: payload.phone ?? null,
+			note: payload.note ?? null,
 		});
 		await contact.save();
 	}

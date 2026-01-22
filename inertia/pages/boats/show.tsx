@@ -1,13 +1,15 @@
 import { Head, router } from "@inertiajs/react";
-import { CircleAlert, Contact, MapPin, Wrench } from "lucide-react";
+import { CircleAlert, Contact, Contact2, MapPin, Wrench } from "lucide-react";
 import type { Boat } from "#types/boat";
 import { getBoatTypeIcon } from "~/app/utils";
 import BoatMap from "~/components/features/boat/BoatMap";
 import UploadBoatThumbnailModal from "~/components/features/boat/UploadBoatThumbnailModal";
+import ShowContactModal from "~/components/features/contact/modals/ShowContactModal";
 import BoatInterventionList from "~/components/features/intervention/BoatInterventionList";
 import AddProjectMediaModal from "~/components/features/media/AddProjectMediaModal";
 import AppLayout from "~/components/layout/AppLayout";
 import BoatPageHeader from "~/components/layout/boat/BoatPageHeader";
+import Button from "~/components/ui/buttons/Button";
 import EmptyList from "~/components/ui/EmptyList";
 import InformationsBlock from "~/components/ui/InformationsBlock";
 import ConfirmModal from "~/components/ui/modals/Confirm";
@@ -22,6 +24,19 @@ type BoatPageProps = {
 const BoatPage = ({ boat }: BoatPageProps) => {
 	const hasPlace = boat.place !== null && !Number.isNaN(Number(boat.place));
 	const hasPosition = boat.position !== null;
+
+	let positionType: "gps" | "place" | "panne" | null = null;
+
+	if (hasPlace) {
+		const placeNumber = Number(boat.place);
+		if (placeNumber >= 1 && placeNumber <= 9) {
+			positionType = "panne";
+		} else {
+			positionType = "place";
+		}
+	} else if (hasPosition) {
+		positionType = "gps";
+	}
 
 	const inProgressInterventions = boat.interventions.filter(
 		(i) => i.status === "IN_PROGRESS" || i.status === "SUSPENDED",
@@ -85,7 +100,7 @@ const BoatPage = ({ boat }: BoatPageProps) => {
 					{(hasPlace || hasPosition) && (
 						<Section
 							title="Position dans le port"
-							subtitle="Basé sur le quai/panne/position"
+							subtitle={`Basé sur ${positionType === "panne" ? "la panne" : positionType === "place" ? "la place" : positionType === "gps" ? "la position GPS" : "aucun"}`}
 							icon={<MapPin />}
 						>
 							<BoatMap boat={boat} />
@@ -119,6 +134,13 @@ const BoatPage = ({ boat }: BoatPageProps) => {
 								display="BLOCK"
 								data={contactData}
 							/>
+							<Button
+								onClick={() => setCurrentModal(Modals.Contact)}
+								className="mt-4"
+								icon={<Contact2 size="20" />}
+							>
+								Ouvrir
+							</Button>
 						</Section>
 					)}
 
@@ -158,6 +180,13 @@ const BoatPage = ({ boat }: BoatPageProps) => {
 				open={currentModal === Modals.UpdateThumbnail}
 				onClose={() => setCurrentModal(Modals.None)}
 			/>
+			{boat.contact && (
+				<ShowContactModal
+					open={currentModal === Modals.Contact}
+					onClose={() => setCurrentModal(Modals.None)}
+					contact={boat.contact}
+				/>
+			)}
 		</>
 	);
 };

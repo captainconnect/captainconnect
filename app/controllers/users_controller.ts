@@ -13,9 +13,8 @@ export default class UsersController {
 		protected roleService: RoleService,
 	) {}
 
-	async index({ inertia, auth }: HttpContext) {
-		const { id } = await auth.authenticate();
-		const users = await this.userService.getAll(id);
+	async index({ inertia }: HttpContext) {
+		const users = await this.userService.getAll();
 		const roles = await this.roleService.getAll();
 		return inertia.render("users/index", {
 			users,

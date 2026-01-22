@@ -1,5 +1,20 @@
 # 📝 Notes de mise à jour
 
+## **1.3.6**
+
+#### 🚀 Nouvelles fonctionnalités
+- Affichage modal contact depuis bateau et intervention avec possibilité de mettre une note
+- Filtrage + pagination dans la liste des interventions
+  - Filtre par état de l'intervention
+  - Tri par priorité ou date de création
+
+#### 🛠️ Corrections
+- Sécurité supplémentaire pour la suppression d'un utilisateur
+- Label position GPS, Panne ou place dans la carte suivant la donnée
+- Tableau des heures : Première colonne et première ligne sticky et changement ordre des dates
+- Afficher Dany dans la liste des utilisateurs
+- Scroll automatiquement en haut sur la page d'intervention
+
 ## **1.3.5**
 
 #### 🚀 Nouvelles fonctionnalités

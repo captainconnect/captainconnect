@@ -11,10 +11,10 @@ import { DriveService } from "./drive_service.js";
 export class UserService {
 	constructor(protected driveService: DriveService) {}
 
-	async getAll(authenticatedUserId: number) {
+	async getAll() {
 		return await User.query()
-			.whereNot("id", 1)
-			.andWhereNot("id", authenticatedUserId)
+			// .whereNot("id", 1)
+			// .andWhereNot("id", authenticatedUserId)
 			.orderBy("firstname", "asc")
 			.preload("role")
 			.preload("avatar");

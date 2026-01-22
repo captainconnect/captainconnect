@@ -44,34 +44,35 @@ export default function UserHourTable({ user }: HoursTableProps) {
 
 		fetch(url.toString())
 			.then((res) => res.json())
-			.then((data) => {
-				setHours(data);
-			});
+			.then((data) => setHours(data));
 	};
 
-	// Toutes les dates (colonnes)
 	const allDates = useMemo(() => {
-		return Array.from(
+		const unique = Array.from(
 			new Set(hours.flatMap((b) => b.hours.map((h) => h.date))),
-		).sort();
+		);
+
+		const toTime = (s: string) => {
+			const [dd, mm, yyyy] = s.split("/").map(Number);
+			return new Date(yyyy, mm - 1, dd).getTime();
+		};
+
+		return unique.sort((a, b) => toTime(a) - toTime(b)).reverse();
 	}, [hours]);
 
-	// Helper: valeur (bateau, date)
 	const getCount = useCallback((boat: BoatHours, date: string) => {
 		const found = boat.hours.find((h) => h.date === date);
 		return found ? Number(found.count) : 0;
 	}, []);
 
-	// Totaux colonnes (par jour)
 	const totalsByDate = useMemo(() => {
 		const totals: Record<string, number> = {};
 		for (const date of allDates) totals[date] = 0;
 
 		for (const boat of hours) {
-			for (const date of allDates) {
-				totals[date] += getCount(boat, date);
-			}
+			for (const date of allDates) totals[date] += getCount(boat, date);
 		}
+
 		return totals;
 	}, [hours, allDates, getCount]);
 
@@ -83,48 +84,38 @@ export default function UserHourTable({ user }: HoursTableProps) {
 	const exportToExcel = () => {
 		if (hours.length === 0) return;
 
-		// En-têtes
 		const header = ["Bateau", ...allDates, "Total Bateau"];
 
-		// Lignes bateaux
 		const rows = hours.map((boat) => {
 			const rowTotal = allDates.reduce(
-				(sum, date) =>
-					sum + (boat.hours.find((h) => h.date === date)?.count ?? 0),
+				(sum, date) => sum + getCount(boat, date),
 				0,
 			);
 
 			return [
 				boat.boat,
-				...allDates.map(
-					(date) => boat.hours.find((h) => h.date === date)?.count ?? 0,
-				),
+				...allDates.map((date) => getCount(boat, date)),
 				rowTotal,
 			];
 		});
 
-		// Ligne "Total jour"
 		const totalRow = [
 			"Total jour",
 			...allDates.map((date) =>
-				hours.reduce(
-					(sum, boat) =>
-						sum + (boat.hours.find((h) => h.date === date)?.count ?? 0),
-					0,
-				),
+				hours.reduce((sum, boat) => sum + getCount(boat, date), 0),
 			),
-			rows.reduce((sum, r) => sum + Number(r.at(-1)), 0),
+			rows.reduce((sum, r) => sum + Number(r.at(-1) ?? 0), 0),
 		];
 
 		const sheetData = [header, ...rows, totalRow];
-
-		// Création du workbook
 		const worksheet = XLSX.utils.aoa_to_sheet(sheetData);
 		const workbook = XLSX.utils.book_new();
 		XLSX.utils.book_append_sheet(workbook, worksheet, "Heures");
 
-		// Téléchargement
-		XLSX.writeFile(workbook, `heures_${user.firstname}_${user.lastname}.xlsx`);
+		XLSX.writeFile(
+			workbook,
+			`heures_${user.firstname}_${user.lastname}_${startAt}-${endAt}.xlsx`,
+		);
 	};
 
 	return (
@@ -159,24 +150,24 @@ export default function UserHourTable({ user }: HoursTableProps) {
 				</div>
 			</div>
 
-			<div className="overflow-x-auto max-h-96 rounded-lg border border-gray-300">
-				<table className="table-auto w-full border-collapse rounded-lg overflow-hidden">
-					<thead className="bg-gray-100 sticky top-0 z-10">
+			<div className="relative overflow-auto max-h-96 rounded-lg border border-gray-300">
+				<table className="min-w-max w-full border-separate border-spacing-0">
+					<thead>
 						<tr>
-							<th className="border border-gray-300 px-4 py-2 text-left">
-								Bateau
+							<th className="sticky top-0 left-0 z-40 bg-gray-100 border border-gray-300 px-4 py-2 text-left">
+								Bateau | Date
 							</th>
 
 							{allDates.map((date) => (
 								<th
 									key={date}
-									className="border border-gray-300 px-4 py-2 text-center"
+									className="sticky top-0 z-30 bg-gray-100 border border-gray-300 px-4 py-2 text-center"
 								>
 									{date}
 								</th>
 							))}
 
-							<th className="border border-gray-300 px-4 py-2 text-center">
+							<th className="sticky top-0 z-30 bg-gray-100 border border-gray-300 px-4 py-2 text-center">
 								Total Bateau
 							</th>
 						</tr>
@@ -191,7 +182,7 @@ export default function UserHourTable({ user }: HoursTableProps) {
 
 							return (
 								<tr key={boat.boat}>
-									<td className="border border-gray-300 px-4 py-2 font-semibold">
+									<td className="sticky left-0 z-20 bg-white border border-gray-300 px-4 py-2 font-semibold whitespace-nowrap">
 										{boat.boat}
 									</td>
 
@@ -211,22 +202,21 @@ export default function UserHourTable({ user }: HoursTableProps) {
 							);
 						})}
 
-						{/* Ligne Total jour */}
-						<tr className="bg-gray-100 sticky bottom-0 z-10">
-							<td className="border border-gray-300 px-4 py-2 font-semibold">
+						<tr>
+							<td className="sticky bottom-0 left-0 z-40 bg-gray-100 border border-gray-300 px-4 py-2 font-semibold whitespace-nowrap">
 								Total jour
 							</td>
 
 							{allDates.map((date) => (
 								<td
 									key={date}
-									className="border border-gray-300 px-4 py-2 text-center font-semibold"
+									className="sticky bottom-0 z-30 bg-gray-100 border border-gray-300 px-4 py-2 text-center font-semibold"
 								>
 									{`${totalsByDate[date] ?? 0}h`}
 								</td>
 							))}
 
-							<td className="border border-gray-300 px-4 py-2 text-center font-bold">
+							<td className="sticky bottom-0 z-30 bg-gray-100 border border-gray-300 px-4 py-2 text-center font-bold">
 								{`Total période : ${grandTotal}h`}
 							</td>
 						</tr>

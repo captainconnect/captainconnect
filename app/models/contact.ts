@@ -19,6 +19,9 @@ export default class Contact extends BaseModel {
 	@column()
 	declare phone: string | null;
 
+	@column()
+	declare note: string | null;
+
 	@column.dateTime({ autoCreate: true })
 	declare createdAt: DateTime;
 
