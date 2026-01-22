@@ -5,6 +5,7 @@ type EditableFieldProps = InputHTMLAttributes<HTMLInputElement> & {
 	editing: boolean;
 	value: string;
 	error?: string;
+	undefinedLabel?: string;
 };
 
 export default function EditableField({
@@ -12,6 +13,7 @@ export default function EditableField({
 	error,
 	value,
 	onChange,
+	undefinedLabel = "Non défini",
 	...props
 }: EditableFieldProps) {
 	if (editing) {
@@ -22,5 +24,5 @@ export default function EditableField({
 			</div>
 		);
 	}
-	return <p>{value ? value : "Non défini"}</p>;
+	return <p>{value ? value : undefinedLabel}</p>;
 }

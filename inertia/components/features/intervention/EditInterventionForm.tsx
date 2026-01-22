@@ -3,7 +3,9 @@ import { Wrench, X } from "lucide-react";
 import type { Intervention, InterventionPriority } from "#types/intervention";
 import Button from "~/components/ui/buttons/Button";
 import Input from "~/components/ui/inputs/Input";
+import Select from "~/components/ui/inputs/Select";
 import Textarea from "~/components/ui/inputs/TextArea";
+import { priorityOptions } from "./CreateInterventionForm";
 
 type EditInterventionFormProps = {
 	intervention: Intervention;
@@ -43,6 +45,7 @@ export default function EditInterventionForm({
 		e.preventDefault();
 		put(`/interventions/${intervention.slug}/modifier`);
 	};
+
 	return (
 		<form onSubmit={submit} className="space-y-4">
 			<div className="flex flex-col gap-4">
@@ -80,6 +83,16 @@ export default function EditInterventionForm({
 						value={data.endAt}
 						onChange={(e) => setData("endAt", e.target.value)}
 						error={errors.endAt}
+					/>
+					<Select
+						options={priorityOptions}
+						label="Priorité"
+						name="priority"
+						allowNull={false}
+						onChange={(e) =>
+							setData("priority", e.target.value as InterventionPriority)
+						}
+						value={data.priority}
 					/>
 				</div>
 			</div>

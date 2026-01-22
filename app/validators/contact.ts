@@ -14,6 +14,7 @@ export const contactSchema = vine.object({
 		})
 		.optional()
 		.requiredIfMissing("email"),
+	note: vine.string().optional(),
 });
 
 export const contactValidator = vine.compile(contactSchema);

@@ -1,14 +1,35 @@
 import { useForm } from "@inertiajs/react";
 import { Wrench } from "lucide-react";
 import type { Boat } from "#types/boat";
+import type { InterventionPriority } from "#types/intervention";
 import Button from "~/components/ui/buttons/Button";
 import Input from "~/components/ui/inputs/Input";
+import Select from "~/components/ui/inputs/Select";
 import Textarea from "~/components/ui/inputs/TextArea";
 import AddTaskBoard from "./AddTaskBoard";
 
 type CreateInterventionFormProps = {
 	boat: Boat;
 };
+
+export const priorityOptions = [
+	{
+		id: "LOW",
+		label: "Basse",
+	},
+	{
+		id: "NORMAL",
+		label: "Normale",
+	},
+	{
+		id: "HIGH",
+		label: "Haute",
+	},
+	{
+		id: "EXTREME",
+		label: "Très haute",
+	},
+];
 
 export default function CreateInterventionForm({
 	boat,
@@ -18,6 +39,7 @@ export default function CreateInterventionForm({
 		description: "",
 		startAt: "",
 		endAt: "",
+		priority: "NORMAL",
 		taskGroups: [],
 	});
 
@@ -30,6 +52,7 @@ export default function CreateInterventionForm({
 		if (data.taskGroups.length === 0) return;
 		post(`/interventions/nouvelle/${boat.slug}`);
 	};
+
 	return (
 		<form onSubmit={submit} className="space-y-4">
 			<div className="flex flex-col gap-4">
@@ -67,6 +90,16 @@ export default function CreateInterventionForm({
 						value={data.endAt}
 						onChange={(e) => setData("endAt", e.target.value)}
 						error={errors.endAt}
+					/>
+					<Select
+						options={priorityOptions}
+						label="Priorité"
+						name="priority"
+						allowNull={false}
+						onChange={(e) =>
+							setData("priority", e.target.value as InterventionPriority)
+						}
+						value={data.priority}
 					/>
 				</div>
 			</div>

@@ -55,6 +55,7 @@ export interface CreateInterventionPayload {
 	description: string | null;
 	startAt: Date | null;
 	endAt: Date | null;
+	priority: InterventionPriority;
 	taskGroups: {
 		id?: number;
 		name: string;
@@ -71,6 +72,7 @@ export interface UpdateInterventionPayload {
 	description: string | null;
 	startAt: Date | null;
 	endAt: Date | null;
+	priority: InterventionPriority;
 }
 
 export interface AddHourPayload {

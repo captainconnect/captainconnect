@@ -26,12 +26,23 @@ export class InterventionService {
 		}));
 	}
 
-	async getOpenInterventions() {
-		return await Intervention.query()
-			.whereNot("status", "DONE")
-			.orderBy("endAt", "desc")
+	async getOpenInterventions(page: number, sort: string, state?: string) {
+		const query = Intervention.query()
 			.preload("boat", (query) => query.preload("type").preload("thumbnail"))
-			.preload("taskGroups", (query) => query.preload("tasks"));
+			.preload("taskGroups", (query) => query.preload("tasks"))
+			.orderBy(sort, "asc");
+
+		if (state) {
+			query.andWhere("status", state);
+		} else {
+			query.whereNot("status", "DONE");
+		}
+
+		const rows = await query.paginate(page, 10);
+		return {
+			data: rows.all(),
+			meta: rows.getMeta(),
+		};
 	}
 
 	async getBySlug(slug: string) {
@@ -66,6 +77,7 @@ export class InterventionService {
 			description: payload.description,
 			startAt: payload.startAt,
 			endAt: payload.endAt,
+			priority: payload.priority,
 		});
 
 		for (const taskGroup of payload.taskGroups) {
@@ -87,6 +99,7 @@ export class InterventionService {
 			description: payload.description,
 			startAt: payload.startAt,
 			endAt: payload.endAt,
+			priority: payload.priority,
 		});
 
 		const newSlug = (await intervention.save()).slug;

@@ -16,6 +16,7 @@ export const createInterventionSchema = vine.object({
 	startAt: vine.date().beforeField("endAt").nullable(),
 	endAt: vine.date().afterField("startAt").nullable(),
 	taskGroups: vine.array(taskGroupSchema),
+	priority: vine.enum(["LOW", "NORMAL", "HIGH", "EXTREME"]),
 });
 
 export const createInterventionValidator = vine.compile(
@@ -27,6 +28,7 @@ export const updateInterventionSchema = vine.object({
 	description: vine.string().nullable(),
 	startAt: vine.date().beforeField("endAt").nullable(),
 	endAt: vine.date().afterField("startAt").nullable(),
+	priority: vine.enum(["LOW", "NORMAL", "HIGH", "EXTREME"]),
 });
 
 export const updateInterventionValidator = vine.compile(

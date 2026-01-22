@@ -7,9 +7,10 @@ import {
 	ShieldPlus,
 	Trash,
 } from "lucide-react";
+import type { ReactNode } from "react";
 import type { ActionButton } from "#types/ui/section";
-
 import type { User } from "#types/user";
+import type { ConfirmationType } from "~/components/ui/modals/Confirm";
 
 export enum UserActionsModals {
 	ResetPassword,
@@ -20,12 +21,21 @@ export enum UserActionsModals {
 	DemoteUser,
 }
 
+type UserActionModalConfig = {
+	title: string;
+	label: string;
+	icon: ReactNode;
+	action: () => void;
+	confirmationText: string;
+	confirmationType?: ConfirmationType;
+};
+
 export default function useUserActions(
 	user: User,
 	setCurrentModal: (m: UserActionsModals) => void,
 	setModalOpen: (open: boolean) => void,
 ) {
-	const modals = {
+	const modals: Record<UserActionsModals, UserActionModalConfig> = {
 		[UserActionsModals.ResetPassword]: {
 			title: "Réinitialiser le mot de passe",
 			label: "Confirmer",
