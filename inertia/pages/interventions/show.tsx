@@ -1,4 +1,5 @@
 import { Head, router } from "@inertiajs/react";
+import { useEffect } from "react";
 import type { Intervention } from "#types/intervention";
 import InterventionOverview from "~/components/features/intervention/InterventionOverview";
 import AppLayout from "~/components/layout/AppLayout";
@@ -26,6 +27,10 @@ const InterventionPage = ({
 	const handleDelete = () => {
 		router.delete(`/interventions/${intervention.slug}`);
 	};
+
+	useEffect(() => {
+		document.getElementById("app-main")?.scrollTo(0, 0);
+	}, []);
 
 	return (
 		<>

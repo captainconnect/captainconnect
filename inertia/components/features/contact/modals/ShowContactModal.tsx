@@ -34,6 +34,7 @@ export default function ShowContactModal({
 		fullName: "",
 		email: "",
 		phone: "",
+		note: "",
 	});
 
 	useEffect(() => {
@@ -43,6 +44,7 @@ export default function ShowContactModal({
 				fullName: contact.fullName || "",
 				email: contact.email || "",
 				phone: contact.phone || "",
+				note: contact.note || "",
 			});
 		}
 	}, [contact, setData]);
@@ -53,7 +55,7 @@ export default function ShowContactModal({
 	};
 
 	const handleSave = () => {
-		put(`contacts/update/${contact?.id}`, {
+		put(`/contacts/update/${contact?.id}`, {
 			onSuccess: () => setEditing(false),
 		});
 	};
@@ -64,6 +66,7 @@ export default function ShowContactModal({
 			fullName: contact?.fullName,
 			email: contact?.email,
 			phone: contact?.phone,
+			note: contact?.note,
 		});
 		setEditing(false);
 	};
@@ -140,6 +143,21 @@ export default function ShowContactModal({
 						autoComplete="email"
 						autoCapitalize="off"
 						error={errors.email}
+					/>
+				</div>
+				<div className="flex gap-2 items-center">
+					<Edit className="text-slate-400" />
+					<EditableField
+						name="note"
+						onChange={(e) => setData("note", e.target.value)}
+						editing={editing}
+						value={data.note}
+						placeholder="Ajouter une note"
+						type="text"
+						autoComplete="off"
+						autoCapitalize="off"
+						error={errors.note}
+						undefinedLabel="Aucune note"
 					/>
 				</div>
 			</div>

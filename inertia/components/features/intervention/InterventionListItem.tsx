@@ -6,18 +6,39 @@ import useIntervention from "~/hooks/useIntervention";
 
 type InterventionListItemProps = {
 	intervention: Intervention;
+	showPriority: boolean;
 };
 
 export default function InterventionListItem({
 	intervention,
+	showPriority,
 }: InterventionListItemProps) {
 	const { status, createdAt, endAt, progress, totalTasks, doneTasks } =
 		useIntervention(intervention);
 
+	const borderColor =
+		intervention.priority === "EXTREME"
+			? "border-red-600"
+			: intervention.priority === "HIGH"
+				? "border-orange-300"
+				: intervention.priority === "LOW"
+					? "border-gray-200"
+					: "border-blue-200";
+
+	const bgColor =
+		intervention.priority === "EXTREME"
+			? "bg-red-600/10"
+			: intervention.priority === "HIGH"
+				? "bg-orange-300/10"
+				: intervention.priority === "LOW"
+					? "bg-gray-200/10"
+					: "bg-blue-200/10";
+
 	return (
 		<li>
 			<Link
-				className="flex flex-col gap-6 bg-white rounded-xl border border-gray-200 p-6 cursor-pointer hover:shadow-sm transition active:scale-[99%] w-full"
+				preserveScroll={false}
+				className={`flex flex-col gap-6 ${showPriority ? bgColor : "bg-white"} rounded-xl border-3 ${showPriority ? borderColor : "border-gray-200"} p-6 cursor-pointer hover:shadow-sm transition active:scale-[99%] w-full`}
 				href={`/interventions/${intervention.slug}`}
 			>
 				<div className="flex flex-col md:flex-row justify-between md:items-center gap-4">

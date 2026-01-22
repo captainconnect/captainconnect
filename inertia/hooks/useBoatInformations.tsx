@@ -1,5 +1,6 @@
 import {
 	Building2,
+	Edit,
 	Files,
 	FileUp,
 	Hash,
@@ -21,6 +22,7 @@ enum Modals {
 	AddMedia,
 	UpdateThumbnail,
 	DeleteBoat,
+	Contact,
 }
 
 export default function useBoatInformations(boat: Boat) {
@@ -84,6 +86,11 @@ export default function useBoatInformations(boat: Boat) {
 			icon: <Mail size="18" />,
 			label: "Email",
 			value: boat.contact?.email,
+		},
+		{
+			icon: <Edit size="18" />,
+			label: "Note",
+			value: boat.contact?.note,
 		},
 	];
 

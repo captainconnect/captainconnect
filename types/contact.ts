@@ -4,6 +4,7 @@ export type Contact = {
 	fullName: string;
 	email?: string;
 	phone?: string;
+	note?: string;
 };
 
 export interface ContactPayload {
@@ -11,4 +12,5 @@ export interface ContactPayload {
 	fullName: string;
 	phone?: string;
 	email?: string;
+	note?: string;
 }

@@ -4,6 +4,7 @@ import {
 	Calendar,
 	Check,
 	Clock,
+	Edit,
 	Files,
 	FileUp,
 	LoaderCircle,
@@ -257,7 +258,23 @@ export default function useIntervention(
 			label: "Email",
 			value: boat.contact?.email,
 		},
+		{
+			icon: <Edit size="18" />,
+			label: "Note",
+			value: boat.contact?.note,
+		},
 	];
+
+	const priority =
+		intervention.priority === "LOW"
+			? "Basse"
+			: intervention.priority === "NORMAL"
+				? "Normale"
+				: intervention.priority === "HIGH"
+					? "Haute"
+					: intervention.priority === "EXTREME"
+						? "Très haute"
+						: "Inconnue";
 
 	const interventionData: InformationBlockItemProps[] = [
 		{
@@ -266,7 +283,7 @@ export default function useIntervention(
 		},
 		{
 			label: "Priorité",
-			value: intervention.priority,
+			value: priority,
 		},
 		{
 			icon: <Calendar size="18" />,

@@ -26,7 +26,11 @@ export default function AppLayout({ children, title }: AppLayoutProps) {
 
 	const routes: NavLinkRoute[] = [
 		{ label: "Tableau de bord", route: "/", icon: <LayoutDashboard /> },
-		{ label: "Interventions", route: "/interventions", icon: <Wrench /> },
+		{
+			label: "Interventions",
+			route: "/interventions?sort=priority",
+			icon: <Wrench />,
+		},
 		{ label: "Bateaux", route: "/bateaux", icon: <Ship /> },
 	];
 	if (currentUser.isAdmin) {

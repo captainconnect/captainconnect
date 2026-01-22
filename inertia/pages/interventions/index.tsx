@@ -1,26 +1,32 @@
+import type { SimplePaginatorMetaKeys } from "@adonisjs/lucid/types/querybuilder";
 import { Head } from "@inertiajs/react";
 import { Wrench } from "lucide-react";
+import { useState } from "react";
 import type { Intervention } from "#types/intervention";
 import InterventionList from "~/components/features/intervention/InterventionList";
 import AppLayout from "~/components/layout/AppLayout";
-import PageHeader from "~/components/layout/PageHeader";
+import InterventionIndexHeader from "~/components/layout/intervention/InterventionIndexHeader";
 import EmptyList from "~/components/ui/EmptyList";
 
 type InterventionIndexPageProps = {
 	interventions: Intervention[];
+	meta: SimplePaginatorMetaKeys;
 };
 
 const title = "Interventions";
 
 const InterventionsIndexPage = ({
 	interventions,
+	meta,
 }: InterventionIndexPageProps) => {
+	const [showPriority, setShowPriority] = useState(false);
 	return (
 		<>
 			<Head title={title} />
-			<PageHeader
-				title="Liste des interventions"
-				subtitle="Interventions en cours"
+			<InterventionIndexHeader
+				meta={meta}
+				setShowPriority={setShowPriority}
+				showPriority={showPriority}
 			/>
 			{interventions.length === 0 ? (
 				<EmptyList
@@ -29,7 +35,10 @@ const InterventionsIndexPage = ({
 				d'un bateau."
 				/>
 			) : (
-				<InterventionList interventions={interventions} />
+				<InterventionList
+					showPriority={showPriority}
+					interventions={interventions}
+				/>
 			)}
 		</>
 	);

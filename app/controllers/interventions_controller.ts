@@ -24,19 +24,24 @@ export default class InterventionsController {
 		protected mediaService: MediaService,
 	) {}
 
-	async index({ inertia }: HttpContext) {
-		const interventions = await this.interventionService.getOpenInterventions();
+	async index({ request, inertia }: HttpContext) {
+		const page = request.input("page", 1);
+		const sort = request.input("sort", "priority");
+		const state = request.input("state");
+		const { data, meta } = await this.interventionService.getOpenInterventions(
+			page,
+			sort,
+			state,
+		);
 
 		return inertia.render("interventions/index", {
-			interventions,
+			interventions: data,
+			meta: meta,
+			page,
 		});
 	}
 
-	async show({ params, inertia, auth }: HttpContext) {
-		const { id } = await auth.authenticate();
-
-		const users = await this.userService.getAll(id);
-
+	async show({ params, inertia }: HttpContext) {
 		const interventionSlug = params.interventionSlug;
 
 		const intervention =
@@ -44,7 +49,6 @@ export default class InterventionsController {
 
 		return inertia.render("interventions/show", {
 			intervention,
-			users,
 			mediasCount: intervention.$extras.medias_count,
 		});
 	}
