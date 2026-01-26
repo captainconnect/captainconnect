@@ -26,11 +26,9 @@ export default class InterventionsController {
 
 	async index({ request, inertia }: HttpContext) {
 		const page = request.input("page", 1);
-		const sort = request.input("sort", "priority");
 		const state = request.input("state");
 		const { data, meta } = await this.interventionService.getOpenInterventions(
 			page,
-			sort,
 			state,
 		);
 

@@ -13,8 +13,6 @@ import {
 	Pause,
 	Phone,
 	Play,
-	Sailboat,
-	Ship,
 	Stamp,
 	Trash,
 } from "lucide-react";
@@ -29,6 +27,7 @@ enum Modals {
 	ConfirmDeletion,
 	AddMediaModal,
 	SuspendIntervention,
+	Contact,
 }
 
 export default function useIntervention(
@@ -156,19 +155,6 @@ export default function useIntervention(
 			link: {
 				type: "NAVIGATE",
 				href: `/fichiers/${boat.slug}?intervention_id=${intervention.id}`,
-			},
-		},
-		{
-			icon:
-				boat.type?.label === "Voilier" || boat.type?.label === "Catamaran" ? (
-					<Sailboat size="18" />
-				) : (
-					<Ship size="18" />
-				),
-			text: "Accéder à la page du bateau",
-			link: {
-				type: "NAVIGATE",
-				href: `/bateaux/${boat.slug}`,
 			},
 		},
 		...(intervention.status === "DONE"

@@ -42,3 +42,16 @@ export const suspendInterventionSchema = vine.object({
 export const suspendInterventionValidator = vine.compile(
 	suspendInterventionSchema,
 );
+
+export const orderingInterventionSchema = vine.object({
+	interventions: vine.array(
+		vine.object({
+			id: vine.number(),
+			index: vine.number(),
+		}),
+	),
+});
+
+export const orderingInterventionValidator = vine.compile(
+	orderingInterventionSchema,
+);

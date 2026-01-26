@@ -56,11 +56,6 @@ export default function UserMenu() {
 					<span className="text-sm font-semibold">
 						{authenticatedUser?.firstname} {authenticatedUser?.lastname}
 					</span>
-					{authenticatedUser?.role && (
-						<span className="text-xs text-gray-500">
-							{authenticatedUser?.role.name}
-						</span>
-					)}
 				</div>
 			</button>
 

@@ -48,6 +48,9 @@ export default class Intervention extends BaseModel {
 	@column()
 	declare suspensionReason: string | null;
 
+	@column()
+	declare order: number;
+
 	@computed()
 	get totalHours(): number {
 		return (

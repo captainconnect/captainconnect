@@ -1,9 +1,10 @@
 import { Head, useForm } from "@inertiajs/react";
-import { Ship, X } from "lucide-react";
+import { Ship, UserPen, X } from "lucide-react";
 import { useState } from "react";
 import type { Boat, BoatConstructor, BoatType, Coordinate } from "#types/boat";
 import type { Contact } from "#types/contact";
 import ManualSetPositionCard from "~/components/features/boat/ManualSetPositionCard";
+import CreateContactModal from "~/components/features/contact/modals/CreateContactModal";
 import AppLayout from "~/components/layout/AppLayout";
 import Button from "~/components/ui/buttons/Button";
 import CardHeader from "~/components/ui/CardHeader";
@@ -25,6 +26,10 @@ const EditBoatPage = ({
 	boatConstructors,
 }: EditPageProps) => {
 	const [manualSet, setManualSet] = useState(!!boat.position);
+
+	const [showCreateContactModal, setShowCreateContactModal] = useState(false);
+
+	const [contactList, setContactList] = useState<Contact[]>(contacts);
 
 	const currentPos = boat.position
 		? ([boat.position[0], boat.position[1]] as Coordinate)
@@ -54,6 +59,10 @@ const EditBoatPage = ({
 		put(`/bateaux/${boat.slug}`);
 	};
 
+	const [selectedContactId, setSelectedContactId] = useState<number | "">(
+		data.contact_id as number,
+	);
+
 	return (
 		<>
 			<Head title={`Modifier - ${boat.name}`} />
@@ -65,7 +74,7 @@ const EditBoatPage = ({
 					subtitle="Complétez les informations du bateau"
 				/>
 				<form onSubmit={submit} className="space-y-4">
-					<div className="flex flex-col md:flex-row gap-4">
+					<div className="flex flex-col md:flex-row gap-4 items-end">
 						<Input
 							required
 							label="Nom du bateau *"
@@ -78,12 +87,23 @@ const EditBoatPage = ({
 						<Select
 							name="contact_id"
 							label="Attribuer un contact"
-							value={data.contact_id}
-							options={contacts.map((c) => ({
+							value={selectedContactId}
+							onChange={(e) =>
+								setSelectedContactId(
+									e.target.value ? Number(e.target.value) : "",
+								)
+							}
+							options={contactList.map((c) => ({
 								id: c.id,
 								label: c.company ? `${c.fullName} - ${c.company}` : c.fullName,
 							}))}
-							onChange={(e) => setData("contact_id", e.target.value)}
+						/>
+						<Button
+							type="button"
+							variant="secondary"
+							icon={<UserPen size="18" />}
+							onClick={() => setShowCreateContactModal(true)}
+							className="size-12"
 						/>
 					</div>
 					<div className="flex flex-col md:flex-row gap-4">
@@ -226,6 +246,15 @@ const EditBoatPage = ({
 					</div>
 				</form>
 			</section>
+			<CreateContactModal
+				open={showCreateContactModal}
+				onClose={() => setShowCreateContactModal(false)}
+				onCreated={(contact) => {
+					setContactList((prev) => [...prev, contact]);
+					setSelectedContactId(contact.id);
+					setData("contact_id", contact.id);
+				}}
+			/>
 		</>
 	);
 };

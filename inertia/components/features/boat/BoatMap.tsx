@@ -1,5 +1,6 @@
 import { Circle, MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import { icon } from "leaflet";
 import type { Boat, Coordinate } from "#types/boat";
 import { SailMarkerIcon, ShipMarkerIcon } from "~/app/LeafletMarkerIcon";
 import { placesCoordinates } from "~/app/places";
@@ -27,6 +28,12 @@ export default function BoatMap({ boat }: BoatMapProps) {
 		boatPosition = boat.position as Coordinate;
 	}
 
+	const thumbnailIcon = icon({
+		iconUrl: boat.thumbnailUrl ?? "",
+		iconSize: [40, 40],
+		className: "rounded-full border-2 border-white",
+	});
+
 	return (
 		<div className="w-full h-96 rounded-3xl mt-4">
 			<MapContainer
@@ -53,9 +60,12 @@ export default function BoatMap({ boat }: BoatMapProps) {
 				) : (
 					<Marker
 						icon={
-							boat.type?.label === "Voilier" || boat.type?.label === "Catamaran"
-								? SailMarkerIcon
-								: ShipMarkerIcon
+							boat.thumbnailUrl
+								? thumbnailIcon
+								: boat.type?.label === "Voilier" ||
+										boat.type?.label === "Catamaran"
+									? SailMarkerIcon
+									: ShipMarkerIcon
 						}
 						position={boatPosition}
 					>
@@ -63,6 +73,13 @@ export default function BoatMap({ boat }: BoatMapProps) {
 							<b>{boat.name}</b>
 							<br />
 							{placeNumber && `Place ${placeNumber}`}
+							{boat.thumbnailUrl && (
+								<img
+									className="rounded mt-1"
+									src={boat.thumbnailUrl}
+									alt="Thumbnail du bateau"
+								/>
+							)}
 						</Popup>
 					</Marker>
 				)}

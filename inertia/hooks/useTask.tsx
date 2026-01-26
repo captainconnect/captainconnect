@@ -26,13 +26,6 @@ type UseTaskProps = {
 export default function useTask({ task, interventionSlug }: UseTaskProps) {
 	const [currentModal, setCurrentModal] = useState<Modals>(Modals.None);
 
-	const formatTechnicians = (names: string[]) => {
-		if (names.length === 0) return "";
-		if (names.length === 1) return names[0];
-		if (names.length === 2) return `${names[0]} et ${names[1]}`;
-		return `${names.slice(0, -1).join(", ")} et ${names.at(-1)}`;
-	};
-
 	const getWorkDones = () => {
 		if (!task.workDones) return [];
 
@@ -43,9 +36,12 @@ export default function useTask({ task, interventionSlug }: UseTaskProps) {
 				wd.hours
 					?.map((h) => h.user)
 					.filter(Boolean)
-					.map((t) => `${t.firstname} ${t.lastname}`) ?? [];
-
-			const technicianLabel = formatTechnicians(technicians);
+					.map((t) => ({
+						id: t.id,
+						label: `${t.firstname} ${t.lastname}`,
+						avatar: t.avatarUrl,
+						initials: `${t.firstname[0]}${t.lastname[0]}`,
+					})) ?? [];
 
 			// ✅ ids de tous les techniciens sélectionnés (uniques)
 			const technician_ids = Array.from(
@@ -67,9 +63,9 @@ export default function useTask({ task, interventionSlug }: UseTaskProps) {
 				updatedAt: wd.updatedAt,
 
 				hour_count: hourCount,
-				technicians: technicianLabel,
+				technicians,
 
-				technician_ids, // 👈 ajouté
+				technician_ids,
 			};
 		});
 	};

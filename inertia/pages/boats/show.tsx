@@ -1,5 +1,6 @@
 import { Head, router } from "@inertiajs/react";
-import { CircleAlert, Contact, Contact2, MapPin, Wrench } from "lucide-react";
+import { CircleAlert, Contact, MapPin, Phone, Wrench } from "lucide-react";
+import { useEffect, useState } from "react";
 import type { Boat } from "#types/boat";
 import { getBoatTypeIcon } from "~/app/utils";
 import BoatMap from "~/components/features/boat/BoatMap";
@@ -48,6 +49,7 @@ const BoatPage = ({ boat }: BoatPageProps) => {
 
 	const {
 		boatData,
+		moreBoatData,
 		contactData,
 		actionButtons,
 		dangerActionsButtons,
@@ -59,6 +61,12 @@ const BoatPage = ({ boat }: BoatPageProps) => {
 	const handleDelete = () => {
 		router.delete(`/bateaux/${boat.slug}`);
 	};
+
+	useEffect(() => {
+		document.getElementById("app-main")?.scrollTo(0, 0);
+	}, []);
+
+	const [showMoreBoatData, setShowMoreBoatData] = useState(false);
 
 	return (
 		<>
@@ -76,22 +84,32 @@ const BoatPage = ({ boat }: BoatPageProps) => {
 						subtitle="Détails techniques et caractéristiques"
 					>
 						<InformationsBlock data={boatData} />
-						<hr className="text-gray-200 m-5" />
-						<div className="space-y-2">
-							<p className="text-slate-500 flex items-center gap-2">
-								<CircleAlert size="14" /> Notes & Observations
-							</p>
-							{boat.note ? (
-								<p className="font-semibold">{boat.note}</p>
-							) : (
-								<p className="font-semibold">Aucune notes</p>
-							)}
+						<div className={showMoreBoatData ? "block" : "hidden"}>
+							<InformationsBlock data={moreBoatData} />
+							<hr className="text-gray-200 m-5" />
+							<div className="space-y-2">
+								<p className="text-slate-500 flex items-center gap-2">
+									<CircleAlert size="14" /> Notes & Observations
+								</p>
+								{boat.note ? (
+									<p className="font-semibold">{boat.note}</p>
+								) : (
+									<p className="font-semibold">Aucune notes</p>
+								)}
+							</div>
 						</div>
+						<Button
+							variant="secondary"
+							className="mt-4"
+							onClick={() => setShowMoreBoatData(!showMoreBoatData)}
+						>
+							{`Afficher ${showMoreBoatData ? "moins" : "plus"} d'infos`}
+						</Button>
 					</Section>
 					{inProgressInterventions.length !== 0 && (
 						<Section
 							title="Interventions"
-							subtitle="Interventions en cours/suspendues/non-facturées"
+							subtitle="Interventions en cours"
 							icon={<Wrench />}
 						>
 							<BoatInterventionList interventions={inProgressInterventions} />
@@ -124,24 +142,34 @@ const BoatPage = ({ boat }: BoatPageProps) => {
 				</div>
 				<div className="flex-1 space-y-4">
 					{boat.contact && (
-						<Section
-							title="Contact associé"
-							subtitle="Informations du contact"
-							icon={<Contact />}
+						<button
+							onClick={() => setCurrentModal(Modals.Contact)}
+							type="button"
+							className="block w-full cursor-pointer"
 						>
-							<InformationsBlock
-								showUndefined={false}
-								display="BLOCK"
-								data={contactData}
-							/>
-							<Button
-								onClick={() => setCurrentModal(Modals.Contact)}
-								className="mt-4"
-								icon={<Contact2 size="20" />}
+							<Section
+								className="text-left"
+								title="Contact"
+								subtitle="Informations du contact"
+								icon={<Contact />}
 							>
-								Ouvrir
-							</Button>
-						</Section>
+								<InformationsBlock
+									showUndefined={false}
+									display="BLOCK"
+									data={contactData}
+								/>
+								<a
+									href={`tel:${boat.contact.phone}`}
+									onClick={(e) => {
+										e.stopPropagation();
+									}}
+									className="flex items-center justify-center gap-2 font-semibold rounded-2xl border-2 transition active:scale-95 cursor-pointer text-sm w-auto max-h-10  px-4 py-2 sm:px-5 bg-primary border-transparent text-white hover:bg-primary-hover mt-4"
+								>
+									<Phone size="20" />
+									Appeler
+								</a>
+							</Section>
+						</button>
 					)}
 
 					<ActionSection title="Actions" buttons={actionButtons} />

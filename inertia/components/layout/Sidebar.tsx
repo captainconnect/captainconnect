@@ -24,9 +24,6 @@ export default function Sidebar({
 				<Title />
 				<div className="flex flex-col p-3 gap-4">
 					<div className="h-px bg-white/10" />
-					<p className="px-2 text-xs uppercase tracking-wide text-white/50">
-						Navigation
-					</p>
 					<nav>
 						<ul className="flex flex-col mt-2 gap-7 justify-center">
 							{routes.map((r) => (
