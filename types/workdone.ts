@@ -32,6 +32,11 @@ export type FormattedWorkDone = {
 	createdAt: Date;
 	updatedAt: Date;
 	hour_count: number;
-	technicians: string;
+	technicians: {
+		id: number;
+		label: string;
+		avatar?: string;
+		initials: string;
+	}[];
 	technician_ids: number[];
 };

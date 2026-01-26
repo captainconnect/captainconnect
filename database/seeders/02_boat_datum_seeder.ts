@@ -28,6 +28,7 @@ export default class extends BaseSeeder {
 			{ label: "Runabout" },
 			{ label: "Voilier de course" },
 			{ label: "Catamaran de croisière" },
+			{ label: "Autre" },
 		]);
 
 		await BoatConstructor.createMany([

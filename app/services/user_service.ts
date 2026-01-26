@@ -13,8 +13,6 @@ export class UserService {
 
 	async getAll() {
 		return await User.query()
-			// .whereNot("id", 1)
-			// .andWhereNot("id", authenticatedUserId)
 			.orderBy("firstname", "asc")
 			.preload("role")
 			.preload("avatar");

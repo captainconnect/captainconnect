@@ -1,8 +1,10 @@
+import db from "@adonisjs/lucid/services/db";
 import Boat from "#models/boat";
 import Intervention from "#models/intervention";
 import TaskGroup from "#models/task_group";
 import type {
 	CreateInterventionPayload,
+	OrderingInterventionsPayload,
 	SuspendPayload,
 	UpdateInterventionPayload,
 } from "#types/intervention";
@@ -26,11 +28,31 @@ export class InterventionService {
 		}));
 	}
 
-	async getOpenInterventions(page: number, sort: string, state?: string) {
+	async getInterventionsForOrder() {
+		return await Intervention.query()
+			.preload("boat")
+			.whereNot("status", "DONE")
+			.orderBy("order", "asc");
+	}
+
+	async orderInterventions(payload: OrderingInterventionsPayload) {
+		const list = payload.interventions;
+		if (!Array.isArray(list)) return;
+
+		await db.transaction(async (trx) => {
+			for (const item of list) {
+				await Intervention.query({ client: trx })
+					.where("id", item.id)
+					.update({ order: item.index });
+			}
+		});
+	}
+
+	async getOpenInterventions(page: number, state?: string) {
 		const query = Intervention.query()
 			.preload("boat", (query) => query.preload("type").preload("thumbnail"))
 			.preload("taskGroups", (query) => query.preload("tasks"))
-			.orderBy(sort, "asc");
+			.orderBy("order", "asc");
 
 		if (state) {
 			query.andWhere("status", state);
@@ -49,7 +71,11 @@ export class InterventionService {
 		return await Intervention.query()
 			.where("slug", slug)
 			.preload("boat", (query) =>
-				query.preload("contact").preload("boatConstructor").preload("type"),
+				query
+					.preload("contact")
+					.preload("boatConstructor")
+					.preload("type")
+					.preload("thumbnail"),
 			)
 			.preload("workDones", (query) => query.preload("hours")) // 👈 ICI
 			.preload("taskGroups", (query) =>

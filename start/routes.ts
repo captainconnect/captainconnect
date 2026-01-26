@@ -11,6 +11,8 @@ import app from "@adonisjs/core/services/app";
 import router from "@adonisjs/core/services/router";
 import { middleware } from "./kernel.js";
 
+const AdministrationController = () =>
+	import("#controllers/administration_controller");
 const InterventionsController = () =>
 	import("#controllers/interventions_controller");
 const BoatsController = () => import("#controllers/boats_controller");
@@ -329,7 +331,25 @@ router
 				router.get("/", [MediaController, "index"]).as("medias.index");
 				router.get("/:boatSlug", [MediaController, "show"]).as("medias.show");
 			})
-			.prefix("fichiers")
+			.prefix("fichiers");
+
+		router
+			.group(() => {
+				router.get("/", [AdministrationController, "index"]).as("admin.index");
+				router
+					.get("/interventions", [
+						AdministrationController,
+						"interventionOrganisation",
+					])
+					.as("admin.organise.interventions");
+				router
+					.patch("/interventions/ordering", [
+						AdministrationController,
+						"interventionOrdering",
+					])
+					.as("admin.interventions.ordering");
+			})
+			.prefix("administration")
 			.use(middleware.admin());
 	})
 	.use(middleware.auth());

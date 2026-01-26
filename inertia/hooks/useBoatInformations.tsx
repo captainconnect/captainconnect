@@ -45,6 +45,9 @@ export default function useBoatInformations(boat: Boat) {
 			label: "Modèle",
 			value: boat.model,
 		},
+	];
+
+	const moreBoatData: InformationBlockItemProps[] = [
 		{
 			icon: <Hash size="14" />,
 			label: "MMSI",
@@ -100,6 +103,7 @@ export default function useBoatInformations(boat: Boat) {
 			text: "Ajouter/remplacer miniature",
 			variant: "accent",
 			onClick: () => setCurrentModal(Modals.UpdateThumbnail),
+			mustBeAdmin: true,
 		},
 		{
 			icon: <FileUp size="18" />,
@@ -161,6 +165,7 @@ export default function useBoatInformations(boat: Boat) {
 
 	return {
 		boatData,
+		moreBoatData,
 		contactData,
 		actionButtons,
 		dangerActionsButtons,

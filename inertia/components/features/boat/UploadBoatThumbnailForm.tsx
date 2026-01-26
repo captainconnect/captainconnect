@@ -168,7 +168,7 @@ const UploadBoatThumbnailForm = forwardRef<
 				)}
 
 				{preview && isImage && (
-					<div className="mt-3 overflow-hidden rounded-lg bg-zinc-950 p-2">
+					<div className="mt-3 overflow-hidden rounded-lg bg-zinc-950 p-2 flex items-center justify-center">
 						<ReactCrop
 							crop={crop}
 							onChange={(_, percentCrop) => setCrop(percentCrop)}

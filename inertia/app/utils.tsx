@@ -1,4 +1,11 @@
-import { Container, Fish, Sailboat, Ship, Waves } from "lucide-react";
+import {
+	Building2,
+	Container,
+	Fish,
+	Sailboat,
+	Ship,
+	Waves,
+} from "lucide-react";
 
 export const slugify = (str: string) => {
 	return str
@@ -29,6 +36,7 @@ const boatTypeIconMap = {
 	Runabout: <Ship />,
 	"Voilier de course": <Sailboat />,
 	"Catamaran de croisière": <Sailboat />,
+	Autre: <Building2 />,
 } as const;
 
 type BoatTypeLabel = keyof typeof boatTypeIconMap;

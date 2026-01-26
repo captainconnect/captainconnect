@@ -1,3 +1,4 @@
+import { Link } from "@inertiajs/react";
 import { Edit, Wrench } from "lucide-react";
 import type { Intervention } from "#types/intervention";
 import BackButton from "~/components/ui/buttons/BackButton";
@@ -17,9 +18,22 @@ export default function InterventionHeader({
 			<div className="flex w-full flex-col md:flex-row md:items-center gap-4">
 				<BackButton route="/interventions" />
 				<div className="flex gap-4 items-center">
-					<IconBadge icon={<Wrench />} />
+					{boat.thumbnailUrl ? (
+						<a href={boat.thumbnailUrl} target="_blank">
+							<img
+								className="size-14 rounded-xl"
+								src={boat.thumbnailUrl}
+								alt="Thumbnail du bateau"
+							/>
+						</a>
+					) : (
+						<IconBadge icon={<Wrench />} />
+					)}
+
 					<div className="flex flex-col m-2 md:m-0 justify-around md:block">
-						<p className="text-3xl font-bold">{boat.name}</p>
+						<Link href={`/bateaux/${boat.slug}`} className="text-3xl font-bold">
+							{boat.name}
+						</Link>
 						<p className="text-slate-500">{intervention.title}</p>
 					</div>
 				</div>

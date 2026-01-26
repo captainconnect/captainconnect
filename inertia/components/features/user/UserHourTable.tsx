@@ -155,7 +155,7 @@ export default function UserHourTable({ user }: HoursTableProps) {
 					<thead>
 						<tr>
 							<th className="sticky top-0 left-0 z-40 bg-gray-100 border border-gray-300 px-4 py-2 text-left">
-								Bateau | Date
+								Bateaux
 							</th>
 
 							{allDates.map((date) => (
@@ -168,7 +168,7 @@ export default function UserHourTable({ user }: HoursTableProps) {
 							))}
 
 							<th className="sticky top-0 z-30 bg-gray-100 border border-gray-300 px-4 py-2 text-center">
-								Total Bateau
+								Total
 							</th>
 						</tr>
 					</thead>
@@ -204,7 +204,7 @@ export default function UserHourTable({ user }: HoursTableProps) {
 
 						<tr>
 							<td className="sticky bottom-0 left-0 z-40 bg-gray-100 border border-gray-300 px-4 py-2 font-semibold whitespace-nowrap">
-								Total jour
+								Total
 							</td>
 
 							{allDates.map((date) => (
@@ -217,7 +217,7 @@ export default function UserHourTable({ user }: HoursTableProps) {
 							))}
 
 							<td className="sticky bottom-0 z-30 bg-gray-100 border border-gray-300 px-4 py-2 text-center font-bold">
-								{`Total période : ${grandTotal}h`}
+								{`${grandTotal}h`}
 							</td>
 						</tr>
 					</tbody>

@@ -47,7 +47,9 @@ export default function Section({
 						}
 					>
 						<p className="text-lg font-semibold">{title}</p>
-						{subtitle && <p className="text-slate-500">{subtitle}</p>}
+						{subtitle && (
+							<p className="text-slate-500 hidden md:block">{subtitle}</p>
+						)}
 					</div>
 				</div>
 				{button && button}
