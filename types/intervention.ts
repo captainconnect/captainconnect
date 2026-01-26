@@ -20,6 +20,7 @@ export type Intervention = {
 	progress: number;
 	isProgressComplete: boolean;
 	suspensionReason: string | null;
+	order: number;
 };
 
 export type Task = {
@@ -117,4 +118,13 @@ export interface UpdateTaskPayload {
 
 export interface SuspendPayload {
 	reason: string;
+}
+
+export interface OrderingInterventionsPayload {
+	interventions: OrderingInterventionItem[];
+}
+
+export interface OrderingInterventionItem {
+	id: number;
+	index: number;
 }

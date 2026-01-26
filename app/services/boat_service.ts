@@ -22,11 +22,9 @@ export class BoatService {
 	async getForMediaList() {
 		return await Boat.query()
 			.select("id", "name", "slug")
-			.whereHas("medias", (query) => {
-				query.select("id");
-			})
 			.withCount("medias")
 			.orderBy("name", "asc")
+			.preload("thumbnail")
 			.pojo();
 	}
 

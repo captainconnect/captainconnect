@@ -1,16 +1,35 @@
 # 📝 Notes de mise à jour
 
+## **1.4.0**
+
+#### 🚀 Nouvelles fonctionnalités
+- Organisation de l'ordre d'affichage des interventions
+- Affichage modal contact depuis une intervention
+- Nouveau type de bateau "Autre"
+- Photo du bateau directement dans la carte
+- Bouton pour appeler le contact sur la carte contact
+- Ouvrir carte contact en cliquant dessus
+- Ouvrir les tâches en cliquant sur la carte "Détails de l'intervention" dans interventions
+- Ouvrir la page du bateau en cliquant sur la carte "Détails du bateau" dans interventions
+
+#### 🛠️ Corrections
+- Label position GPS, Panne ou place dans la carte suivant la donnée sur intervention
+- Possibilité de créer un nouveau contact depuis le formulaire de modification d'un bateau
+- Affichage des couleurs des priorités en permanence
+- Photo des techniciens dans la fiche de travaux effectués
+- Bug du cropper corrigé
+
 ## **1.3.6**
 
 #### 🚀 Nouvelles fonctionnalités
-- Affichage modal contact depuis bateau et intervention avec possibilité de mettre une note
+- Affichage modal contact depuis bateau avec possibilité de mettre une note
 - Filtrage + pagination dans la liste des interventions
   - Filtre par état de l'intervention
   - Tri par priorité ou date de création
 
 #### 🛠️ Corrections
 - Sécurité supplémentaire pour la suppression d'un utilisateur
-- Label position GPS, Panne ou place dans la carte suivant la donnée
+- Label position GPS, Panne ou place dans la carte suivant la donnée sur bateau
 - Tableau des heures : Première colonne et première ligne sticky et changement ordre des dates
 - Afficher Dany dans la liste des utilisateurs
 - Scroll automatiquement en haut sur la page d'intervention

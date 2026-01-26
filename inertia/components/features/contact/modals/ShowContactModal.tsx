@@ -120,6 +120,7 @@ export default function ShowContactModal({
 				<div className="flex gap-2 items-center">
 					<Phone className="text-slate-400" />
 					<EditableField
+						link={`tel:${data.phone}`}
 						name="phone"
 						onChange={(e) => setData("phone", e.target.value)}
 						editing={editing}
@@ -134,6 +135,7 @@ export default function ShowContactModal({
 				<div className="flex gap-2 items-center">
 					<Mail className="text-slate-400" />
 					<EditableField
+						link={`mailto:${data.email}`}
 						name="email"
 						onChange={(e) => setData("email", e.target.value)}
 						editing={editing}

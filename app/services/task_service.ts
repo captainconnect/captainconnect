@@ -24,7 +24,7 @@ export class TaskService {
 
 				// 👇 tous les participants
 				q.preload("hours", (hq) => {
-					hq.preload("user");
+					hq.preload("user", (q) => q.preload("avatar"));
 				});
 			})
 			.firstOrFail();

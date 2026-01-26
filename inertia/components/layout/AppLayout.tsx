@@ -4,6 +4,7 @@ import {
 	LayoutDashboard,
 	Ship,
 	SquareUserRound,
+	UserLock,
 	UserRoundCog,
 	Wrench,
 } from "lucide-react";
@@ -28,21 +29,21 @@ export default function AppLayout({ children, title }: AppLayoutProps) {
 		{ label: "Tableau de bord", route: "/", icon: <LayoutDashboard /> },
 		{
 			label: "Interventions",
-			route: "/interventions?sort=priority",
+			route: "/interventions",
 			icon: <Wrench />,
 		},
-		{ label: "Bateaux", route: "/bateaux", icon: <Ship /> },
 	];
 	if (currentUser.isAdmin) {
 		routes.push(
+			{ label: "Bateaux", route: "/bateaux", icon: <Ship /> },
 			{ label: "Contacts", route: "/contacts", icon: <SquareUserRound /> },
 			{ label: "Fichiers", route: "/fichiers", icon: <Folder /> },
 			{ label: "Utilisateurs", route: "/utilisateurs", icon: <UserRoundCog /> },
-			// {
-			// 	label: "Administration",
-			// 	route: "/administration",
-			// 	icon: <UserLock />,
-			// },
+			{
+				label: "Administration",
+				route: "/administration",
+				icon: <UserLock />,
+			},
 		);
 	}
 
