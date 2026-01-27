@@ -31,17 +31,14 @@
 
   <h1>Fiche d’intervention — {{ title }}</h1>
   <div class="muted small">
-    @if(meta?.slug)
-      {{ meta.slug }}
-    @endif
     @if(meta?.status)
-      — <span class="badge">{{ meta.status }}</span>
+      <span class="badge">{{ meta.status === "IN_PROGRESS" ? "En cours" : meta.status === "SUSPENDED" ? "Suspendue" : "Terminé" }}</span>
     @endif
     @if(meta?.priority)
-      <span class="badge">{{ meta.priority }}</span>
+      <span class="badge">Priorité {{ meta.priority === "LOW" ? "basse" : meta.priority === "NORMAL" ? "normale" : meta.priority === "HIGH" ? "haute" : "très haute"   }}</span>
     @endif
     @if(meta?.progress !== undefined)
-      <span class="badge">{{ meta.progress }}%</span>
+      <span class="badge">Progression : {{ meta.progress }}%</span>
     @endif
   </div>
 
