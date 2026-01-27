@@ -1,5 +1,12 @@
 # 📝 Notes de mise à jour
 
+## **1.5.3**
+
+#### 🛠️ Corrections
+- Fiche interventions, infos utiles
+
+---
+
 ## **1.5.2**
 
 #### 🛠️ Corrections
