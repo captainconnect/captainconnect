@@ -1,5 +1,12 @@
 # 📝 Notes de mise à jour
 
+## **1.5.2**
+
+#### 🛠️ Corrections
+- Bug affichage tableau de bord
+
+---
+
 ## **1.5.1**
 
 #### 🛠️ Corrections

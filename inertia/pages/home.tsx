@@ -31,20 +31,13 @@ const HomePage = ({ lastVersion }: { lastVersion: Version | null }) => {
 
 				{lastVersion ? (
 					<div className="bg-white shadow-sm rounded-xl border border-gray-100">
-						{/* Padding adaptatif : p-4 sur petit écran, p-8 sur desktop.
-                L'overflow-x-auto est CRUCIAL pour les tableaux générés par Quill sur mobile.
-            */}
-						<div className="p-5 sm:p-8 lg:p-10 overflow-visible">
-							{" "}
-							{/* On peut retirer overflow-x-auto si on veut forcer le wrap */}
+						<div className="p-5 sm:p-8 lg:p-10">
 							<article
-								className="
-    prose break-all
-
+								className="prose max-w-none w-full break-normal whitespace-normal
   "
 								/* biome-ignore lint/security/noDangerouslySetInnerHtml: Contenu admin */
 								dangerouslySetInnerHTML={{
-									__html: lastVersion.content,
+									__html: lastVersion.content.replace(/&nbsp;/g, " "),
 								}}
 							/>
 						</div>
