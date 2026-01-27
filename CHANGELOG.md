@@ -12,6 +12,7 @@
 - Suppression des placeholders dans le formulaire de travaux effectués
 - Suppression du label Filtrer les interventions pour utilisateur
 - Ancienne valeur de la tâche lors de la création d'une tâche remise à zéro
+- Inversement titre inter et nom du bateau dans la modification de l'ordre des inters
 
 ---
 
