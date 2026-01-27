@@ -38,3 +38,25 @@ export function formatHours(hours: Hour[] = []) {
 
 	return minutes === 0 ? `${h}h` : `${h}h${String(minutes).padStart(2, "0")}`;
 }
+
+export function formatDecimalHours(total: number): string {
+	if (!total || total <= 0) return "-";
+
+	const h = Math.floor(total);
+	// Calcul précis de la partie décimale
+	const decimal = Math.round((total - h) * 100) / 100;
+
+	const minutesMap: Record<number, number> = {
+		0: 0,
+		0.25: 15,
+		0.5: 30,
+		0.75: 45,
+	};
+
+	const minutes =
+		minutesMap[decimal] !== undefined
+			? minutesMap[decimal]
+			: Math.round(decimal * 60);
+
+	return minutes === 0 ? `${h}h` : `${h}h${String(minutes).padStart(2, "0")}`;
+}

@@ -1,5 +1,15 @@
 # 📝 Notes de mise à jour
 
+## **1.5.1**
+
+#### 🛠️ Corrections
+- Bug label intervention suspendue même lorsqu'il n'y a pas d'intervention
+- Affichage total d'heures par techniciens sur la fiche d'intervention
+- Plus de placeholders sur modification travaux effectués
+- Responsive tableau de bord
+
+---
+
 ## **1.5.0**
 
 #### 🚀 Nouvelles fonctionnalités

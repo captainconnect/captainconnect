@@ -1,7 +1,6 @@
 import db from "@adonisjs/lucid/services/db";
 import { DateTime } from "luxon";
 import Boat from "#models/boat";
-import type Hour from "#models/hour";
 import Intervention from "#models/intervention";
 import TaskGroup from "#models/task_group";
 import type {
@@ -12,7 +11,7 @@ import type {
 } from "#types/intervention";
 import {
 	formatDate,
-	formatHours,
+	formatDecimalHours,
 	getInitials,
 } from "../helpers/intervention.js";
 
@@ -182,7 +181,13 @@ export class InterventionService {
 			})
 			.firstOrFail();
 
-		// 1) Travaux demandés (groupés)
+		// Objet pour accumuler le temps de travail réel par technicien
+		const technicianTotals: Record<
+			number,
+			{ name: string; totalHours: number }
+		> = {};
+
+		// 1) Transformation des travaux demandés (Requested Works)
 		const requestedWorks = intervention.taskGroups.map((tg) => ({
 			id: tg.id,
 			name: tg.name,
@@ -194,16 +199,38 @@ export class InterventionService {
 			})),
 		}));
 
-		// 2) Travaux effectués (table rows)
-		// On “aplatit” : taskGroups -> tasks -> workDones
+		// 2) Transformation des travaux effectués (Performed Works)
 		const performedWorks = intervention.taskGroups.flatMap((tg) =>
 			tg.tasks.flatMap((t) =>
 				(t.workDones ?? []).map((wd) => {
-					const users = (wd.hours ?? [])
-						.map((h: Hour) => h.user)
-						.filter(Boolean);
+					const hoursEntries = wd.hours ?? [];
 
-					// initials uniques (évite CM CM CM si 3 heures)
+					// --- LOGIQUE TABLEAU DU HAUT : Temps chronologique de la tâche ---
+					// Si A et B travaillent 1h15 ensemble, la tâche a duré 1h15. On prend le Max.
+					const maxLineHours =
+						hoursEntries.length > 0
+							? Math.max(...hoursEntries.map((h) => Number(h.count ?? 0)))
+							: 0;
+
+					const rowHoursFormatted =
+						maxLineHours > 0 ? formatDecimalHours(maxLineHours) : "-";
+
+					// --- LOGIQUE RÉCAPITULATIF : Charge de travail par technicien ---
+					hoursEntries.forEach((h) => {
+						if (h.user) {
+							const userId = h.user.id;
+							if (!technicianTotals[userId]) {
+								technicianTotals[userId] = {
+									name: `${h.user.firstname} ${h.user.lastname}` || "Inconnu",
+									totalHours: 0,
+								};
+							}
+							// On additionne les heures propres à chaque technicien
+							technicianTotals[userId].totalHours += Number(h.count ?? 0);
+						}
+					});
+
+					const users = hoursEntries.map((h) => h.user).filter(Boolean);
 					const initials = Array.from(new Set(users.map(getInitials))).join(
 						" ",
 					);
@@ -213,8 +240,7 @@ export class InterventionService {
 						initials,
 						workDone: wd.workDone ?? "",
 						usedMaterials: wd.usedMaterials ?? "-",
-						hours: formatHours(wd.hours ?? []),
-						// optionnel: contexte
+						hours: rowHoursFormatted, // Temps de la tâche (Max)
 						taskGroupName: tg.name,
 						taskName: t.name,
 					};
@@ -222,16 +248,31 @@ export class InterventionService {
 			),
 		);
 
-		// Optionnel : tri final (si besoin)
+		// 3) Construction du tableau récapitulatif des techniciens
+		const technicianTable = Object.values(technicianTotals)
+			.map((tech) => ({
+				name: tech.name,
+				total: formatDecimalHours(tech.totalHours),
+				rawHours: tech.totalHours,
+			}))
+			.sort((a, b) => b.rawHours - a.rawHours); // Tri par importance de charge
+
+		// Tri chronologique final des lignes du tableau principal
 		performedWorks.sort((a, b) => {
 			const da = DateTime.fromFormat(a.date, "dd/LL/yyyy").toMillis();
 			const db = DateTime.fromFormat(b.date, "dd/LL/yyyy").toMillis();
 			return da - db;
 		});
 
-		// ✅ OBJET FINAL PRÊT
-		const data = {
+		// ✅ OBJET FINAL RETOURNÉ
+		return {
 			title: intervention.title,
+			meta: {
+				slug: intervention.slug,
+				status: intervention.status,
+				priority: intervention.priority,
+				progress: intervention.progress,
+			},
 			boat: {
 				name: intervention.boat?.name ?? null,
 				contact: intervention.boat?.contact
@@ -242,11 +283,9 @@ export class InterventionService {
 						}
 					: null,
 			},
-
 			requestedWorks,
 			performedWorks,
+			technicianTable,
 		};
-
-		return data;
 	}
 }

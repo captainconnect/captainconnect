@@ -8,6 +8,16 @@ type BoatCardProps = {
 };
 
 export default function BoatCard({ boat }: BoatCardProps) {
+	const interventions = boat.interventions;
+	let status = null;
+	if (interventions.length !== 0) {
+		if (interventions[0].status === "IN_PROGRESS") {
+			status = true;
+		} else {
+			status = false;
+		}
+	}
+
 	return (
 		<li>
 			<Link
@@ -50,17 +60,20 @@ export default function BoatCard({ boat }: BoatCardProps) {
 							</p>
 						</div>
 					</div>
-					{boat.interventions.length !== 0 &&
-					boat.interventions[0].status === "IN_PROGRESS" ? (
-						<span className="flex font-semibold px-2 gap-2 items-center text-white p-1 text-sm rounded-full bg-primary">
-							<Wrench size="18" />{" "}
-							<span className="hidden md:block">Intervention en cours</span>
-						</span>
+					{status !== null ? (
+						status === true ? (
+							<span className="flex font-semibold px-2 gap-2 items-center text-white p-1 text-sm rounded-full bg-primary">
+								<Wrench size="18" />{" "}
+								<span className="hidden md:block">Intervention en cours</span>
+							</span>
+						) : (
+							<span className="flex font-semibold px-2 gap-2 items-center text-white p-1 text-sm rounded-full bg-gray-500">
+								<Wrench size="18" />{" "}
+								<span className="hidden md:block">Intervention suspendue</span>
+							</span>
+						)
 					) : (
-						<span className="flex font-semibold px-2 gap-2 items-center text-white p-1 text-sm rounded-full bg-gray-500">
-							<Wrench size="18" />{" "}
-							<span className="hidden md:block">Intervention suspendue</span>
-						</span>
+						""
 					)}
 				</div>
 			</Link>
