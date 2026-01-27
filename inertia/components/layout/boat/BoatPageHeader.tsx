@@ -14,6 +14,15 @@ export default function BoatPageHeader({
 	boat,
 	inProgressInterventions,
 }: BoatPageHeaderProps) {
+	let status = null;
+	if (inProgressInterventions.length !== 0) {
+		if (inProgressInterventions[0].status === "IN_PROGRESS") {
+			status = true;
+		} else {
+			status = false;
+		}
+	}
+
 	return (
 		<div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
 			<div className="flex flex-col md:flex-row md:items-center gap-4">
@@ -26,19 +35,22 @@ export default function BoatPageHeader({
 							: "Aucune intervention"}
 					</p>
 				</div>
-				{inProgressInterventions.length !== 0 &&
-				inProgressInterventions[0].status === "IN_PROGRESS" ? (
-					<Link
-						title="Accéder à la dernière intervention en cours"
-						href={`/interventions/${inProgressInterventions[0].slug}`}
-						className="justify-center flex font-semibold px-2 gap-2 items-center text-white p-1 text-sm rounded-full bg-primary hover:bg-primary-hover transition"
-					>
-						<Wrench size="18" /> Intervention en cours
-					</Link>
+				{status !== null ? (
+					status === true ? (
+						<Link
+							title="Accéder à la dernière intervention en cours"
+							href={`/interventions/${inProgressInterventions[0].slug}`}
+							className="justify-center flex font-semibold px-2 gap-2 items-center text-white p-1 text-sm rounded-full bg-primary hover:bg-primary-hover transition"
+						>
+							<Wrench size="18" /> Intervention en cours
+						</Link>
+					) : (
+						<p className="justify-center flex font-semibold px-2 gap-2 items-center text-white p-1 text-sm rounded-full bg-gray-500">
+							Intervention suspendue
+						</p>
+					)
 				) : (
-					<p className="justify-center flex font-semibold px-2 gap-2 items-center text-white p-1 text-sm rounded-full bg-gray-500">
-						Intervention suspendue
-					</p>
+					""
 				)}
 			</div>
 			<Button
