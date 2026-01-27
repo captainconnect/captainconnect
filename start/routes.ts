@@ -347,6 +347,10 @@ router
 				router
 					.get("/tableau-de-bord", [AdministrationController, "dashboard"])
 					.as("admin.dashboard");
+				router.patch("/dashboard/:dashboardId", [
+					AdministrationController,
+					"dashboardUpdate",
+				]);
 				router
 					.post("/dashboard", [AdministrationController, "dashboardStore"])
 					.as("admin.dashboard.store");

@@ -31,11 +31,42 @@ export default class AdministrationController {
 		});
 	}
 
+	/**
+	 * CRÉER une nouvelle version
+	 */
 	async dashboardStore({ request, response }: HttpContext) {
-		const data = request.only(["name", "content"]);
+		const data = request.only(["content"]);
 
-		// On crée la version (par défaut isActive est false via la migration)
-		await DashboardVersion.create(data);
+		// Génération du nom formaté : "27/01/2026 20:15"
+		const now = new Date();
+		const formattedName = `Version du ${now.toLocaleDateString("fr-FR")} à ${now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}`;
+
+		await DashboardVersion.create({
+			name: formattedName,
+			content: data.content,
+		});
+
+		return response.redirect().back();
+	}
+
+	/**
+	 * METTRE À JOUR (Écraser) une version existante
+	 */
+	async dashboardUpdate({ params, request, response }: HttpContext) {
+		const dashboardId = params.dashboardId;
+		const { content } = request.only(["content"]);
+
+		const version = await DashboardVersion.findOrFail(dashboardId);
+
+		// On met à jour uniquement le contenu
+		version.content = content;
+
+		// Optionnel : Si tu veux aussi mettre à jour le nom pour refléter
+		// l'heure de la dernière modification "écrasée" :
+		// const now = new Date();
+		// version.name = `Version du ${now.toLocaleDateString('fr-FR')} (MàJ à ${now.toLocaleTimeString('fr-FR')})`;
+
+		await version.save();
 
 		return response.redirect().back();
 	}
@@ -51,9 +82,8 @@ export default class AdministrationController {
 			await DashboardVersion.query({ client: trx }).update({ isActive: false });
 
 			// 2. On active la version cible
-			const version = await DashboardVersion.findOrFail(dashboardId, {
-				client: trx,
-			});
+			const version = await DashboardVersion.findOrFail(dashboardId);
+			version.useTransaction(trx);
 			version.isActive = true;
 			await version.save();
 		});
@@ -61,22 +91,27 @@ export default class AdministrationController {
 		return response.redirect().back();
 	}
 
-	/**
-	 * Supprimer une version avec sécurité
-	 */
 	async dashboardDelete({ params, response }: HttpContext) {
 		const dashboardId = params.dashboardId;
+
+		// On compte pour éviter de supprimer la dernière version existante
+		const totalVersions = await DashboardVersion.query().count("* as total");
+		if (totalVersions[0].$extras.total <= 1) {
+			// Optionnel : envoyer un message d'erreur via session
+			return response.redirect().back();
+		}
 
 		const versionToDelete = await DashboardVersion.findOrFail(dashboardId);
 		const wasActive = versionToDelete.isActive;
 
 		await versionToDelete.delete();
 
-		// SI on a supprimé la version active, on active la toute dernière existante
+		// SI on a supprimé la version active, on active la toute dernière par date
 		if (wasActive) {
 			const latest = await DashboardVersion.query()
 				.orderBy("created_at", "desc")
 				.first();
+
 			if (latest) {
 				latest.isActive = true;
 				await latest.save();

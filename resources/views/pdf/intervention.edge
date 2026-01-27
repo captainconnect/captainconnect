@@ -19,12 +19,16 @@
     .nowrap { white-space: nowrap; }
     .page-break { page-break-before: always; }
     tr { page-break-inside: avoid; }
+    
+    /* Style spécifique pour le tableau des techniciens */
+    .tech-table { width: auto; min-width: 250px; margin-top: 10px; border: 1px solid #eee; }
+    .tech-table th, .tech-table td { padding: 4px 8px; border: 1px solid #eee; }
+    .text-right { text-align: right; }
   </style>
 </head>
 
 <body>
 
-  <!-- HEADER -->
   <h1>Fiche d’intervention — {{ title }}</h1>
   <div class="muted small">
     @if(meta?.slug)
@@ -62,7 +66,6 @@
     </div>
   </div>
 
-  <!-- REQUESTED WORKS -->
   <h2>Travaux demandés</h2>
 
   @if(!requestedWorks || requestedWorks.length === 0)
@@ -87,7 +90,6 @@
 
   <div class="page-break"></div>
 
-  <!-- PERFORMED WORKS -->
   <h2>Travaux effectués</h2>
 
   <table>
@@ -131,6 +133,28 @@
       @endif
     </tbody>
   </table>
+
+  @if(technicianTable && technicianTable.length > 0)
+    <div style="margin-top: 30px;">
+      <h2 style="margin-bottom: 5px;">Récapitulatif des heures</h2>
+      <table class="tech-table">
+        <thead>
+          <tr>
+            <th>Technicien</th>
+            <th class="text-right">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          @each(tech in technicianTable)
+            <tr>
+              <td>{{ tech.name }}</td>
+              <td class="text-right"><strong>{{ tech.total }}</strong></td>
+            </tr>
+          @endeach
+        </tbody>
+      </table>
+    </div>
+  @endif
 
 </body>
 </html>

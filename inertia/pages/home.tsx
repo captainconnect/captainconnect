@@ -30,15 +30,22 @@ const HomePage = ({ lastVersion }: { lastVersion: Version | null }) => {
 				</header>
 
 				{lastVersion ? (
-					<div className="bg-white shadow-sm rounded-xl border border-gray-100 overflow-hidden">
+					<div className="bg-white shadow-sm rounded-xl border border-gray-100">
 						{/* Padding adaptatif : p-4 sur petit écran, p-8 sur desktop.
                 L'overflow-x-auto est CRUCIAL pour les tableaux générés par Quill sur mobile.
             */}
-						<div className="p-5 sm:p-8 lg:p-10 overflow-x-auto">
+						<div className="p-5 sm:p-8 lg:p-10 overflow-visible">
+							{" "}
+							{/* On peut retirer overflow-x-auto si on veut forcer le wrap */}
 							<article
-								className="prose prose-sm sm:prose-base lg:prose-lg prose-indigo max-w-none break-after-all"
-								/* biome-ignore lint/security/noDangerouslySetInnerHtml: App fermée - Contenu admin de confiance */
-								dangerouslySetInnerHTML={{ __html: lastVersion.content }}
+								className="
+    prose break-all
+
+  "
+								/* biome-ignore lint/security/noDangerouslySetInnerHtml: Contenu admin */
+								dangerouslySetInnerHTML={{
+									__html: lastVersion.content,
+								}}
 							/>
 						</div>
 					</div>

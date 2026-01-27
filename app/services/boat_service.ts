@@ -34,7 +34,7 @@ export class BoatService {
 			.preload("boatConstructor")
 			.preload("type")
 			.preload("contact")
-			.preload("interventions", (query) => query.where("status", "IN_PROGRESS"))
+			.preload("interventions", (query) => query.whereNot("status", "DONE"))
 			.preload("thumbnail")
 			.orderBy("name", "asc");
 	}
