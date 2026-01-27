@@ -1,5 +1,7 @@
 import db from "@adonisjs/lucid/services/db";
+import { DateTime } from "luxon";
 import Boat from "#models/boat";
+import type Hour from "#models/hour";
 import Intervention from "#models/intervention";
 import TaskGroup from "#models/task_group";
 import type {
@@ -8,6 +10,11 @@ import type {
 	SuspendPayload,
 	UpdateInterventionPayload,
 } from "#types/intervention";
+import {
+	formatDate,
+	formatHours,
+	getInitials,
+} from "../helpers/intervention.js";
 
 export class InterventionService {
 	async getBoatInterventions(boatId: number) {
@@ -157,5 +164,89 @@ export class InterventionService {
 		const intervention = await Intervention.findByOrFail("slug", slug);
 
 		await intervention.delete();
+	}
+
+	async getForPDF(slug: string) {
+		const intervention = await Intervention.query()
+			.where("slug", slug)
+			.preload("boat", (b) => b.preload("contact"))
+			.preload("taskGroups", (tg) => {
+				tg.orderBy("sort", "asc");
+				tg.preload("tasks", (t) => {
+					t.orderBy("sort", "asc");
+					t.preload("workDones", (wd) => {
+						wd.orderBy("date", "asc");
+						wd.preload("hours", (h) => h.preload("user"));
+					});
+				});
+			})
+			.firstOrFail();
+
+		// 1) Travaux demandés (groupés)
+		const requestedWorks = intervention.taskGroups.map((tg) => ({
+			id: tg.id,
+			name: tg.name,
+			tasks: tg.tasks.map((t) => ({
+				id: t.id,
+				name: t.name,
+				status: t.status,
+				details: t.details ?? null,
+			})),
+		}));
+
+		// 2) Travaux effectués (table rows)
+		// On “aplatit” : taskGroups -> tasks -> workDones
+		const performedWorks = intervention.taskGroups.flatMap((tg) =>
+			tg.tasks.flatMap((t) =>
+				(t.workDones ?? []).map((wd) => {
+					const users = (wd.hours ?? [])
+						.map((h: Hour) => h.user)
+						.filter(Boolean);
+
+					// initials uniques (évite CM CM CM si 3 heures)
+					const initials = Array.from(new Set(users.map(getInitials))).join(
+						" ",
+					);
+
+					return {
+						date: formatDate(wd.date),
+						initials,
+						workDone: wd.workDone ?? "",
+						usedMaterials: wd.usedMaterials ?? "-",
+						hours: formatHours(wd.hours ?? []),
+						// optionnel: contexte
+						taskGroupName: tg.name,
+						taskName: t.name,
+					};
+				}),
+			),
+		);
+
+		// Optionnel : tri final (si besoin)
+		performedWorks.sort((a, b) => {
+			const da = DateTime.fromFormat(a.date, "dd/LL/yyyy").toMillis();
+			const db = DateTime.fromFormat(b.date, "dd/LL/yyyy").toMillis();
+			return da - db;
+		});
+
+		// ✅ OBJET FINAL PRÊT
+		const data = {
+			title: intervention.title,
+			boat: {
+				name: intervention.boat?.name ?? null,
+				contact: intervention.boat?.contact
+					? {
+							name: intervention.boat.contact.fullName ?? null,
+							email: intervention.boat.contact.email ?? null,
+							phone: intervention.boat.contact.phone ?? null,
+						}
+					: null,
+			},
+
+			requestedWorks,
+			performedWorks,
+		};
+
+		return data;
 	}
 }

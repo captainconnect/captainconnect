@@ -26,7 +26,8 @@ export default function BoatPageHeader({
 							: "Aucune intervention"}
 					</p>
 				</div>
-				{inProgressInterventions.length !== 0 && (
+				{inProgressInterventions.length !== 0 &&
+				inProgressInterventions[0].status === "IN_PROGRESS" ? (
 					<Link
 						title="Accéder à la dernière intervention en cours"
 						href={`/interventions/${inProgressInterventions[0].slug}`}
@@ -34,6 +35,10 @@ export default function BoatPageHeader({
 					>
 						<Wrench size="18" /> Intervention en cours
 					</Link>
+				) : (
+					<p className="justify-center flex font-semibold px-2 gap-2 items-center text-white p-1 text-sm rounded-full bg-gray-500">
+						Intervention suspendue
+					</p>
 				)}
 			</div>
 			<Button

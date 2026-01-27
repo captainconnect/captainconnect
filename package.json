@@ -87,6 +87,7 @@
 		"react-image-crop": "^11.0.10",
 		"react-leaflet": "^5.0.0",
 		"react-markdown": "^10.1.0",
+		"react-quill-new": "^3.7.0",
 		"reflect-metadata": "^0.2.2",
 		"sharp": "^0.34.5",
 		"tailwindcss": "^4.1.17",
@@ -100,5 +101,5 @@
 		]
 	},
 	"prettier": "@adonisjs/prettier-config",
-	"packageManager": "pnpm@10.28.1"
+	"packageManager": "pnpm@10.28.2"
 }

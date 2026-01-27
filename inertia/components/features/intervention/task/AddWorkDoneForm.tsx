@@ -232,7 +232,6 @@ export default function AddWorkDoneForm({
 				value={data.work_done}
 				onChange={(e) => setData("work_done", e.target.value)}
 				error={errors.work_done}
-				placeholder="Travaux effectués"
 				required
 			/>
 
@@ -241,7 +240,6 @@ export default function AddWorkDoneForm({
 				value={data.used_materials}
 				onChange={(e) => setData("used_materials", e.target.value)}
 				error={errors.used_materials}
-				placeholder="Matériel utilisé"
 			/>
 
 			<Input

@@ -59,7 +59,7 @@ router
 // --- Authenticated App Routes ---
 router
 	.group(() => {
-		router.on("/").renderInertia("home");
+		router.get("/", [AdministrationController, "showDashboard"]).as("home");
 		router.on("/version").renderInertia("version");
 
 		router
@@ -138,6 +138,8 @@ router
 					.patch("/:userId/demote", [UsersController, "demote"])
 					.as("users.demote")
 					.use(middleware.admin());
+
+				router.patch("/:userId", [UsersController, "update"]).as("user.update");
 			})
 			.prefix("utilisateurs")
 			.use(middleware.admin());
@@ -179,6 +181,12 @@ router
 		// --- Interventions routes ---
 		router
 			.group(() => {
+				router
+					.get("/:interventionSlug/pdf", [
+						InterventionsController,
+						"generatePDF",
+					])
+					.as("intervention.pdf");
 				router
 					.get("/", [InterventionsController, "index"])
 					.as("interventions.index");
@@ -336,6 +344,24 @@ router
 		router
 			.group(() => {
 				router.get("/", [AdministrationController, "index"]).as("admin.index");
+				router
+					.get("/tableau-de-bord", [AdministrationController, "dashboard"])
+					.as("admin.dashboard");
+				router
+					.post("/dashboard", [AdministrationController, "dashboardStore"])
+					.as("admin.dashboard.store");
+				router
+					.post("/dashboard/:dashboardId/publish", [
+						AdministrationController,
+						"dashboardPublish",
+					])
+					.as("admin.dashboard.publish");
+				router
+					.delete("/dashboard/:dashboardId", [
+						AdministrationController,
+						"dashboardDelete",
+					])
+					.as("admin.dashboard.delete");
 				router
 					.get("/interventions", [
 						AdministrationController,
