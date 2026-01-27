@@ -1,6 +1,5 @@
 import { inject } from "@adonisjs/core";
 import type { HttpContext } from "@adonisjs/core/http";
-
 // biome-ignore lint/style/useImportType: IoC runtime needs this
 import { BoatService } from "#services/boat_service";
 // biome-ignore lint/style/useImportType: IoC runtime needs this
@@ -119,5 +118,13 @@ export default class InterventionsController {
 		await this.interventionService.delete(interventionSlug);
 
 		return response.redirect().toRoute("interventions.index");
+	}
+
+	async generatePDF({ params, view }: HttpContext) {
+		const pdfData = await this.interventionService.getForPDF(
+			params.interventionSlug,
+		);
+
+		return view.render("pdf/intervention", pdfData);
 	}
 }

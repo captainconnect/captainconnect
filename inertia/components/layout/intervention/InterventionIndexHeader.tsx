@@ -58,9 +58,11 @@ export default function InterventionIndexHeader() {
 			<div className="flex flex-col gap-6 justify-between md:flex-row md:items-center mb-4">
 				<div className="space-y-2">
 					<h2 className="text-3xl font-bold">Liste des interventions</h2>
-					<p className="text-md text-gray-500">
-						Rechercher et filtrer les interventions
-					</p>
+					<AdminChecker mustBeAdmin={true}>
+						<p className="text-md text-gray-500">
+							Rechercher et filtrer les interventions
+						</p>
+					</AdminChecker>
 				</div>
 				<div className="flex flex-col md:flex-row items-center md:gap-4 md:w-3/4">
 					<AdminChecker mustBeAdmin={true}>

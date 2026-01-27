@@ -1,4 +1,5 @@
 import { Link } from "@inertiajs/react";
+import { Ship } from "lucide-react";
 import type { Intervention } from "#types/intervention";
 import { getBoatTypeIcon } from "~/app/utils";
 import IconBadge from "~/components/ui/IconBadge";
@@ -54,7 +55,13 @@ export default function InterventionListItem({
 						) : (
 							<IconBadge
 								size="18"
-								icon={getBoatTypeIcon(intervention.boat.type?.label)}
+								icon={
+									intervention.boat.type?.label ? (
+										getBoatTypeIcon(intervention.boat.type?.label)
+									) : (
+										<Ship />
+									)
+								}
 							/>
 						)}
 						<div>

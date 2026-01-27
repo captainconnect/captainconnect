@@ -49,7 +49,10 @@ export default function TaskModal({
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		post(`/interventions/${interventionSlug}/task`, {
-			onSuccess: () => handleOnClose(),
+			onSuccess: () => {
+				setData(getInitialData());
+				handleOnClose();
+			},
 			onError: (error) => console.error(error),
 		});
 	};

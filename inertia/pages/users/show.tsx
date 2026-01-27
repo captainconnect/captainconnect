@@ -1,12 +1,14 @@
 import { Head } from "@inertiajs/react";
 import {
 	CalendarClock,
+	Edit,
 	ShieldBan,
 	ShieldCheck,
 	UserCircle,
 } from "lucide-react";
 import { useState } from "react";
 import type { User } from "#types/user";
+import UpdateProfileModal from "~/components/features/profile/UpdateProfileModal";
 import UserHourTable from "~/components/features/user/UserHourTable";
 import AppLayout from "~/components/layout/AppLayout";
 import PageHeader from "~/components/layout/PageHeader";
@@ -21,6 +23,7 @@ type UserPageProps = {
 
 const UserPage = ({ user }: UserPageProps) => {
 	const [modalOpen, setModalOpen] = useState(false);
+	const [updateModalOpen, setUpdateModalOpen] = useState(false);
 	const [currentModal, setCurrentModal] = useState<UserActionsModals>(
 		UserActionsModals.ResetPassword,
 	);
@@ -51,6 +54,13 @@ const UserPage = ({ user }: UserPageProps) => {
 								label: "Désactivé",
 							}
 				}
+				buttons={[
+					{
+						label: "Modifier",
+						icon: <Edit size="20" />,
+						onClick: () => setUpdateModalOpen(true),
+					},
+				]}
 			/>
 			<div className="w-full flex flex-col md:flex-row gap-4 mb-4">
 				<Section
@@ -114,6 +124,12 @@ const UserPage = ({ user }: UserPageProps) => {
 			>
 				<UserHourTable user={user} />
 			</Section>
+			<UpdateProfileModal
+				user={user}
+				open={updateModalOpen}
+				onClose={() => setUpdateModalOpen(false)}
+				route={`/utilisateurs/${user.id}`}
+			/>
 		</>
 	);
 };

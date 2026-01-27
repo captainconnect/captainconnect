@@ -92,7 +92,7 @@ function SortableInterventionItem({
 			{...listeners}
 		>
 			<div>
-				<p>{`${intervention.title} - ${intervention.boat.name}`}</p>
+				<p>{`${intervention.boat.name} - ${intervention.title}`}</p>
 				<p className="text-slate-500 text-sm">Créée le {createdAt}</p>
 			</div>
 			<p className={`p-1 px-3 rounded-full font-semibold text-sm text-center`}>

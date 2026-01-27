@@ -1,5 +1,21 @@
 # 📝 Notes de mise à jour
 
+## **1.5.0**
+
+#### 🚀 Nouvelles fonctionnalités
+- Édition du tableau de bord
+- Génération d'une fiche d'intervention
+- Modification des informations d'un utilisateur
+
+#### 🛠️ Corrections
+- Intervention suspendue au lieu de en cours dans la page bateau
+- Suppression des placeholders dans le formulaire de travaux effectués
+- Suppression du label Filtrer les interventions pour utilisateur
+- Ancienne valeur de la tâche lors de la création d'une tâche remise à zéro
+- Inversement titre inter et nom du bateau dans la modification de l'ordre des inters
+
+---
+
 ## **1.4.0**
 
 #### 🚀 Nouvelles fonctionnalités
@@ -19,6 +35,8 @@
 - Photo des techniciens dans la fiche de travaux effectués
 - Bug du cropper corrigé
 
+---
+
 ## **1.3.6**
 
 #### 🚀 Nouvelles fonctionnalités
@@ -34,11 +52,15 @@
 - Afficher Dany dans la liste des utilisateurs
 - Scroll automatiquement en haut sur la page d'intervention
 
+---
+
 ## **1.3.5**
 
 #### 🚀 Nouvelles fonctionnalités
 - Nouvelle version du tableau des heures
 - Export des heures au format xlsx (Excel/Tableur)
+
+---
 
 ## **1.3.4**
 
@@ -48,6 +70,8 @@
 #### 🛠️ Corrections
 - Affichage du nom du bateau et du titre de l'intervention dans les tâches
 - Bouton retour dans la modal de suspension d'une tâche/intervention
+
+---
 
 ## **1.3.3**
 
@@ -62,6 +86,8 @@
 - Routes Utilisateurs, contacts et fichiers limitées aux administrateurs
 - Si toutes les tâches d'une intervention sont terminées, l'intervention est marquée comme terminée
 - Nouveaux icons + remplacement de l'icon clé par l'icon du bateau
+
+---
 
 ## **1.3.1**
 
@@ -115,6 +141,7 @@
 ---
 
 ## **1.0.0**
+
 ### **Refonte majeure & nouveau pipeline de déploiement**
 Cette version apporte une restructuration de l’application et introduit plusieurs fonctionnalités essentielles.  
 Un nouveau flux CI/CD via **GitHub Actions** est désormais en place : chaque push sur `main` déclenche automatiquement la construction de l’image Docker correspondante.

@@ -37,6 +37,7 @@ const boatTypeIconMap = {
 	"Voilier de course": <Sailboat />,
 	"Catamaran de croisière": <Sailboat />,
 	Autre: <Building2 />,
+	Bâtiment: <Building2 />,
 } as const;
 
 type BoatTypeLabel = keyof typeof boatTypeIconMap;

@@ -1,16 +1,19 @@
 import { inject } from "@adonisjs/core";
 import type { HttpContext } from "@adonisjs/core/http";
 // biome-ignore lint/style/useImportType: IoC runtime needs this
+import { ProfileService } from "#services/profile_service";
+// biome-ignore lint/style/useImportType: IoC runtime needs this
 import { RoleService } from "#services/role_service";
 // biome-ignore lint/style/useImportType: IoC runtime needs this
 import { UserService } from "#services/user_service";
-import { createUserValidator } from "#validators/user";
+import { createUserValidator, updateProfileValidator } from "#validators/user";
 
 @inject()
 export default class UsersController {
 	constructor(
 		protected userService: UserService,
 		protected roleService: RoleService,
+		protected profileService: ProfileService,
 	) {}
 
 	async index({ inertia }: HttpContext) {
@@ -34,6 +37,13 @@ export default class UsersController {
 		return inertia.render("users/show", {
 			user,
 		});
+	}
+
+	async update({ params, request, response }: HttpContext) {
+		const userId = params.userId;
+		const payload = await request.validateUsing(updateProfileValidator);
+		await this.profileService.update(userId, payload);
+		return response.redirect().back();
 	}
 
 	async destroy({ params, response }: HttpContext) {

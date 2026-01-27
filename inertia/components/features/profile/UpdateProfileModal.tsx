@@ -8,6 +8,7 @@ import Modal from "~/components/ui/modals/Modal";
 
 type UpdateProfileModalProps = BaseModalProps & {
 	user: User;
+	route?: string;
 };
 
 type EditProfileFormData = {
@@ -19,6 +20,7 @@ export default function UpdateProfileModal({
 	open,
 	onClose,
 	user,
+	route = "/profile",
 }: UpdateProfileModalProps) {
 	const getInitialData = (): EditProfileFormData => ({
 		email: user.email || "",
@@ -35,7 +37,7 @@ export default function UpdateProfileModal({
 
 	const submit = (e: React.FormEvent) => {
 		e.preventDefault();
-		patch("/profile/", {
+		patch(route, {
 			onSuccess: () => {
 				reset();
 				onClose();
