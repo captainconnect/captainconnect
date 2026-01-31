@@ -1,5 +1,12 @@
 # 📝 Notes de mise à jour
 
+## **1.5.4**
+
+#### 🛠️ Corrections
+- Problème carte qui ne se charge pas correctement, fichier CSS importé directement depuis le fichier d'entrée. (A tester en prod)
+
+---
+
 ## **1.5.3**
 
 #### 🛠️ Corrections

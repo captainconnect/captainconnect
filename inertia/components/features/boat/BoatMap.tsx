@@ -1,6 +1,5 @@
-import { Circle, MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
 import { icon } from "leaflet";
+import { Circle, MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import type { Boat, Coordinate } from "#types/boat";
 import { SailMarkerIcon, ShipMarkerIcon } from "~/app/LeafletMarkerIcon";
 import { placesCoordinates } from "~/app/places";
