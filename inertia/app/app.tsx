@@ -7,6 +7,7 @@ import { resolvePageComponent } from "@adonisjs/inertia/helpers";
 import { createInertiaApp } from "@inertiajs/react";
 import { createRoot } from "react-dom/client";
 import "react-image-crop/dist/ReactCrop.css";
+import "leaflet/dist/leaflet.css";
 
 const appName = "Cap'tain Connect";
 
