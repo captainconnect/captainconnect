@@ -1,6 +1,7 @@
-import { Head, router } from "@inertiajs/react";
+import { Head, router, usePage } from "@inertiajs/react";
 import { useEffect } from "react";
 import type { Intervention } from "#types/intervention";
+import type { User } from "#types/user";
 import InterventionOverview from "~/components/features/intervention/InterventionOverview";
 import AppLayout from "~/components/layout/AppLayout";
 import InformationCard from "~/components/layout/intervention/InformationCard";
@@ -23,6 +24,9 @@ const InterventionPage = ({
 }: InterventionPageProps) => {
 	const { cards, setCurrentModal, currentModal, closeModal, Modals } =
 		useIntervention(intervention);
+
+	const { props } = usePage<{ authenticatedUser: User }>();
+	const currentUser = props.authenticatedUser;
 
 	const handleDelete = () => {
 		router.delete(`/interventions/${intervention.slug}`);
@@ -65,7 +69,9 @@ const InterventionPage = ({
 				confirmationText="Confirmer la suppression de l'intervention ?"
 				onConfirm={handleDelete}
 			/>
-			{intervention.status === "SUSPENDED" &&
+
+			{currentUser.role.slug === "user" &&
+				intervention.status === "SUSPENDED" &&
 				intervention.suspensionReason !== null && (
 					<SuspensionModal
 						href="/interventions"
