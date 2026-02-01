@@ -1,5 +1,14 @@
 # 📝 Notes de mise à jour
 
+## **1.5.7**
+
+#### 🛠️ Corrections
+- Modal de suspension d'intervention et de tâche désactivées pour les administrateurs
+- Affichage de la raison de la suspension d'une intervention dans les détails de l'intervention
+- Affichage de la raison de la suspension d'une tâche dans le titre du haut de page d'une tâche
+
+---
+
 ## **1.5.5**
 
 #### 🛠️ Corrections

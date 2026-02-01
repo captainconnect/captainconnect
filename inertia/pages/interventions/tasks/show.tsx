@@ -1,4 +1,4 @@
-import { Head, router } from "@inertiajs/react";
+import { Head, router, usePage } from "@inertiajs/react";
 import { CircleCheck, Clock, FilePlus, Wrench } from "lucide-react";
 import { useState } from "react";
 
@@ -62,6 +62,9 @@ const TaskPage = ({
 	});
 
 	const workDones = getWorkDones();
+
+	const { props } = usePage<{ authenticatedUser: User }>();
+	const currentUser = props.authenticatedUser;
 
 	return (
 		<>
@@ -171,7 +174,7 @@ const TaskPage = ({
 				open={currentModal === Modals.SuspendModal}
 				scope="task"
 			/>
-			{task.suspensionReason !== null && (
+			{currentUser.role.slug === "user" && task.suspensionReason !== null && (
 				<SuspensionModal
 					href={`/interventions/${intervention.slug}/taches`}
 					interventionSlug={intervention.slug}
@@ -186,12 +189,11 @@ const TaskPage = ({
 };
 
 TaskPage.layout = (page: React.ReactNode & { props: TaskPageProps }) => {
-	const { intervention } = page.props;
-	return (
-		<AppLayout title={`${intervention.boat.name} - ${intervention.title}`}>
-			{page}
-		</AppLayout>
-	);
+	const { intervention, task } = page.props;
+	const title = task.suspensionReason
+		? `${intervention.boat.name} - ${task.name} - ${task.suspensionReason}`
+		: `${intervention.boat.name} - ${task.name}`;
+	return <AppLayout title={title}>{page}</AppLayout>;
 };
 
 export default TaskPage;
