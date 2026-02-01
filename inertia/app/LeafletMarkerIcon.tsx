@@ -14,3 +14,13 @@ export const MarkerIcon = icon({
 	iconUrl: "/marker.svg",
 	iconSize: [28, 28],
 });
+
+export const BuildIcon = icon({
+	iconUrl: "/building-marker.svg",
+	iconSize: [28, 28],
+});
+
+export const TruckIcon = icon({
+	iconUrl: "/truck-marker.svg",
+	iconSize: [28, 28],
+});

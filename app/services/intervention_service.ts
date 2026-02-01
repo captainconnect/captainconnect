@@ -56,8 +56,11 @@ export class InterventionService {
 
 	async getOpenInterventions(page: number, state?: string) {
 		const query = Intervention.query()
-			.preload("boat", (query) => query.preload("type").preload("thumbnail"))
-			.preload("taskGroups", (query) => query.preload("tasks"))
+			.preload("boat", (q) => q.preload("type").preload("thumbnail"))
+			.preload("taskGroups", (q) => q.preload("tasks"))
+			// 0 pour non-suspendue, 1 pour suspendue -> les suspendues passent à la fin
+			.orderByRaw(`CASE WHEN status = ? THEN 1 ELSE 0 END ASC`, ["SUSPENDED"])
+			// ensuite ton ordre manuel
 			.orderBy("order", "asc");
 
 		if (state) {

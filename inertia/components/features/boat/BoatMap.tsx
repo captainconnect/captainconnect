@@ -1,7 +1,12 @@
 import { icon } from "leaflet";
 import { Circle, MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import type { Boat, Coordinate } from "#types/boat";
-import { SailMarkerIcon, ShipMarkerIcon } from "~/app/LeafletMarkerIcon";
+import {
+	BuildIcon,
+	SailMarkerIcon,
+	ShipMarkerIcon,
+	TruckIcon,
+} from "~/app/LeafletMarkerIcon";
 import { placesCoordinates } from "~/app/places";
 
 type BoatMapProps = {
@@ -64,7 +69,11 @@ export default function BoatMap({ boat }: BoatMapProps) {
 								: boat.type?.label === "Voilier" ||
 										boat.type?.label === "Catamaran"
 									? SailMarkerIcon
-									: ShipMarkerIcon
+									: boat.type?.label === "Véhicule"
+										? TruckIcon
+										: boat.type?.label === "Autre"
+											? BuildIcon
+											: ShipMarkerIcon
 						}
 						position={boatPosition}
 					>
