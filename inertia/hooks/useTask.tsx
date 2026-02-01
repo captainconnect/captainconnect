@@ -103,17 +103,23 @@ export default function useTask({ task, interventionSlug }: UseTaskProps) {
 	];
 
 	const tag: Tag =
-		task.status === "IN_PROGRESS"
+		task.status === "IN_PROGRESS" && task.suspensionReason === null
 			? {
 					label: "En cours",
 					icon: <Clock size="18" />,
 					className: "bg-primary hidden md:flex",
 				}
-			: {
-					label: "Terminée",
-					icon: <CircleCheck size="18" />,
-					className: "bg-primary hidden md:flex",
-				};
+			: task.suspensionReason !== null
+				? {
+						label: "Suspendue",
+						icon: <Pause size="18" />,
+						className: "bg-yellow-700 hidden md:flex",
+					}
+				: {
+						label: "Terminée",
+						icon: <CircleCheck size="18" />,
+						className: "bg-primary hidden md:flex",
+					};
 
 	const handleDelete = () => {
 		router.delete(`/tasks/${interventionSlug}/${task.id}`);

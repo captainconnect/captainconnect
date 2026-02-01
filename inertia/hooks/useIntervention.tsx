@@ -267,6 +267,14 @@ export default function useIntervention(
 			label: "Description",
 			value: intervention.description,
 		},
+		...(intervention.suspensionReason
+			? [
+					{
+						label: "Motif de suspension",
+						value: intervention.suspensionReason,
+					},
+				]
+			: []),
 		{
 			label: "Priorité",
 			value: priority,
