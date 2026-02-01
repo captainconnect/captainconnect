@@ -1,5 +1,14 @@
 # 📝 Notes de mise à jour
 
+## **1.5.5**
+
+#### 🛠️ Corrections
+- Ajout d'un nouveau type de bateau "Véhicule"
+- Nouvel icon pour type Autre et type véhicule pour la carte
+- Interventions suspendues affichées en dernier dans la liste
+
+---
+
 ## **1.5.4**
 
 #### 🛠️ Corrections
