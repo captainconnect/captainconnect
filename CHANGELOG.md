@@ -1,4 +1,10 @@
 # 📝 Notes de mise à jour
+## **1.5.8**
+
+#### 🛠️ Corrections
+- Bouton pour reprendre une tâche suspendue
+
+---
 
 ## **1.5.7**
 
