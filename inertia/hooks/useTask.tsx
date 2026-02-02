@@ -1,5 +1,13 @@
 import { router } from "@inertiajs/react";
-import { CircleCheck, Clock, Edit, FileUp, Pause, Trash } from "lucide-react";
+import {
+	CircleCheck,
+	Clock,
+	Edit,
+	FileUp,
+	Pause,
+	Play,
+	Trash,
+} from "lucide-react";
 import { type ReactNode, useState } from "react";
 import type { Task } from "#types/intervention";
 import type { ActionButton } from "#types/ui/section";
@@ -77,6 +85,7 @@ export default function useTask({ task, interventionSlug }: UseTaskProps) {
 			onClick: () => setCurrentModal(Modals.AddMediaModal),
 			variant: "accent",
 		},
+
 		{
 			icon: <Edit size="18" />,
 			text: "Modifier la tâche",
@@ -92,7 +101,14 @@ export default function useTask({ task, interventionSlug }: UseTaskProps) {
 						mustBeAdmin: true,
 					},
 				]
-			: []),
+			: [
+					{
+						icon: <Play size="18" />,
+						text: "Reprendre la tâche",
+						onClick: () => router.patch(`/tasks/${task.id}/resume`),
+						mustBeAdmin: true,
+					},
+				]),
 		{
 			icon: <Trash size="18" />,
 			variant: "danger",
