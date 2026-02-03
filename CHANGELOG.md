@@ -1,4 +1,13 @@
 # 📝 Notes de mise à jour
+
+## **1.6.0**
+
+#### 🚀 Nouvelles fonctionnalités
+- PWA
+- Notifications lors de la publication de nouvelles consignes
+
+---
+
 ## **1.5.8**
 
 #### 🛠️ Corrections
