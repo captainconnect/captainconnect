@@ -17,9 +17,9 @@ const HomePage = ({ lastVersion }: { lastVersion: Version | null }) => {
 
 			{/* Container avec padding adaptatif (px-4 sur mobile, px-6+ sur desktop) */}
 			<div className="w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
-				<header className="mb-6 sm:mb-8 border-b pb-4">
+				<header className="mb-6 sm:mb-8 border-b pb-4 flex justify-between">
 					<h1 className="text-xl sm:text-2xl font-bold italic text-gray-800">
-						Tableau d'affichage
+						Consignes du jour
 					</h1>
 					{lastVersion && (
 						<p className="text-xs text-gray-400 mt-1">

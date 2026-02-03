@@ -1,6 +1,6 @@
 {
 	"name": "captainconnect",
-	"version": "1.5.8",
+	"version": "1.6.0",
 	"private": true,
 	"type": "module",
 	"license": "UNLICENSED",
@@ -47,6 +47,7 @@
 		"@types/node": "^22.15.18",
 		"@types/react": "^19.2.3",
 		"@types/react-dom": "^19.2.3",
+		"@types/web-push": "^3.6.4",
 		"@vitejs/plugin-react": "^5.1.1",
 		"baseline-browser-mapping": "^2.9.14",
 		"hot-hook": "^0.4.0",
@@ -91,6 +92,7 @@
 		"reflect-metadata": "^0.2.2",
 		"sharp": "^0.34.5",
 		"tailwindcss": "^4.1.17",
+		"web-push": "^3.6.7",
 		"xlsx": "^0.18.5",
 		"yet-another-react-lightbox": "^3.28.0"
 	},

@@ -8,11 +8,35 @@
   <title inertia>Cap'tain Connect</title>
 
   <link rel="preconnect" href="https://fonts.bunny.net">
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <meta name="theme-color" content="#0b1220" />
+<script>
+(function () {
+  
+
+  if (!("serviceWorker" in navigator)) return;
+
+  window.addEventListener(
+    "load",
+    async () => {
+      try {
+        const reg = await navigator.serviceWorker.register("/sw.js", { scope: "/" });
+        
+      } catch (err) {
+        console.warn("[SW] register failed", err);
+      }
+    },
+    { once: true },
+  );
+})();
+</script>
+
 
   @stack('dumper')
   @viteReactRefresh()
   @inertiaHead()
   @vite(['inertia/app/app.tsx', `inertia/pages/${page.component}.tsx`])
+  
 </head>
 
 <body class="min-h-screen w-screen font-sans bg-background">

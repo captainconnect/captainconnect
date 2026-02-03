@@ -9,6 +9,7 @@
 
 import app from "@adonisjs/core/services/app";
 import router from "@adonisjs/core/services/router";
+import PushSubscriptionsController from "#controllers/push_subscriptions_controller";
 import { middleware } from "./kernel.js";
 
 const AdministrationController = () =>
@@ -381,5 +382,21 @@ router
 			})
 			.prefix("administration")
 			.use(middleware.admin());
+
+		router
+			.group(() => {
+				router.post("test", [PushSubscriptionsController, "testing"]);
+				router.get("public-key", [PushSubscriptionsController, "getPublicKey"]);
+				router.post("subscribe", [PushSubscriptionsController, "subscribe"]);
+				router.post("unsubscribe", [
+					PushSubscriptionsController,
+					"unsubscribe",
+				]);
+				router.post("unsubscribe-all", [
+					PushSubscriptionsController,
+					"unsubscribeAll",
+				]);
+			})
+			.prefix("push");
 	})
 	.use(middleware.auth());
