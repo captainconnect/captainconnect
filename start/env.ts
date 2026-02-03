@@ -49,4 +49,13 @@ export default await Env.create(new URL("../", import.meta.url), {
 	MINIO_ENDPOINT: Env.schema.string(),
 	MINIO_CDN_URL: Env.schema.string(),
 	S3_BUCKET: Env.schema.string(),
+
+	/*
+  |----------------------------------------------------------
+  | Variables for configuring VAPID
+  |----------------------------------------------------------
+  */
+	VAPID_SUBJECT: Env.schema.string(),
+	VAPID_PUBLIC_KEY: Env.schema.string(),
+	VAPID_PRIVATE_KEY: Env.schema.string(),
 });

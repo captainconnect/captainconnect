@@ -4,11 +4,16 @@ import db from "@adonisjs/lucid/services/db";
 import DashboardVersion from "#models/dashboard_version";
 // biome-ignore lint/style/useImportType: IoC runtime needs this
 import { InterventionService } from "#services/intervention_service";
+// biome-ignore lint/style/useImportType: IoC runtime needs this
+import { PushService } from "#services/push_service";
 import { orderingInterventionValidator } from "#validators/intervention";
 
 @inject()
 export default class AdministrationController {
-	constructor(protected interventionService: InterventionService) {}
+	constructor(
+		protected interventionService: InterventionService,
+		protected pushService: PushService,
+	) {}
 
 	async index({ inertia }: HttpContext) {
 		return inertia.render("administration/index");
@@ -68,6 +73,13 @@ export default class AdministrationController {
 
 		await version.save();
 
+		await this.pushService.notifyAll({
+			title: "Cap'tain Connect",
+			body: `Nouvelles consignes du jour publiées`,
+			data: { url: "/" },
+			icon: "/icons/icon-192.png",
+		});
+
 		return response.redirect().back();
 	}
 
@@ -86,6 +98,14 @@ export default class AdministrationController {
 			version.useTransaction(trx);
 			version.isActive = true;
 			await version.save();
+		});
+
+		await this.pushService.notifyAll({
+			title: "Cap'tain Connect",
+			body: `Nouvelles consignes du jour publiées`,
+			data: { url: "/" },
+			icon: "/icons/icon-192.png",
+			badge: "/icons/icon-192.png",
 		});
 
 		return response.redirect().back();

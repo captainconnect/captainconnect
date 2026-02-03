@@ -16,13 +16,20 @@ export default defineConfig({
 		tailwindcss(),
 	],
 
-	/**
-	 * Define aliases for importing modules from
-	 * your frontend code
-	 */
 	resolve: {
 		alias: {
 			"~/": `${getDirname(import.meta.url)}/inertia/`,
 		},
+	},
+
+	server: {
+		// Autorise les tunnels ngrok / IP locale
+		allowedHosts: [
+			"localhost",
+			".localhost",
+			".ngrok.io", // pour ngrok
+			".loca.lt", // pour localhost.run
+			"plentiful-pretemperate-ninfa.ngrok-free.dev",
+		],
 	},
 });

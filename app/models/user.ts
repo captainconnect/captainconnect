@@ -13,6 +13,7 @@ import type { DateTime } from "luxon";
 import { DriveService } from "#services/drive_service";
 import Hour from "./hour.js";
 import Media from "./media.js";
+import PushSubscription from "./push_subscription.js";
 import Role from "./role.js";
 
 const AuthFinder = withAuthFinder(() => hash.use("argon"), {
@@ -79,6 +80,9 @@ export default class User extends compose(BaseModel, AuthFinder) {
 	public async isAdmin() {
 		return this.role.slug === "admin";
 	}
+
+	@hasMany(() => PushSubscription)
+	declare pushSubscriptions: HasMany<typeof PushSubscription>;
 
 	@computed()
 	get avatarUrl() {

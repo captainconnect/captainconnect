@@ -35,6 +35,14 @@ podman compose up -d
 ```bash
 pnpm dev
 ```
+### 5. Générer les clés VAPID
+```bash
+pnpx web-push generate-vapid-keys
+```
+### 6. Générer l'app key
+```bash
+node ace generate:key
+```
 ## 🚀 Fonctionnalités principales
 Gestion des chantiers (bateaux, deadlines, contacts, travaux demandés)
 

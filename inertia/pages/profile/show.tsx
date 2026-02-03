@@ -1,6 +1,8 @@
 import type { SharedProps } from "@adonisjs/inertia/types";
 import { Head, router, usePage } from "@inertiajs/react";
 import {
+	Bell,
+	BellOff,
 	CalendarClock,
 	Edit,
 	ImageMinus,
@@ -10,6 +12,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import type { User } from "#types/user";
+
 import UpdatePasswordModal from "~/components/features/profile/UpdatePasswordModal";
 import UpdateProfileModal from "~/components/features/profile/UpdateProfileModal";
 import UploadAvatarModal from "~/components/features/profile/UploadAvatarModal";
@@ -17,8 +20,10 @@ import UserHourTable from "~/components/features/user/UserHourTable";
 import AppLayout from "~/components/layout/AppLayout";
 import PageHeader from "~/components/layout/PageHeader";
 import AvatarSection from "~/components/layout/profile/AvatarSection";
+import type { ButtonVariant } from "~/components/ui/buttons/Button";
 import ConfirmModal from "~/components/ui/modals/Confirm";
 import Section from "~/components/ui/Section";
+import { usePushNotifications } from "~/hooks/usePushNotifications";
 
 enum ProfilePageModals {
 	None,
@@ -40,6 +45,32 @@ const ProfilePage = ({ user }: ProfilePageProps) => {
 		router.delete("/profile/avatar");
 	};
 
+	const { subscribe, unsubscribe, loading, supported, permission, subscribed } =
+		usePushNotifications();
+
+	const pushButtons = !supported
+		? []
+		: [
+				!subscribed
+					? {
+							label:
+								permission === "denied"
+									? "Notifications bloquées (Chrome)"
+									: "Activer les notifications",
+							icon: <Bell size="18" />,
+							variant: "secondary" as ButtonVariant,
+							onClick: subscribe,
+							disabled: loading || permission === "denied",
+						}
+					: {
+							label: "Désactiver cet appareil",
+							icon: <BellOff size="18" />,
+							variant: "secondary" as ButtonVariant,
+							onClick: unsubscribe,
+							disabled: loading,
+						},
+			].filter(Boolean);
+
 	return (
 		<>
 			<Head title={user.firstname} />
@@ -57,6 +88,7 @@ const ProfilePage = ({ user }: ProfilePageProps) => {
 						variant: "secondary",
 						onClick: () => setModal(ProfilePageModals.UpdatePassword),
 					},
+					...pushButtons,
 					{
 						label: "Ajouter/Changer l'avatar",
 						icon: <ImageUp size="18" />,
@@ -104,6 +136,7 @@ const ProfilePage = ({ user }: ProfilePageProps) => {
 						</p>
 					</div>
 				</Section>
+
 				<Section
 					title="Heures"
 					subtitle="Historique des heures"
