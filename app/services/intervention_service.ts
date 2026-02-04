@@ -37,6 +37,7 @@ export class InterventionService {
 	async getInterventionsForOrder() {
 		return await Intervention.query()
 			.preload("boat")
+			.preload("taskGroups", (q) => q.preload("tasks"))
 			.whereNot("status", "DONE")
 			.orderBy("order", "asc");
 	}

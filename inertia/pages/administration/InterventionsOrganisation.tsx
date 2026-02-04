@@ -12,6 +12,7 @@ import { useMemo, useRef, useState } from "react";
 import type { Intervention } from "#types/intervention";
 import AppLayout from "~/components/layout/AppLayout";
 import Button from "~/components/ui/buttons/Button";
+import useIntervention from "~/hooks/useIntervention";
 
 const title = "Organiser les interventions";
 
@@ -37,6 +38,8 @@ function SortableInterventionItem({
 		id: intervention.id,
 		disabled: !editing,
 	});
+
+	const { progress } = useIntervention(intervention);
 
 	const style: React.CSSProperties = {
 		transform: CSS.Transform.toString(transform),
@@ -78,7 +81,9 @@ function SortableInterventionItem({
 		intervention.status === "DONE"
 			? "Facturée"
 			: intervention.status === "IN_PROGRESS"
-				? "En cours"
+				? progress === 100
+					? "Terminée"
+					: "En cours"
 				: intervention.status === "SUSPENDED"
 					? "Suspendue"
 					: "";
