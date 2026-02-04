@@ -1,5 +1,12 @@
 # 📝 Notes de mise à jour
 
+## **1.6.1**
+
+#### 🛠️ Corrections
+- Intervention marquée comme terminée dans la page de modification de l'ordre des interventions
+
+---
+
 ## **1.6.0**
 
 #### 🚀 Nouvelles fonctionnalités
