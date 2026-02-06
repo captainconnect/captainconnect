@@ -1,5 +1,12 @@
 # 📝 Notes de mise à jour
 
+## **1.6.2**
+
+#### 🛠️ Corrections
+- Correction fuseau horaire lors de l'édition des consignes du jour
+
+---
+
 ## **1.6.1**
 
 #### 🛠️ Corrections
