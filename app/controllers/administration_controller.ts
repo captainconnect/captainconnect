@@ -44,7 +44,11 @@ export default class AdministrationController {
 
 		// Génération du nom formaté : "27/01/2026 20:15"
 		const now = new Date();
-		const formattedName = `Version du ${now.toLocaleDateString("fr-FR")} à ${now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}`;
+		now.setHours(now.getHours() + 1);
+
+		const formattedName =
+			`Version du ${now.toLocaleDateString("fr-FR")} à ` +
+			now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
 
 		await DashboardVersion.create({
 			name: formattedName,
