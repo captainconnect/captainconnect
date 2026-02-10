@@ -82,6 +82,7 @@ const IndexTaskPage = ({ intervention }: IndexTaskPageProps) => {
 						onClick: () => setOpenTaskModal(true),
 						mustBeAdmin: true,
 						icon: <Plus />,
+						disabled: orderingEnabled,
 					},
 				]}
 			/>

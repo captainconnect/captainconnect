@@ -1,4 +1,10 @@
 # 📝 Notes de mise à jour
+## **1.6.3**
+
+#### 🛠️ Corrections
+- Désactivation du bouton d'ajout de tâche si l'on est en train de modifier l'ordre des tâches
+
+---
 
 ## **1.6.2**
 
