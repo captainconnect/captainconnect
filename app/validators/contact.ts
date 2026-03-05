@@ -6,12 +6,7 @@ export const contactSchema = vine.object({
 	email: vine.string().email().trim().optional().requiredIfMissing("phone"),
 	phone: vine
 		.string()
-		.mobile(() => {
-			return {
-				locale: ["fr-FR"],
-				strictMode: false,
-			};
-		})
+		.mobile({ strictMode: false })
 		.optional()
 		.requiredIfMissing("email"),
 	note: vine.string().optional(),
