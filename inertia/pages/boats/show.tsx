@@ -117,7 +117,7 @@ const BoatPage = ({ boat }: BoatPageProps) => {
 					)}
 					{(hasPlace || hasPosition) && (
 						<Section
-							title="Position dans le port"
+							title="Localisation"
 							subtitle={`Basé sur ${positionType === "panne" ? "la panne" : positionType === "place" ? "la place" : positionType === "gps" ? "la position GPS" : "aucun"}`}
 							icon={<MapPin />}
 						>

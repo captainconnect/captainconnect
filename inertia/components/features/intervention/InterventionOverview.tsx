@@ -80,7 +80,7 @@ export default function InterventionOverview({
 					<div className="mt-4">
 						{(hasPlace || hasPosition) && (
 							<Section
-								title="Position dans le port"
+								title="Localisation"
 								subtitle={`Basé sur ${positionType === "panne" ? "la panne" : positionType === "place" ? "la place" : positionType === "gps" ? "la position GPS" : "aucun"}`}
 								icon={<MapPin />}
 							>
