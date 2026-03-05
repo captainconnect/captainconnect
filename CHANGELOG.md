@@ -1,4 +1,11 @@
 # 📝 Notes de mise à jour
+
+## **1.6.4**
+
+#### 🛠️ Corrections
+- Possibilité d'ajouter des numéros de téléphone internationaux pour les contacts
+- Remplacement du label "Position dans le port" par "Localisation" dans la carte dans les pages bateaux et interventions 
+
 ## **1.6.3**
 
 #### 🛠️ Corrections
