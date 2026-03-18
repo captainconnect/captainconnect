@@ -1,5 +1,8 @@
 # 📝 Notes de mise à jour
 
+## **1.6.5**
+- Correction aucune tâche dans une intervention
+
 ## **1.6.4**
 
 #### 🛠️ Corrections

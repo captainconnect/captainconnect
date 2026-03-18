@@ -31,16 +31,17 @@ export default function TaskModal({
 			label: tg.name,
 		};
 	});
-	const [useExistantTaskGroup, setUseExistantTaskGroup] = useState(true);
+	const hasExistingGroups = options.length > 0;
+	const [useExistantTaskGroup, setUseExistantTaskGroup] = useState(hasExistingGroups);
 	const [fakeTaskGroupId, setFakeTaskGroupId] = useState<number | string>(
-		options[0].id,
+		hasExistingGroups ? options[0].id : "new",
 	);
 
 	const getInitialData = () => {
-		return {
-			taskGroupId: options[0].id,
-			name: "",
-		};
+		if (hasExistingGroups) {
+			return { taskGroupId: options[0].id, name: "" };
+		}
+		return { taskGroup: "", name: "" };
 	};
 
 	const { data, setData, reset, errors, processing, post } =
@@ -83,8 +84,8 @@ export default function TaskModal({
 	const handleOnClose = () => {
 		onClose();
 		setTimeout(() => {
-			setUseExistantTaskGroup(true);
-			setFakeTaskGroupId(options[0].id);
+			setUseExistantTaskGroup(hasExistingGroups);
+			setFakeTaskGroupId(hasExistingGroups ? options[0].id : "new");
 			setData(getInitialData());
 			reset();
 		}, 150);
@@ -98,13 +99,15 @@ export default function TaskModal({
 			onClose={handleOnClose}
 		>
 			<form className="space-y-4" onSubmit={handleSubmit}>
-				<Select
-					label="Groupe de tâche"
-					value={fakeTaskGroupId}
-					onChange={(e) => handleSelectOnChange(e)}
-					allowNull={false}
-					options={[...options, { id: "new", label: "Nouveau groupe" }]}
-				/>
+				{hasExistingGroups && (
+					<Select
+						label="Groupe de tâche"
+						value={fakeTaskGroupId}
+						onChange={(e) => handleSelectOnChange(e)}
+						allowNull={false}
+						options={[...options, { id: "new", label: "Nouveau groupe" }]}
+					/>
+				)}
 				{!useExistantTaskGroup && (
 					<Input
 						label="Nouveau groupe de tâche"

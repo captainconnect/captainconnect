@@ -49,6 +49,7 @@ const IndexTaskPage = ({ intervention }: IndexTaskPageProps) => {
 	}
 
 	const taskGroups = intervention.taskGroups || [];
+	
 
 	return (
 		<>
@@ -74,6 +75,7 @@ const IndexTaskPage = ({ intervention }: IndexTaskPageProps) => {
 									onClick: () => setOrderingEnabled(true),
 									icon: <Pencil size="18" />,
 									variant: "secondary" as const,
+									disabled: groups.length === 0,
 									mustBeAdmin: true,
 								},
 							]),
@@ -86,19 +88,19 @@ const IndexTaskPage = ({ intervention }: IndexTaskPageProps) => {
 					},
 				]}
 			/>
-
-			<TaskBoard
+			{groups.length !== 0 ? (<TaskBoard
 				orderingEnabled={orderingEnabled}
 				groups={groups}
 				onGroupsChange={setGroups}
-			/>
-
-			<TaskModal
+			/>): <p>Aucune tâche pour le moment</p>}
+			
+				<TaskModal
 				interventionSlug={intervention.slug}
 				taskGroups={taskGroups}
 				open={openTaskModal}
 				onClose={() => setOpenTaskModal(false)}
 			/>
+			
 		</>
 	);
 };
