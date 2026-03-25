@@ -12,7 +12,7 @@ type InterventionListItemProps = {
 export default function InterventionListItem({
 	intervention,
 }: InterventionListItemProps) {
-	const { status, createdAt, endAt, progress, totalTasks, doneTasks } =
+	const { status, endAt, progress, totalTasks, doneTasks } =
 		useIntervention(intervention);
 
 	const isSuspended = intervention.status === "SUSPENDED";
@@ -78,9 +78,6 @@ export default function InterventionListItem({
 									Échéance le {endAt.toLocaleDateString("fr-FR")}
 								</p>
 							)}
-							<p className="text-slate-500">
-								Créée le {createdAt.toLocaleDateString("fr-FR")}
-							</p>
 						</div>
 					</div>
 

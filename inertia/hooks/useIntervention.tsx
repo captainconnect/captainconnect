@@ -2,6 +2,7 @@ import { router } from "@inertiajs/react";
 import {
 	Building2,
 	Calendar,
+	CalendarClock,
 	Check,
 	Clock,
 	Edit,
@@ -129,7 +130,7 @@ export default function useIntervention(
 			? [
 					{
 						title: "Échéance",
-						icon: <Calendar color="gray" />,
+						icon: <CalendarClock color="gray" />,
 						data: endAt.toLocaleDateString("fr-FR"),
 					},
 				]
@@ -283,6 +284,11 @@ export default function useIntervention(
 			icon: <Calendar size="18" />,
 			label: "Date de création",
 			value: createdAt.toLocaleDateString("fr-FR"),
+		},
+		{
+			icon: <CalendarClock size="18" />,
+			label: "Date d'échéance",
+			value: endAt ? endAt.toLocaleDateString("fr-FR") : "Non précisée",
 		},
 	];
 
