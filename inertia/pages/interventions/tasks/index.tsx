@@ -49,7 +49,6 @@ const IndexTaskPage = ({ intervention }: IndexTaskPageProps) => {
 	}
 
 	const taskGroups = intervention.taskGroups || [];
-	
 
 	return (
 		<>
@@ -88,19 +87,22 @@ const IndexTaskPage = ({ intervention }: IndexTaskPageProps) => {
 					},
 				]}
 			/>
-			{groups.length !== 0 ? (<TaskBoard
-				orderingEnabled={orderingEnabled}
-				groups={groups}
-				onGroupsChange={setGroups}
-			/>): <p>Aucune tâche pour le moment</p>}
-			
-				<TaskModal
+			{groups.length !== 0 ? (
+				<TaskBoard
+					orderingEnabled={orderingEnabled}
+					groups={groups}
+					onGroupsChange={setGroups}
+				/>
+			) : (
+				<p>Aucune tâche pour le moment</p>
+			)}
+
+			<TaskModal
 				interventionSlug={intervention.slug}
 				taskGroups={taskGroups}
 				open={openTaskModal}
 				onClose={() => setOpenTaskModal(false)}
 			/>
-			
 		</>
 	);
 };

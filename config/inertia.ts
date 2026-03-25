@@ -30,6 +30,7 @@ const inertiaConfig = defineConfig({
 					firstname: authUser.firstname,
 					lastname: authUser.lastname,
 					isAdmin: await authUser.isAdmin(),
+					isModerator: await authUser.isModerator(),
 					role: {
 						slug: authUser.role.slug,
 						name: authUser.role.name,

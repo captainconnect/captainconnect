@@ -96,4 +96,16 @@ export class UserService {
 		user.roleId = 1;
 		await user.save();
 	}
+
+	async assignModerator(id: number) {
+		const user = await User.findOrFail(id);
+		user.roleId = 3;
+		await user.save();
+	}
+
+	async revokeModerator(id: number) {
+		const user = await User.findOrFail(id);
+		user.roleId = 1;
+		await user.save();
+	}
 }

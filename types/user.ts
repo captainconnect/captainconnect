@@ -13,6 +13,7 @@ export type User = {
 	createdAt: Date;
 	updatedAt: Date;
 	isAdmin: boolean;
+	isModerator: boolean;
 	avatar: string | undefined;
 	avatarUrl: string | undefined;
 };

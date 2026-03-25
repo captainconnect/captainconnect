@@ -4,17 +4,21 @@ import type { User } from "#types/user";
 
 type AdminCheckerProps = PropsWithChildren & {
 	mustBeAdmin?: boolean;
+	allowModerator?: boolean;
 };
 
 export default function AdminChecker({
 	mustBeAdmin = false,
+	allowModerator = false,
 	children,
 }: AdminCheckerProps) {
 	const { props } = usePage<{ authenticatedUser: User }>();
 	const currentUser = props.authenticatedUser;
 	let can: boolean = true;
 
-	if (mustBeAdmin === true && !currentUser.isAdmin) can = false;
+	if (mustBeAdmin === true && !currentUser.isAdmin) {
+		if (!(allowModerator && currentUser.isModerator)) can = false;
+	}
 
 	if (!can) {
 		return null;

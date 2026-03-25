@@ -100,12 +100,14 @@ export default function WorkDoneCard({
 					<p className="font-medium">{workDone.hour_count}h</p>
 				</div>
 			</div>
-			<AdminChecker mustBeAdmin={true}>
-				<div className="flex gap-2">
+			<div className="flex gap-2">
+				<AdminChecker mustBeAdmin={true} allowModerator={true}>
 					<Button onClick={() => onUpdate(workDone)}>Modifier</Button>
+				</AdminChecker>
+				<AdminChecker mustBeAdmin={true} allowModerator={false}>
 					<Button variant="danger" icon={<Trash />} onClick={handleDelete} />
-				</div>
-			</AdminChecker>
+				</AdminChecker>
+			</div>
 			{/* </Section> */}
 		</section>
 	);

@@ -19,6 +19,8 @@ export enum UserActionsModals {
 	DeleteUser,
 	PromoteUser,
 	DemoteUser,
+	AssignModerator,
+	RevokeModerator,
 }
 
 type UserActionModalConfig = {
@@ -56,6 +58,20 @@ export default function useUserActions(
 			icon: <ShieldMinus />,
 			action: () => router.patch(`/utilisateurs/${user.id}/demote`),
 			confirmationText: "L'utilisateur perdra les droits administrateur",
+		},
+		[UserActionsModals.AssignModerator]: {
+			title: "Définir comme modérateur",
+			label: "Confirmer",
+			icon: <ShieldPlus />,
+			action: () => router.patch(`/utilisateurs/${user.id}/assign-moderator`),
+			confirmationText: "L'utilisateur aura les droits modérateur",
+		},
+		[UserActionsModals.RevokeModerator]: {
+			title: "Révoquer le rôle modérateur",
+			label: "Confirmer",
+			icon: <ShieldMinus />,
+			action: () => router.patch(`/utilisateurs/${user.id}/revoke-moderator`),
+			confirmationText: "L'utilisateur perdra les droits modérateur",
 		},
 		[UserActionsModals.DeactivateUser]: {
 			title: "Désactiver l'utilisateur",
@@ -95,23 +111,42 @@ export default function useUserActions(
 		setModalOpen(true);
 	};
 
-	const dangerZoneButtons: ActionButton[] = [
-		{
-			text: "Réinitialiser le mot de passe",
-			icon: <RotateCcw size="18" />,
-			onClick: () => openModal(UserActionsModals.ResetPassword),
-		},
+	const roleButton: ActionButton =
 		user.role.id === 2
 			? {
 					text: "Rétrograder en utilisateur",
 					icon: <ShieldMinus size="18" />,
 					onClick: () => openModal(UserActionsModals.DemoteUser),
 				}
-			: {
-					text: "Promouvoir administrateur",
+			: user.role.id === 3
+				? {
+						text: "Révoquer modérateur",
+						icon: <ShieldMinus size="18" />,
+						onClick: () => openModal(UserActionsModals.RevokeModerator),
+					}
+				: {
+						text: "Promouvoir administrateur",
+						icon: <ShieldPlus size="18" />,
+						onClick: () => openModal(UserActionsModals.PromoteUser),
+					};
+
+	const moderatorButton: ActionButton | null =
+		user.role.id === 1
+			? {
+					text: "Définir modérateur",
 					icon: <ShieldPlus size="18" />,
-					onClick: () => openModal(UserActionsModals.PromoteUser),
-				},
+					onClick: () => openModal(UserActionsModals.AssignModerator),
+				}
+			: null;
+
+	const dangerZoneButtons: ActionButton[] = [
+		{
+			text: "Réinitialiser le mot de passe",
+			icon: <RotateCcw size="18" />,
+			onClick: () => openModal(UserActionsModals.ResetPassword),
+		},
+		roleButton,
+		...(moderatorButton ? [moderatorButton] : []),
 		user.activated
 			? {
 					text: "Désactiver l'utilisateur",

@@ -174,7 +174,7 @@ const TaskPage = ({
 				open={currentModal === Modals.SuspendModal}
 				scope="task"
 			/>
-			{currentUser.role.slug === "user" && task.suspensionReason !== null && (
+			{currentUser.role.slug !== "admin" && task.suspensionReason !== null && (
 				<SuspensionModal
 					href={`/interventions/${intervention.slug}/taches`}
 					interventionSlug={intervention.slug}

@@ -17,6 +17,10 @@ export default class extends BaseSeeder {
 				slug: "admin",
 				name: "Administrateur",
 			},
+			{
+				slug: "moderator",
+				name: "Modérateur",
+			},
 		]);
 	}
 }

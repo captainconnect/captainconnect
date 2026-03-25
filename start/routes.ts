@@ -139,6 +139,20 @@ router
 					.patch("/:userId/demote", [UsersController, "demote"])
 					.as("users.demote")
 					.use(middleware.admin());
+				router
+					.patch("/:userId/assign-moderator", [
+						UsersController,
+						"assignModerator",
+					])
+					.as("users.assign-moderator")
+					.use(middleware.admin());
+				router
+					.patch("/:userId/revoke-moderator", [
+						UsersController,
+						"revokeModerator",
+					])
+					.as("users.revoke-moderator")
+					.use(middleware.admin());
 
 				router.patch("/:userId", [UsersController, "update"]).as("user.update");
 			})

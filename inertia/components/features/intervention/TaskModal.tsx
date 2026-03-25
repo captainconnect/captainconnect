@@ -32,7 +32,8 @@ export default function TaskModal({
 		};
 	});
 	const hasExistingGroups = options.length > 0;
-	const [useExistantTaskGroup, setUseExistantTaskGroup] = useState(hasExistingGroups);
+	const [useExistantTaskGroup, setUseExistantTaskGroup] =
+		useState(hasExistingGroups);
 	const [fakeTaskGroupId, setFakeTaskGroupId] = useState<number | string>(
 		hasExistingGroups ? options[0].id : "new",
 	);

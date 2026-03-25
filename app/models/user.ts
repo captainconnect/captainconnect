@@ -81,6 +81,10 @@ export default class User extends compose(BaseModel, AuthFinder) {
 		return this.role.slug === "admin";
 	}
 
+	public async isModerator() {
+		return this.role.slug === "moderator";
+	}
+
 	@hasMany(() => PushSubscription)
 	declare pushSubscriptions: HasMany<typeof PushSubscription>;
 

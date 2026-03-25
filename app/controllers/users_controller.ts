@@ -80,4 +80,16 @@ export default class UsersController {
 		await this.userService.demote(userId);
 		return response.redirect().back();
 	}
+
+	async assignModerator({ params, response }: HttpContext) {
+		const userId = params.userId;
+		await this.userService.assignModerator(userId);
+		return response.redirect().back();
+	}
+
+	async revokeModerator({ params, response }: HttpContext) {
+		const userId = params.userId;
+		await this.userService.revokeModerator(userId);
+		return response.redirect().back();
+	}
 }
