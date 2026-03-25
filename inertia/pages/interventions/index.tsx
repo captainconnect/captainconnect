@@ -29,11 +29,21 @@ const InterventionsIndexPage = ({
 		return u.searchParams.get("state") ?? "";
 	}, [url]);
 
-	useEffect(() => {
-		setItems([]);
-	}, []);
-
 	const currentPage = Number(meta.currentPage || 1);
+
+	const initialPageRef = useRef(currentPage);
+	const initialStateRef = useRef(stateFilter);
+
+	// Si on arrive sur la page avec page > 1 dans l'URL (ex: refresh), on recharge depuis page 1
+	useEffect(() => {
+		if (initialPageRef.current > 1) {
+			router.get(
+				"/interventions",
+				{ state: initialStateRef.current || undefined },
+				{ replace: true, preserveState: false },
+			);
+		}
+	}, []);
 
 	useEffect(() => {
 		if (currentPage <= 1) {
