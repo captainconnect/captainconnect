@@ -1,5 +1,10 @@
 # 📝 Notes de mise à jour
 
+## **1.6.6**
+- Ajout de la date d'échéance dans la page de l'intervention
+- Suppression de la date de création des interventions dans la liste des interventions
+- Ajout du rôle modérateur avec possibilité d'éditer un travail effectué
+
 ## **1.6.5**
 - Correction aucune tâche dans une intervention
 
