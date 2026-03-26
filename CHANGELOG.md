@@ -1,5 +1,10 @@
 # 📝 Notes de mise à jour
 
+
+## **1.6.7**
+- Ajout d'un éditeur pour les types de bateaux
+- Ajout d'un éditeur pour les constructeurs de bateaux
+
 ## **1.6.6**
 - Ajout de la date d'échéance dans la page de l'intervention
 - Suppression de la date de création des interventions dans la liste des interventions
