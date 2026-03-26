@@ -393,6 +393,51 @@ router
 						"interventionOrdering",
 					])
 					.as("admin.interventions.ordering");
+
+				router.get("/bateaux/types", [
+					AdministrationController,
+					"boatTypeEditor",
+				]);
+				router
+					.post("/bateaux/types", [
+						AdministrationController,
+						"boatTypeStore",
+					])
+					.as("admin.boat-types.store");
+				router
+					.patch("/bateaux/types/:typeId", [
+						AdministrationController,
+						"boatTypeUpdate",
+					])
+					.as("admin.boat-types.update");
+				router
+					.delete("/bateaux/types/:typeId", [
+						AdministrationController,
+						"boatTypeDestroy",
+					])
+					.as("admin.boat-types.destroy");
+				router.get("/bateaux/constructeurs", [
+					AdministrationController,
+					"boatConstructorEditor",
+				]);
+				router
+					.post("/bateaux/constructeurs", [
+						AdministrationController,
+						"boatConstructorStore",
+					])
+					.as("admin.boat-constructors.store");
+				router
+					.patch("/bateaux/constructeurs/:constructorId", [
+						AdministrationController,
+						"boatConstructorUpdate",
+					])
+					.as("admin.boat-constructors.update");
+				router
+					.delete("/bateaux/constructeurs/:constructorId", [
+						AdministrationController,
+						"boatConstructorDestroy",
+					])
+					.as("admin.boat-constructors.destroy");
 			})
 			.prefix("administration")
 			.use(middleware.admin());

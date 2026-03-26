@@ -1,5 +1,5 @@
 import { Head, Link } from "@inertiajs/react";
-import { FileText, ListOrdered } from "lucide-react";
+import { FileText, ListOrdered, Sailboat, Ship } from "lucide-react";
 import AppLayout from "~/components/layout/AppLayout";
 
 const AdministrationIndexPage = () => {
@@ -35,6 +35,34 @@ const AdministrationIndexPage = () => {
 						<h4 className="text-lg font-semibold">Ordre des interventions</h4>
 						<p className="text-sm text-gray-500 leading-tight">
 							Organiser l'ordre d'affichage des interventions
+						</p>
+					</div>
+				</Link>
+				<Link
+					href="/administration/bateaux/types"
+					className="flex items-center justify-center flex-col p-6 sm:p-10 bg-white border border-gray-100 rounded-2xl gap-4 hover:border-indigo-300 hover:shadow-md transition-all group"
+				>
+					<div className="flex items-center justify-center rounded-xl size-14 bg-gray-100 group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-colors">
+						<Sailboat />
+					</div>
+					<div className="flex flex-col items-center gap-2 text-center">
+						<h4 className="text-lg font-semibold">Types de bateaux</h4>
+						<p className="text-sm text-gray-500 leading-tight">
+							Éditer les types de bateaux
+						</p>
+					</div>
+				</Link>
+				<Link
+					href="/administration/bateaux/constructeurs"
+					className="flex items-center justify-center flex-col p-6 sm:p-10 bg-white border border-gray-100 rounded-2xl gap-4 hover:border-indigo-300 hover:shadow-md transition-all group"
+				>
+					<div className="flex items-center justify-center rounded-xl size-14 bg-gray-100 group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-colors">
+						<Ship />
+					</div>
+					<div className="flex flex-col items-center gap-2 text-center">
+						<h4 className="text-lg font-semibold">Constructeurs de bateaux</h4>
+						<p className="text-sm text-gray-500 leading-tight">
+							Éditer les constructeurs de bateaux
 						</p>
 					</div>
 				</Link>

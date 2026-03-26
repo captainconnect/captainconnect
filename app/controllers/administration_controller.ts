@@ -1,6 +1,8 @@
 import { inject } from "@adonisjs/core";
 import type { HttpContext } from "@adonisjs/core/http";
 import db from "@adonisjs/lucid/services/db";
+import BoatConstructor from "#models/boat_constructor";
+import BoatType from "#models/boat_type";
 import DashboardVersion from "#models/dashboard_version";
 // biome-ignore lint/style/useImportType: IoC runtime needs this
 import { InterventionService } from "#services/intervention_service";
@@ -168,5 +170,60 @@ export default class AdministrationController {
 		return inertia.render("home", {
 			lastVersion,
 		});
+	}
+
+	async boatTypeEditor({ inertia }: HttpContext) {
+		const boatTypes = await BoatType.all();
+
+		return inertia.render("administration/BoatTypeEditor", {
+			types: boatTypes,
+		});
+	}
+
+	async boatTypeStore({ request, response }: HttpContext) {
+		const { label } = request.only(["label"]);
+		await BoatType.create({ label });
+		return response.redirect().back();
+	}
+
+	async boatTypeUpdate({ params, request, response }: HttpContext) {
+		const type = await BoatType.findOrFail(params.typeId);
+		const { label } = request.only(["label"]);
+		type.label = label;
+		await type.save();
+		return response.redirect().back();
+	}
+
+	async boatTypeDestroy({ params, response }: HttpContext) {
+		const type = await BoatType.findOrFail(params.typeId);
+		await type.delete();
+		return response.redirect().back();
+	}
+
+	async boatConstructorEditor({ inertia }: HttpContext) {
+		const constructors = await BoatConstructor.all();
+		return inertia.render("administration/BoatConstructorEditor", {
+			constructors,
+		});
+	}
+
+	async boatConstructorStore({ request, response }: HttpContext) {
+		const { name } = request.only(["name"]);
+		await BoatConstructor.create({ name });
+		return response.redirect().back();
+	}
+
+	async boatConstructorUpdate({ params, request, response }: HttpContext) {
+		const ctor = await BoatConstructor.findOrFail(params.constructorId);
+		const { name } = request.only(["name"]);
+		ctor.name = name;
+		await ctor.save();
+		return response.redirect().back();
+	}
+
+	async boatConstructorDestroy({ params, response }: HttpContext) {
+		const ctor = await BoatConstructor.findOrFail(params.constructorId);
+		await ctor.delete();
+		return response.redirect().back();
 	}
 }
