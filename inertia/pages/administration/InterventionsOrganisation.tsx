@@ -73,9 +73,9 @@ function SortableInterventionItem({
 					? "bg-blue-200/10"
 					: "bg-yellow-200/10";
 
-	const createdAt = new Date(intervention.createdAt).toLocaleDateString(
-		"fr-FR",
-	);
+	const endAt = intervention.endAt
+		? new Date(intervention.endAt).toLocaleDateString("fr-FR")
+		: null;
 
 	const status =
 		intervention.status === "DONE"
@@ -98,7 +98,9 @@ function SortableInterventionItem({
 		>
 			<div>
 				<p>{`${intervention.boat.name} - ${intervention.title}`}</p>
-				<p className="text-slate-500 text-sm">Créée le {createdAt}</p>
+				<p className="text-slate-500 text-sm">
+					Échéance : {endAt ?? "Non précisée"}
+				</p>
 			</div>
 			<p className={`p-1 px-3 rounded-full font-semibold text-sm text-center`}>
 				{status}

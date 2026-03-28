@@ -1,5 +1,7 @@
 # 📝 Notes de mise à jour
 
+## **1.6.8**
+- Ajout de l'échéance dans la modification de l'ordre des interventions
 
 ## **1.6.7**
 - Ajout d'un éditeur pour les types de bateaux
