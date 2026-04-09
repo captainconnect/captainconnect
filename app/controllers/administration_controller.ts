@@ -46,11 +46,16 @@ export default class AdministrationController {
 
 		// Génération du nom formaté : "27/01/2026 20:15"
 		const now = new Date();
-		now.setHours(now.getHours() + 1);
+		const locale = "fr-FR";
+		const tz = { timeZone: "Europe/Paris" };
 
 		const formattedName =
-			`Version du ${now.toLocaleDateString("fr-FR")} à ` +
-			now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+			`Version du ${now.toLocaleDateString(locale, tz)} à ` +
+			now.toLocaleTimeString(locale, {
+				...tz,
+				hour: "2-digit",
+				minute: "2-digit",
+			});
 
 		await DashboardVersion.create({
 			name: formattedName,
@@ -69,13 +74,7 @@ export default class AdministrationController {
 
 		const version = await DashboardVersion.findOrFail(dashboardId);
 
-		// On met à jour uniquement le contenu
 		version.content = content;
-
-		// Optionnel : Si tu veux aussi mettre à jour le nom pour refléter
-		// l'heure de la dernière modification "écrasée" :
-		// const now = new Date();
-		// version.name = `Version du ${now.toLocaleDateString('fr-FR')} (MàJ à ${now.toLocaleTimeString('fr-FR')})`;
 
 		await version.save();
 

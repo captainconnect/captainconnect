@@ -1,5 +1,8 @@
 # 📝 Notes de mise à jour
 
+## **1.6.9**
+- Prise en charge de l'heure d'été dans la version du tableau de bord 
+
 ## **1.6.8**
 - Ajout de l'échéance dans la modification de l'ordre des interventions
 
