@@ -81,11 +81,12 @@ export default function useIntervention(
 		status.color = "bg-yellow-600";
 	} else if (intervention.status === "IN_PROGRESS") {
 		if (progress === 100) {
-			status.label = "Terminé";
+			status.label = "À facturer";
+			status.color = "bg-green-500";
 		} else {
 			status.label = "En\u00A0cours";
+			status.color = "bg-blue-950";
 		}
-		status.color = "bg-blue-950";
 	} else if (intervention.status === "DONE") {
 		status.label = "Facturée";
 		status.color = "bg-green-500";

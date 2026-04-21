@@ -1,5 +1,8 @@
 # 📝 Notes de mise à jour
 
+## **1.6.10**
+- Le label "À facturer" remplace le label "Terminé" dans la liste des interventions
+
 ## **1.6.9**
 - Prise en charge de l'heure d'été dans la version du tableau de bord 
 

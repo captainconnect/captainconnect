@@ -82,7 +82,7 @@ function SortableInterventionItem({
 			? "Facturée"
 			: intervention.status === "IN_PROGRESS"
 				? progress === 100
-					? "Terminée"
+					? "À facturer"
 					: "En cours"
 				: intervention.status === "SUSPENDED"
 					? "Suspendue"

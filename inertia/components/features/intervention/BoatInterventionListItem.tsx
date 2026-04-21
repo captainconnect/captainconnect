@@ -21,7 +21,7 @@ export default function BoatInterventionListItem({
 		status = "Suspendue";
 	} else if (intervention.status === "IN_PROGRESS") {
 		if (intervention.isProgressComplete) {
-			status = "Terminée";
+			status = "À facturer";
 		} else {
 			status = "En cours";
 		}
@@ -47,7 +47,9 @@ export default function BoatInterventionListItem({
 						<p className="text-xs text-slate-500 mt-1">Créée le {createdAt}</p>
 					</div>
 				</div>
-				<p className="p-1 mt-4 md:mt-0 px-3 bg-blue-950 rounded-full text-white font-semibold text-sm text-center">
+				<p
+					className={`p-1 mt-4 md:mt-0 px-3 ${status === "À facturer" ? "bg-green-500" : "bg-blue-950"} rounded-full text-white font-semibold text-sm text-center`}
+				>
 					{status}
 				</p>
 			</Link>
