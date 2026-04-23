@@ -1,5 +1,8 @@
 # 📝 Notes de mise à jour
 
+## **1.6.11**
+- Les interventions "À facturer" apparaissent juste avant les interventions suspendues dans la liste, et la bordure est verte
+
 ## **1.6.10**
 - Le label "À facturer" remplace le label "Terminé" dans la liste des interventions
 

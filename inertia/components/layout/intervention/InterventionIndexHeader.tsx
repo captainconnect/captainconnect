@@ -9,6 +9,10 @@ export default function InterventionIndexHeader() {
 			label: "En cours",
 		},
 		{
+			id: "TO_BILL",
+			label: "À facturer",
+		},
+		{
 			id: "SUSPENDED",
 			label: "Suspendues",
 		},

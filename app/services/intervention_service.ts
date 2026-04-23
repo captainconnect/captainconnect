@@ -64,7 +64,19 @@ export class InterventionService {
 			// ensuite ton ordre manuel
 			.orderBy("order", "asc");
 
-		if (state) {
+		if (state === "TO_BILL") {
+			query.where("status", "IN_PROGRESS").whereIn("id", (sub) => {
+				sub
+					.from("task_groups as tg")
+					.join("tasks as t", "t.task_group_id", "tg.id")
+					.select("tg.intervention_id")
+					.groupBy("tg.intervention_id")
+					.havingRaw(
+						"COUNT(*) > 0 AND COUNT(*) = SUM(CASE WHEN t.status = ? THEN 1 ELSE 0 END)",
+						["DONE"],
+					);
+			});
+		} else if (state) {
 			query.andWhere("status", state);
 		} else {
 			query.whereNot("status", "DONE");

@@ -16,26 +16,32 @@ export default function InterventionListItem({
 		useIntervention(intervention);
 
 	const isSuspended = intervention.status === "SUSPENDED";
+	const isToBill =
+		intervention.status === "IN_PROGRESS" && progress === 100;
 
 	const borderColor = isSuspended
 		? "border-gray-300"
-		: intervention.priority === "EXTREME"
-			? "border-red-600"
-			: intervention.priority === "HIGH"
-				? "border-orange-300"
-				: intervention.priority === "LOW"
-					? "border-blue-200"
-					: "border-yellow-200";
+		: isToBill
+			? "border-green-500"
+			: intervention.priority === "EXTREME"
+				? "border-red-600"
+				: intervention.priority === "HIGH"
+					? "border-orange-300"
+					: intervention.priority === "LOW"
+						? "border-blue-200"
+						: "border-yellow-200";
 
 	const bgColor = isSuspended
 		? "bg-gray-200/10"
-		: intervention.priority === "EXTREME"
-			? "bg-red-600/10"
-			: intervention.priority === "HIGH"
-				? "bg-orange-300/10"
-				: intervention.priority === "LOW"
-					? "bg-blue-200/10"
-					: "bg-yellow-200/10";
+		: isToBill
+			? "bg-green-500/10"
+			: intervention.priority === "EXTREME"
+				? "bg-red-600/10"
+				: intervention.priority === "HIGH"
+					? "bg-orange-300/10"
+					: intervention.priority === "LOW"
+						? "bg-blue-200/10"
+						: "bg-yellow-200/10";
 
 	return (
 		<li>
