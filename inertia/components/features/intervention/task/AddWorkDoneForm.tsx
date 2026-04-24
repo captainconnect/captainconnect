@@ -236,7 +236,7 @@ export default function AddWorkDoneForm({
 			/>
 
 			<Textarea
-				label="Matériel utilisé"
+				label="Matériel installé"
 				value={data.used_materials}
 				onChange={(e) => setData("used_materials", e.target.value)}
 				error={errors.used_materials}

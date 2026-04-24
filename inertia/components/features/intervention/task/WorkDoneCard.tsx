@@ -84,7 +84,7 @@ export default function WorkDoneCard({
 				<div>
 					<p className="text-slate-400 flex items-center gap-1">
 						<ToolCase size="20" />
-						Materiel utilisé
+						Matériel installé
 					</p>
 					<p className="font-medium">
 						{workDone.usedMaterials || "Aucun materiel utilisé"}

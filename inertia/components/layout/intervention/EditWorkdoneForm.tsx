@@ -198,7 +198,7 @@ export default function EditWorkDoneForm({
 			/>
 
 			<Textarea
-				label="Matériel utilisé"
+				label="Matériel installé"
 				value={data.used_materials as string}
 				onChange={(e) => setData("used_materials", e.target.value)}
 				error={errors.used_materials}
