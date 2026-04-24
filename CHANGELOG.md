@@ -1,5 +1,8 @@
 # 📝 Notes de mise à jour
 
+## **1.6.12**
+- Remplacement du label "Matériel utilisé" par "Matériel installé"
+
 ## **1.6.11**
 - Les interventions "À facturer" apparaissent juste avant les interventions suspendues dans la liste, et la bordure est verte
 
