@@ -1,5 +1,8 @@
 # 📝 Notes de mise à jour
 
+## **1.6.13**
+- Remplacement de l'affichage des heures en steps de 0.25
+
 ## **1.6.12**
 - Remplacement du label "Matériel utilisé" par "Matériel installé"
 
