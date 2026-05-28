@@ -1,5 +1,8 @@
 # 📝 Notes de mise à jour
 
+## **1.6.14**
+- Les utilisateurs désactivés n'apparaissent plus dans la liste d'ajout de technicien dans un travail effectué
+
 ## **1.6.13**
 - Remplacement de l'affichage des heures en steps de 0.25
 

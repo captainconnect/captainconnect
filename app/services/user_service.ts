@@ -23,6 +23,8 @@ export class UserService {
 			.select(["id", "firstname", "lastname"])
 			.orderBy("id", "desc");
 
+		query.whereNot("activated", false);
+
 		if (app.inProduction) {
 			query.whereNot("id", 2);
 		}

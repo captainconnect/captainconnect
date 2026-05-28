@@ -3,3 +3,4 @@ onlyBuiltDependencies:
   - argon2
   - esbuild
   - puppeteer
+  - sharp
