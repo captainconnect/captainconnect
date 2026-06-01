@@ -1,5 +1,8 @@
 # 📝 Notes de mise à jour
 
+## **1.6.15**
+- Suppression bug d'attribution de contact à un bateau
+
 ## **1.6.14**
 - Les utilisateurs désactivés n'apparaissent plus dans la liste d'ajout de technicien dans un travail effectué
 

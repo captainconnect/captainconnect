@@ -56,6 +56,7 @@ const EditBoatPage = ({
 
 	const submit = (e: React.FormEvent) => {
 		e.preventDefault();
+		data.contact_id = selectedContactId;
 		put(`/bateaux/${boat.slug}`);
 	};
 
