@@ -32,8 +32,8 @@ export default function WorkDoneCard({
 					<div className="justify-center flex flex-col">
 						<p className="text-lg font-semibold">{`Travaux effectués le ${workDone.date}`}</p>
 
-						<div className="hidden md:flex gap-2 text-slate-500">
-							<span>Par</span>
+						<div className="gap-2 text-slate-500">
+							<span>Par </span>
 
 							{workDone.technicians.map((tech, index) => {
 								const isLast = index === workDone.technicians.length - 1;
@@ -54,7 +54,7 @@ export default function WorkDoneCard({
 														{tech.initials}
 													</span>
 												)}
-												<span className="text-sm">{tech.label}</span>
+												<span className="hidden md:flex text-sm">{tech.label}</span>
 											</span>
 										</Link>
 

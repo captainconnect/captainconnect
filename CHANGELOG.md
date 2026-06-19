@@ -1,5 +1,8 @@
 # 📝 Notes de mise à jour
 
+## **1.6.16**
+- Affichage des initiales des techniciens sur les travaux effectués en vue mobile
+
 ## **1.6.15**
 - Suppression bug d'attribution de contact à un bateau
 
