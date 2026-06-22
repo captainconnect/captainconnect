@@ -60,8 +60,23 @@ export class InterventionService {
 			.preload("boat", (q) => q.preload("type").preload("thumbnail"))
 			.preload("taskGroups", (q) => q.preload("tasks"))
 			// 0 pour non-suspendue, 1 pour suspendue -> les suspendues passent à la fin
-			.orderByRaw(`CASE WHEN status = ? THEN 1 ELSE 0 END ASC`, ["SUSPENDED"])
-			// ensuite ton ordre manuel
+			.orderByRaw(`
+CASE
+    WHEN status = 'SUSPENDED' THEN 2
+    WHEN status = 'IN_PROGRESS'
+         AND EXISTS (
+             SELECT 1
+             FROM task_groups tg
+             JOIN tasks t ON t.task_group_id = tg.id
+             WHERE tg.intervention_id = interventions.id
+             GROUP BY tg.intervention_id
+             HAVING COUNT(*) > 0
+                AND COUNT(*) = SUM(CASE WHEN t.status = 'DONE' THEN 1 ELSE 0 END)
+         )
+    THEN 1
+    ELSE 0
+END ASC
+`)
 			.orderBy("order", "asc");
 
 		if (state === "TO_BILL") {

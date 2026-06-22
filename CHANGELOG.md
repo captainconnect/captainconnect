@@ -1,5 +1,8 @@
 # 📝 Notes de mise à jour
 
+## **1.6.17**
+- Résolution de l'affichage des interventions à facturer dans le chargement continu
+
 ## **1.6.16**
 - Affichage des initiales des techniciens sur les travaux effectués en vue mobile
 

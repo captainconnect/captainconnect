@@ -54,7 +54,9 @@ export default function WorkDoneCard({
 														{tech.initials}
 													</span>
 												)}
-												<span className="hidden md:flex text-sm">{tech.label}</span>
+												<span className="hidden md:flex text-sm">
+													{tech.label}
+												</span>
 											</span>
 										</Link>
 
