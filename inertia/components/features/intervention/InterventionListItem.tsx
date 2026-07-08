@@ -16,8 +16,7 @@ export default function InterventionListItem({
 		useIntervention(intervention);
 
 	const isSuspended = intervention.status === "SUSPENDED";
-	const isToBill =
-		intervention.status === "IN_PROGRESS" && progress === 100;
+	const isToBill = intervention.status === "IN_PROGRESS" && progress === 100;
 
 	const borderColor = isSuspended
 		? "border-gray-300"

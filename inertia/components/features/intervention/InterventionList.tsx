@@ -7,8 +7,7 @@ type InterventionListProps = {
 
 function getSortOrder(intervention: Intervention): number {
 	if (intervention.status === "SUSPENDED") return 2;
-	const allTasks =
-		intervention.taskGroups?.flatMap((g) => g.tasks) ?? [];
+	const allTasks = intervention.taskGroups?.flatMap((g) => g.tasks) ?? [];
 	const total = allTasks.length;
 	const done = allTasks.filter((t) => t.status === "DONE").length;
 	const progress = total > 0 ? Math.round((done / total) * 100) : 0;

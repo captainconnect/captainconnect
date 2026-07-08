@@ -399,10 +399,7 @@ router
 					"boatTypeEditor",
 				]);
 				router
-					.post("/bateaux/types", [
-						AdministrationController,
-						"boatTypeStore",
-					])
+					.post("/bateaux/types", [AdministrationController, "boatTypeStore"])
 					.as("admin.boat-types.store");
 				router
 					.patch("/bateaux/types/:typeId", [
