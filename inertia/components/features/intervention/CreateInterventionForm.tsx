@@ -14,6 +14,10 @@ type CreateInterventionFormProps = {
 
 export const priorityOptions = [
 	{
+		id: "ESTIMATE",
+		label: "Devis",
+	},
+	{
 		id: "LOW",
 		label: "Basse",
 	},

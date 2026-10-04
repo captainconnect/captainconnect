@@ -262,7 +262,9 @@ export default function useIntervention(
 					? "Haute"
 					: intervention.priority === "EXTREME"
 						? "Très haute"
-						: "Inconnue";
+						: intervention.priority === "ESTIMATE"
+							? "Devis"
+							: "Inconnue";
 
 	const interventionData: InformationBlockItemProps[] = [
 		{

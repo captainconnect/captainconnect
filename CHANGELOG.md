@@ -1,5 +1,8 @@
 # 📝 Notes de mise à jour
 
+## **1.6.18**
+- Ajout d'une priorité devis sur les interventions avec la couleur Cyan
+
 ## **1.6.17**
 - Résolution de l'affichage des interventions à facturer dans le chargement continu
 

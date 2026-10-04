@@ -28,7 +28,9 @@ export default function InterventionListItem({
 					? "border-orange-300"
 					: intervention.priority === "LOW"
 						? "border-blue-200"
-						: "border-yellow-200";
+						: intervention.priority === "ESTIMATE"
+							? "border-cyan-200"
+							: "border-yellow-200";
 
 	const bgColor = isSuspended
 		? "bg-gray-200/10"
@@ -40,7 +42,9 @@ export default function InterventionListItem({
 					? "bg-orange-300/10"
 					: intervention.priority === "LOW"
 						? "bg-blue-200/10"
-						: "bg-yellow-200/10";
+						: intervention.priority === "ESTIMATE"
+							? "bg-cyan-600/10"
+							: "bg-yellow-200/10";
 
 	return (
 		<li>

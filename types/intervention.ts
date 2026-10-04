@@ -47,7 +47,12 @@ export type TaskGroup = {
 
 export type InterventionStatus = "SUSPENDED" | "IN_PROGRESS" | "DONE";
 
-export type InterventionPriority = "LOW" | "NORMAL" | "HIGH" | "EXTREME";
+export type InterventionPriority =
+	| "ESTIMATE"
+	| "LOW"
+	| "NORMAL"
+	| "HIGH"
+	| "EXTREME";
 
 export type TaskStatus = "IN_PROGRESS" | "DONE";
 

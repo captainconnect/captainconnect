@@ -35,7 +35,7 @@
       <span class="badge">{{ meta.status === "IN_PROGRESS" ? "En cours" : meta.status === "SUSPENDED" ? "Suspendue" : "Terminé" }}</span>
     @endif
     @if(meta?.priority)
-      <span class="badge">Priorité {{ meta.priority === "LOW" ? "basse" : meta.priority === "NORMAL" ? "normale" : meta.priority === "HIGH" ? "haute" : "très haute"   }}</span>
+      <span class="badge">Priorité {{meta.priority === "ESTIMATE" ? "Devis" : meta.priority === "LOW" ? "basse" : meta.priority === "NORMAL" ? "normale" : meta.priority === "HIGH" ? "haute" : "très haute"   }}</span>
     @endif
     @if(meta?.progress !== undefined)
       <span class="badge">Progression : {{ meta.progress }}%</span>
